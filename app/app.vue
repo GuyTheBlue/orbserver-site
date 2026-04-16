@@ -15,7 +15,7 @@ const isGlassy = computed(() => y.value > 50)
     <ClientOnly>
       <header 
         class="fixed top-0 left-0 right-0 z-[100] transition-all duration-500 border-b"
-        :class="isGlassy ? 'bg-slate-950/40 backdrop-blur-md border-cyan-400/20 shadow-[0_4px_30px_rgba(0,255,255,0.05)] py-2' : 'bg-transparent border-transparent py-4'"
+        :class="isGlassy ? 'bg-black/50 backdrop-blur-xl border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.5)] py-2' : 'bg-transparent border-transparent py-4'"
       >
         <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
           

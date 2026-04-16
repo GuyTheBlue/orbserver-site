@@ -25,9 +25,9 @@ const voidOpacity = computed(() => Math.min(y.value / 600, 1))
         
         <img src="/images/hero_layers/night_sky.png" class="absolute top-0 left-0 w-full h-[55%] object-cover object-bottom z-10" :style="{ transform: backgroundTransform }" alt="Sky" />
 
-        <!-- Mystic Hexagon Overlay (Lifted to z-15 so it paints cleanly above the starry sky) -->
-        <div id="hexagon-overlay" class="absolute inset-0 z-15" :style="{ transform: backgroundTransform }">
-          <PagesLandingHeroHexagons />
+        <!-- Background Top-Left Hexagon Overlay (Deep in the sky, behind moon) -->
+        <div id="hexagon-overlay-bg" class="absolute inset-0 z-15" :style="{ transform: backgroundTransform }">
+          <PagesLandingHeroHexagons maskMode="top-left" />
         </div>
         
         <!-- Moon scaled massively and raised dynamically per breakpoint to keep ~20% intersecting the horizon -->
@@ -57,10 +57,10 @@ const voidOpacity = computed(() => Math.min(y.value / 600, 1))
           <div class="absolute bottom-0 left-0 w-full h-[25%] bg-gradient-to-t from-black to-transparent pointer-events-none"></div>
           
           <!-- The infinite black bleed anchored underneath the rock -->
-          <div class="absolute top-full left-0 w-full h-[200vh] bg-black"></div>
+          <div class="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent"></div>
         </div>
 
-        <!-- Dynamic Tech Line Tracking SVG (Locked to Moon Center organically per Breakpoint) -->
+        <!-- Ultra-minimal tech HUD targeting system aimed strictly at the core of the moon (z-60 lifts them above rocks) -->
         <!-- Hidden entirely on XS so it doesn't wildly intersect the newly woven left-and-right alternating layout -->
         <svg class="absolute inset-0 w-full h-full z-[65] pointer-events-none text-cyan-400 hidden sm:block">
           <defs><linearGradient id="techGlow" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#00ffff" stop-opacity="0.8" /><stop offset="100%" stop-color="#00ffff" stop-opacity="0.1" /></linearGradient></defs>
