@@ -42,8 +42,8 @@ const voidOpacity = computed(() => Math.min(y.value / 600, 1))
         <!-- Dune restricted on mobile, but grows to h-[45%] on XL screens to reach higher up -->
         <img src="/images/hero_layers/dunes.png" class="absolute bottom-0 w-full h-[35%] xl:h-[45%] object-cover object-top origin-bottom z-50" :style="{ transform: duneTransform }" alt="Dune" />
         
-        <!-- Foreground rock vastly increased in size and tucked into the black void structurally -->
-        <img src="/images/hero_layers/fore_front_rock.png" class="absolute left-0 -bottom-[10%] w-[40vw] max-w-none origin-bottom-left z-60" :style="{ transform: rockTransform }" alt="Foreground Rock" />
+        <!-- Foreground rock intelligently scaled across breakpoints to dominate exactly as requested -->
+        <img src="/images/hero_layers/fore_front_rock.png" class="absolute left-0 -bottom-[10%] sm:-bottom-[2%] md:-bottom-[10%] w-[80vw] sm:w-[50vw] md:w-[60vw] lg:w-[40vw] xl:w-[50vw] max-w-none origin-bottom-left z-60" :style="{ transform: rockTransform }" alt="Foreground Rock" />
 
         <!-- Dynamic Tech Line Tracking SVG (Locked to Moon Center organically per Breakpoint) -->
         <svg class="absolute inset-0 w-full h-full z-[65] pointer-events-none text-cyan-400">
@@ -51,31 +51,26 @@ const voidOpacity = computed(() => Math.min(y.value / 600, 1))
           
           <!-- Base (XS) -->
           <g class="sm:hidden">
-            <circle cx="50%" :cy="`calc(10% + 18rem - ${y * 0.8}px)`" r="8" fill="currentColor" class="animate-ping" />
             <line x1="50%" :y1="`calc(10% + 18rem - ${y * 0.8}px)`" x2="90%" y2="20%" stroke="url(#techGlow)" stroke-width="1.5" style="filter: drop-shadow(0 0 8px rgba(0,255,255,0.8));" />
           </g>
 
           <!-- SM -->
           <g class="hidden sm:block md:hidden">
-            <circle cx="50%" :cy="`calc(0% + 18rem - ${y * 0.8}px)`" r="8" fill="currentColor" class="animate-ping" />
             <line x1="50%" :y1="`calc(0% + 18rem - ${y * 0.8}px)`" x2="90%" y2="20%" stroke="url(#techGlow)" stroke-width="1.5" style="filter: drop-shadow(0 0 8px rgba(0,255,255,0.8));" />
           </g>
 
           <!-- MD -->
           <g class="hidden md:block lg:hidden">
-            <circle cx="50%" :cy="`calc(-15% + 24rem - ${y * 0.8}px)`" r="8" fill="currentColor" class="animate-ping" />
             <line x1="50%" :y1="`calc(-15% + 24rem - ${y * 0.8}px)`" x2="90%" y2="20%" stroke="url(#techGlow)" stroke-width="1.5" style="filter: drop-shadow(0 0 8px rgba(0,255,255,0.8));" />
           </g>
 
           <!-- LG -->
           <g class="hidden lg:block xl:hidden">
-            <circle cx="50%" :cy="`calc(-20% + 24rem - ${y * 0.8}px)`" r="8" fill="currentColor" class="animate-ping" />
             <line x1="50%" :y1="`calc(-20% + 24rem - ${y * 0.8}px)`" x2="92%" y2="20%" stroke="url(#techGlow)" stroke-width="1.5" style="filter: drop-shadow(0 0 8px rgba(0,255,255,0.8));" />
           </g>
 
           <!-- XL / 2XL -->
           <g class="hidden xl:block">
-            <circle cx="50%" :cy="`calc(-25% + 24rem - ${y * 0.8}px)`" r="8" fill="currentColor" class="animate-ping" />
             <line x1="50%" :y1="`calc(-25% + 24rem - ${y * 0.8}px)`" x2="92%" y2="20%" stroke="url(#techGlow)" stroke-width="1.5" style="filter: drop-shadow(0 0 8px rgba(0,255,255,0.8));" />
           </g>
         </svg>
