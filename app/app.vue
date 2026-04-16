@@ -23,22 +23,6 @@ const isGlassy = computed(() => y.value > 50)
             <!-- Our massive highly-kerned Orbserver logo -->
             <SharedAppLogo class="w-auto h-8 md:h-10 shrink-0 transition-transform hover:scale-105 drop-shadow-md" />
           </NuxtLink>
-
-          <!-- SPA Anchor Links -->
-          <nav class="hidden md:flex items-center gap-8">
-            <a href="#stats" class="text-sm font-semibold text-white/70 hover:text-cyan-300 hover:drop-shadow-[0_0_8px_rgba(0,255,255,0.8)] transition-all">Telemetry</a>
-            <a href="#mission" class="text-sm font-semibold text-white/70 hover:text-cyan-300 hover:drop-shadow-[0_0_8px_rgba(0,255,255,0.8)] transition-all">Mission</a>
-            
-            <UButton
-              to="https://github.com/nuxt"
-              target="_blank"
-              icon="i-simple-icons-github"
-              aria-label="GitHub"
-              color="white"
-              variant="ghost"
-              class="opacity-80 hover:opacity-100"
-            />
-          </nav>
         </div>
       </header>
     </ClientOnly>

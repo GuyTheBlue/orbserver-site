@@ -23,14 +23,14 @@ const stats = [
     </div>
 
     <!-- Dynamic Super-Tech Panels -->
-    <div class="absolute top-[5%] sm:top-[15%] xl:top-[20%] left-2 right-2 sm:left-auto sm:right-[5%] lg:right-[8%] pointer-events-auto h-[70vh] sm:h-auto z-[70]">
+    <div class="absolute top-[15%] sm:top-[15%] xl:top-[10%] left-2 right-2 sm:left-auto sm:right-[5%] lg:right-[8%] pointer-events-auto h-[70vh] sm:h-auto z-[70]">
       <!-- XS runs absolute weaving natively. SM runs flex-col cleanly stacked! -->
       <div class="w-full h-full sm:flex sm:flex-col sm:gap-3 lg:gap-5">
         <div 
           v-for="(stat, i) in stats" 
           :key="stat.label"
           class="group bg-[#020b14]/40 backdrop-blur-xl border-y border-white/5 border-r p-2 sm:p-3 md:p-4 lg:p-5 xl:p-6 shadow-[inset_0_0_20px_rgba(0,255,255,0.02),0_10px_30px_rgba(0,0,0,0.5)] animate-floating
-                 w-32 sm:w-40 md:w-48 lg:w-56 xl:w-72 transition-all hover:bg-[#020b14]/60 hover:border-l-cyan-300 overflow-hidden
+                 w-36 sm:w-40 md:w-48 lg:w-56 xl:w-72 transition-all hover:bg-[#020b14]/60 hover:border-l-cyan-300 overflow-hidden
                  border-l-cyan-400 border-l-[1px] sm:border-l-2 border-r-white/5 rounded-r-lg"
           :class="[
             i === 0 ? 'max-sm:absolute max-sm:top-[8%] max-sm:right-[6%]' :
