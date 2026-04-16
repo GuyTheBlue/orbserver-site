@@ -42,7 +42,30 @@ const stats = [
           :style="{ animationDelay: `${i * 0.3}s`, '--scatter-x': `${stat.scatter}px` }"
         >
           <!-- Sexy sweeping light effect inside the glass -->
-          <div class="absolute inset-0 bg-gradient-to-r from-cyan-400/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div class="absolute inset-0 bg-gradient-to-r from-cyan-400/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20 pointer-events-none"></div>
+          
+          <!-- Majestic Custom Hexagon Cluster floating freely inside the glass bounds -->
+          <svg 
+            class="absolute w-16 md:w-20 lg:w-28 h-auto text-cyan-400 opacity-60 group-hover:opacity-100 group-hover:drop-shadow-[0_0_12px_rgba(0,255,255,0.6)] transition-all duration-700 z-30 pointer-events-none mix-blend-screen" 
+            viewBox="0 0 100 150" 
+            :style="{ 
+              top: `${20 + ((i * 43) % 60)}%`,
+              left: `${-10 + ((i * 37) % 120)}%`,
+              transform: `translate(-50%, -50%) scale(${1 + (i % 2) * 0.4}) rotate(${(i * 55) - 90}deg)`,
+              maskImage: 'radial-gradient(circle at center, black 10%, transparent 72%)',
+              WebkitMaskImage: 'radial-gradient(circle at center, black 10%, transparent 72%)'
+            }"
+          >
+            <!-- Core Structure (2 Large interlocking) -->
+            <polygon points="30,40 50,28 70,40 70,64 50,76 30,64" fill="currentColor" fill-opacity="0.05" stroke="currentColor" stroke-width="1.5" />
+            <polygon points="30,88 50,76 70,88 70,112 50,124 30,112" fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-width="2" />
+            
+            <!-- Structural Flankers (4 Small Linked Hubs) -->
+            <polygon points="10,28 20,22 30,28 30,40 20,46 10,40" fill="none" stroke="currentColor" stroke-width="1" />
+            <polygon points="70,28 80,22 90,28 90,40 80,46 70,40" fill="currentColor" fill-opacity="0.4" stroke="currentColor" stroke-width="1" />
+            <polygon points="10,76 20,70 30,76 30,88 20,94 10,88" fill="none" stroke="currentColor" stroke-width="1" />
+            <polygon points="70,76 80,70 90,76 90,88 80,94 70,88" fill="none" stroke="currentColor" stroke-width="1" />
+          </svg>
           
           <!-- Minimal tech scanning line graphic -->
           <div class="absolute top-0 left-0 w-8 sm:w-12 h-[1px] bg-cyan-400/80" :class="(i === 3 || i === 4) ? 'max-sm:right-0 max-sm:left-auto' : ''"></div>
