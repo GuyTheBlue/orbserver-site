@@ -4,12 +4,12 @@ import { useWindowScroll } from '@vueuse/core'
 
 const { y } = useWindowScroll()
 
-// The background elements move upward very fast to "drop" out of frame
-const backgroundTransform = computed(() => `translateY(-${y.value * 0.8}px)`)
+// The background elements (Sky/Moon) are distant, so they barely move (anchoring down visually)
+const backgroundTransform = computed(() => `translateY(-${y.value * 0.2}px)`)
 
-// The foreground elements (dune/front rock) slowly translate up and slightly scale, eclipsing the background
-const duneTransform = computed(() => `scale(${1 + y.value * 0.0005}) translateY(-${y.value * 0.2}px)`)
-const rockTransform = computed(() => `scale(${1 + y.value * 0.0005}) translateY(-${y.value * 0.2}px)`)
+// The foreground elements move up faster relative to the camera to overtake the horizon naturally
+const duneTransform = computed(() => `scale(${1 + y.value * 0.0005}) translateY(-${y.value * 0.6}px)`)
+const rockTransform = computed(() => `scale(${1 + y.value * 0.0005}) translateY(-${y.value * 1.0}px)`)
 
 // The overall space transitions to pitch black/void as you sink
 const voidOpacity = computed(() => Math.min(y.value / 600, 1))
@@ -21,7 +21,7 @@ const voidOpacity = computed(() => Math.min(y.value / 600, 1))
     <!-- ClientOnly wrapper to satisfy our strict Nuxt 4 guard-rail! -->
     <ClientOnly>
       <!-- The camera frame: locks to the screen while you scroll down the track -->
-      <div class="sticky top-0 h-screen w-full overflow-hidden bg-slate-950 flex flex-col justify-end">
+      <div class="sticky top-0 h-screen w-full overflow-hidden bg-black flex flex-col justify-end">
         
         <img src="/images/hero_layers/night_sky.png" class="absolute top-0 left-0 w-full h-[55%] object-cover object-bottom z-10" :style="{ transform: backgroundTransform }" alt="Sky" />
 
@@ -51,27 +51,27 @@ const voidOpacity = computed(() => Math.min(y.value / 600, 1))
           
           <!-- Base (XS) -->
           <g class="sm:hidden">
-            <line x1="50%" :y1="`calc(10% + 18rem - ${y * 0.8}px)`" x2="90%" y2="20%" stroke="url(#techGlow)" stroke-width="1.5" style="filter: drop-shadow(0 0 8px rgba(0,255,255,0.8));" />
+            <line x1="50%" :y1="`calc(10% + 18rem - ${y * 0.2}px)`" x2="90%" y2="20%" stroke="url(#techGlow)" stroke-width="1.5" style="filter: drop-shadow(0 0 8px rgba(0,255,255,0.8));" />
           </g>
 
           <!-- SM -->
           <g class="hidden sm:block md:hidden">
-            <line x1="50%" :y1="`calc(0% + 18rem - ${y * 0.8}px)`" x2="90%" y2="20%" stroke="url(#techGlow)" stroke-width="1.5" style="filter: drop-shadow(0 0 8px rgba(0,255,255,0.8));" />
+            <line x1="50%" :y1="`calc(0% + 18rem - ${y * 0.2}px)`" x2="90%" y2="20%" stroke="url(#techGlow)" stroke-width="1.5" style="filter: drop-shadow(0 0 8px rgba(0,255,255,0.8));" />
           </g>
 
           <!-- MD -->
           <g class="hidden md:block lg:hidden">
-            <line x1="50%" :y1="`calc(-15% + 24rem - ${y * 0.8}px)`" x2="90%" y2="20%" stroke="url(#techGlow)" stroke-width="1.5" style="filter: drop-shadow(0 0 8px rgba(0,255,255,0.8));" />
+            <line x1="50%" :y1="`calc(-15% + 24rem - ${y * 0.2}px)`" x2="90%" y2="20%" stroke="url(#techGlow)" stroke-width="1.5" style="filter: drop-shadow(0 0 8px rgba(0,255,255,0.8));" />
           </g>
 
           <!-- LG -->
           <g class="hidden lg:block xl:hidden">
-            <line x1="50%" :y1="`calc(-20% + 24rem - ${y * 0.8}px)`" x2="92%" y2="20%" stroke="url(#techGlow)" stroke-width="1.5" style="filter: drop-shadow(0 0 8px rgba(0,255,255,0.8));" />
+            <line x1="50%" :y1="`calc(-20% + 24rem - ${y * 0.2}px)`" x2="92%" y2="20%" stroke="url(#techGlow)" stroke-width="1.5" style="filter: drop-shadow(0 0 8px rgba(0,255,255,0.8));" />
           </g>
 
           <!-- XL / 2XL -->
           <g class="hidden xl:block">
-            <line x1="50%" :y1="`calc(-25% + 24rem - ${y * 0.8}px)`" x2="92%" y2="20%" stroke="url(#techGlow)" stroke-width="1.5" style="filter: drop-shadow(0 0 8px rgba(0,255,255,0.8));" />
+            <line x1="50%" :y1="`calc(-25% + 24rem - ${y * 0.2}px)`" x2="92%" y2="20%" stroke="url(#techGlow)" stroke-width="1.5" style="filter: drop-shadow(0 0 8px rgba(0,255,255,0.8));" />
           </g>
         </svg>
 
@@ -84,12 +84,12 @@ const voidOpacity = computed(() => Math.min(y.value / 600, 1))
         <SharedScreenSizeHelper />
 
         <!-- Pitch Black Void Fade-in Layer -->
-        <div class="absolute inset-0 z-[70] bg-slate-950 pointer-events-none" :style="{ opacity: voidOpacity }"></div>
+        <div class="absolute inset-0 z-[70] bg-black pointer-events-none" :style="{ opacity: voidOpacity }"></div>
       </div>
       
       <template #fallback>
         <!-- SSR loading state -->
-        <div class="h-screen w-full bg-slate-950 flex items-center justify-center">
+        <div class="h-screen w-full bg-black flex items-center justify-center">
           <p class="text-white text-lg animate-pulse">Initializing Interface...</p>
         </div>
       </template>
