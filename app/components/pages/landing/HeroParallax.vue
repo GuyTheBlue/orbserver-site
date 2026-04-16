@@ -39,11 +39,26 @@ const voidOpacity = computed(() => Math.min(y.value / 600, 1))
         <!-- <img src="/images/hero_layers/stones_left.png" class="absolute bottom-[20%] xl:bottom-[32%] left-4 md:left-12 w-16 md:w-32 z-40" :style="{ transform: backgroundTransform }" alt="Left Stone" /> -->
         <!-- <img src="/images/hero_layers/stones_right.png" class="absolute bottom-[20%] xl:bottom-[32%] right-4 md:right-12 w-16 md:w-32 z-40" :style="{ transform: backgroundTransform }" alt="Right Stone" /> -->
 
-        <!-- Dune restricted on mobile, but grows to h-[45%] on XL screens to reach higher up -->
-        <img src="/images/hero_layers/dunes.png" class="absolute bottom-0 w-full h-[35%] xl:h-[45%] object-cover object-top origin-bottom z-50" :style="{ transform: duneTransform }" alt="Dune" />
+        <!-- Dune visually grouped with an infinite black base so it bleeds into the lower page dynamically -->
+        <div class="absolute bottom-0 w-full z-50 origin-bottom" :style="{ transform: duneTransform }">
+          <img src="/images/hero_layers/dunes.png" class="w-full h-[35vh] xl:h-[45vh] object-cover object-top block" alt="Dune" />
+          
+          <!-- Inner gradient creating a soft fade from the dune texture into absolute black -->
+          <div class="absolute bottom-0 left-0 w-full h-[30%] bg-gradient-to-t from-black to-transparent pointer-events-none"></div>
+          
+          <!-- Infinite solid black base mathematically pinned to the bottom of the dune -->
+          <div class="absolute top-full left-0 w-full h-[200vh] bg-black"></div>
+        </div>
         
-        <!-- Foreground rock intelligently scaled across breakpoints to dominate exactly as requested -->
-        <img src="/images/hero_layers/fore_front_rock.png" class="absolute left-0 -bottom-[10%] sm:-bottom-[2%] md:-bottom-[10%] w-[80vw] sm:w-[50vw] md:w-[60vw] lg:w-[40vw] xl:w-[50vw] max-w-none origin-bottom-left z-60" :style="{ transform: rockTransform }" alt="Foreground Rock" />
+        <!-- Foreground rock anchored similarly with a massive black bleed for the parallax uplift effect -->
+        <div class="absolute left-0 -bottom-[10%] sm:-bottom-[2%] md:-bottom-[10%] w-[80vw] sm:w-[50vw] md:w-[60vw] lg:w-[40vw] xl:w-[50vw] max-w-none origin-bottom-left z-60" :style="{ transform: rockTransform }">
+          <img src="/images/hero_layers/fore_front_rock.png" class="w-full object-cover origin-bottom-left block" alt="Foreground Rock" />
+          
+          <div class="absolute bottom-0 left-0 w-full h-[25%] bg-gradient-to-t from-black to-transparent pointer-events-none"></div>
+          
+          <!-- The infinite black bleed anchored underneath the rock -->
+          <div class="absolute top-full left-0 w-full h-[200vh] bg-black"></div>
+        </div>
 
         <!-- Dynamic Tech Line Tracking SVG (Locked to Moon Center organically per Breakpoint) -->
         <svg class="absolute inset-0 w-full h-full z-[65] pointer-events-none text-cyan-400">
