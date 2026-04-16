@@ -30,8 +30,8 @@ const voidOpacity = computed(() => Math.min(y.value / 600, 1))
           <PagesLandingHeroHexagons />
         </div>
         
-        <!-- Moon massive and shifted higher on LG screens -->
-        <img src="/images/hero_layers/moon.png" class="absolute left-1/2 w-[24rem] md:w-[48rem] top-[20%] lg:top-[5%] -translate-x-1/2 z-20" :style="{ transform: backgroundTransform }" alt="Moon" />
+        <!-- Moon scaled massively and raised dynamically per breakpoint to keep ~20% intersecting the horizon -->
+        <img src="/images/hero_layers/moon.png" class="absolute left-1/2 w-[36rem] md:w-[48rem] top-[10%] sm:top-0 md:-top-[15%] lg:-top-[20%] xl:-top-[25%] -translate-x-1/2 z-20" :style="{ transform: backgroundTransform }" alt="Moon" />
 
         <img src="/images/hero_layers/sea.png" class="absolute bottom-0 left-0 w-full h-[45%] object-cover object-top z-30" :style="{ transform: backgroundTransform }" alt="Sea" />
         
@@ -45,16 +45,39 @@ const voidOpacity = computed(() => Math.min(y.value / 600, 1))
         <!-- Foreground rock vastly increased in size and tucked into the black void structurally -->
         <img src="/images/hero_layers/fore_front_rock.png" class="absolute left-0 -bottom-[10%] w-[40vw] max-w-none origin-bottom-left z-60" :style="{ transform: rockTransform }" alt="Foreground Rock" />
 
-        <!-- Dynamic Tech Line Tracking SVG (Locked to Moon Center organically) -->
-        <svg class="absolute inset-0 w-full h-full z-[65] pointer-events-none lg:hidden">
-          <circle cx="50%" :cy="`calc(20% + 12rem - ${y * 0.8}px)`" r="8" fill="#00ffff" class="animate-ping hidden md:block" />
-          <line x1="50%" :y1="`calc(20% + 12rem - ${y * 0.8}px)`" x2="85%" y2="28%" stroke="url(#techGlow)" stroke-width="1.5" style="filter: drop-shadow(0 0 8px rgba(0,255,255,0.8));" class="hidden md:block" />
+        <!-- Dynamic Tech Line Tracking SVG (Locked to Moon Center organically per Breakpoint) -->
+        <svg class="absolute inset-0 w-full h-full z-[65] pointer-events-none text-cyan-400">
           <defs><linearGradient id="techGlow" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#00ffff" stop-opacity="0.8" /><stop offset="100%" stop-color="#00ffff" stop-opacity="0.1" /></linearGradient></defs>
-        </svg>
+          
+          <!-- Base (XS) -->
+          <g class="sm:hidden">
+            <circle cx="50%" :cy="`calc(10% + 18rem - ${y * 0.8}px)`" r="8" fill="currentColor" class="animate-ping" />
+            <line x1="50%" :y1="`calc(10% + 18rem - ${y * 0.8}px)`" x2="90%" y2="20%" stroke="url(#techGlow)" stroke-width="1.5" style="filter: drop-shadow(0 0 8px rgba(0,255,255,0.8));" />
+          </g>
 
-        <svg class="absolute inset-0 w-full h-full z-[65] pointer-events-none hidden lg:block">
-          <circle cx="50%" :cy="`calc(5% + 24rem - ${y * 0.8}px)`" r="8" fill="#00ffff" class="animate-ping" />
-          <line x1="50%" :y1="`calc(5% + 24rem - ${y * 0.8}px)`" x2="85%" y2="28%" stroke="url(#techGlow)" stroke-width="1.5" style="filter: drop-shadow(0 0 8px rgba(0,255,255,0.8));" />
+          <!-- SM -->
+          <g class="hidden sm:block md:hidden">
+            <circle cx="50%" :cy="`calc(0% + 18rem - ${y * 0.8}px)`" r="8" fill="currentColor" class="animate-ping" />
+            <line x1="50%" :y1="`calc(0% + 18rem - ${y * 0.8}px)`" x2="90%" y2="20%" stroke="url(#techGlow)" stroke-width="1.5" style="filter: drop-shadow(0 0 8px rgba(0,255,255,0.8));" />
+          </g>
+
+          <!-- MD -->
+          <g class="hidden md:block lg:hidden">
+            <circle cx="50%" :cy="`calc(-15% + 24rem - ${y * 0.8}px)`" r="8" fill="currentColor" class="animate-ping" />
+            <line x1="50%" :y1="`calc(-15% + 24rem - ${y * 0.8}px)`" x2="90%" y2="20%" stroke="url(#techGlow)" stroke-width="1.5" style="filter: drop-shadow(0 0 8px rgba(0,255,255,0.8));" />
+          </g>
+
+          <!-- LG -->
+          <g class="hidden lg:block xl:hidden">
+            <circle cx="50%" :cy="`calc(-20% + 24rem - ${y * 0.8}px)`" r="8" fill="currentColor" class="animate-ping" />
+            <line x1="50%" :y1="`calc(-20% + 24rem - ${y * 0.8}px)`" x2="92%" y2="20%" stroke="url(#techGlow)" stroke-width="1.5" style="filter: drop-shadow(0 0 8px rgba(0,255,255,0.8));" />
+          </g>
+
+          <!-- XL / 2XL -->
+          <g class="hidden xl:block">
+            <circle cx="50%" :cy="`calc(-25% + 24rem - ${y * 0.8}px)`" r="8" fill="currentColor" class="animate-ping" />
+            <line x1="50%" :y1="`calc(-25% + 24rem - ${y * 0.8}px)`" x2="92%" y2="20%" stroke="url(#techGlow)" stroke-width="1.5" style="filter: drop-shadow(0 0 8px rgba(0,255,255,0.8));" />
+          </g>
         </svg>
 
         <!-- Our static Foreground HUD (Logo, Text, and Panels) -->
