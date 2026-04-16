@@ -2,36 +2,57 @@
   <svg viewBox="0 0 400 80" xmlns="http://www.w3.org/2000/svg" class="overflow-visible w-full h-full">
     <defs>
       <filter id="logo-glow" x="-20%" y="-20%" width="140%" height="140%">
-        <feGaussianBlur stdDeviation="6" result="blur" />
+        <feGaussianBlur stdDeviation="5" result="blur" />
         <feComposite in="SourceGraphic" in2="blur" operator="over" />
       </filter>
     </defs>
 
     <g filter="url(#logo-glow)">
+      
+      <!-- The solid "O" quietly pulsing like a moon -->
+      <circle 
+        cx="40" 
+        cy="36" 
+        r="15" 
+        fill="#FFFFFF" 
+        class="origin-[40px_36px] animate-[o-pulse_4s_ease-in-out_infinite]"
+      />
+
+      <!-- The typography precisely aligned to follow the O -->
       <text 
-        x="200" 
+        x="68" 
         y="50" 
         font-family="sans-serif" 
         font-weight="900" 
-        font-size="42" 
+        font-size="38" 
         fill="#FFFFFF" 
-        text-anchor="middle"
-        letter-spacing="12"
+        text-anchor="start"
+        letter-spacing="14"
       >
-        ORBSERVER
+        RBSERVER
       </text>
 
+      <!-- The orbital path mathematically centered to slice cleanly through the O and B -->
       <ellipse 
-        cx="140" 
-        cy="40" 
-        rx="90" 
-        ry="25" 
+        cx="85" 
+        cy="33" 
+        rx="65" 
+        ry="18" 
         fill="none" 
         stroke="#FFFFFF" 
         stroke-width="1.5" 
-        transform="rotate(-15 140 40)"
+        transform="rotate(-15 85 33)"
         opacity="0.8"
       />
     </g>
   </svg>
 </template>
+
+<style scoped>
+/* Quiet, organic pulsing animation bound specifically to the origin coordinates of the O */
+@keyframes o-pulse {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.08); opacity: 1; filter: drop-shadow(0 0 10px rgba(255,255,255,0.9)); }
+  100% { transform: scale(0.95); opacity: 0.8; }
+}
+</style>
