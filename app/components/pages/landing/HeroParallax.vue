@@ -61,13 +61,9 @@ const voidOpacity = computed(() => Math.min(y.value / 600, 1))
         </div>
 
         <!-- Dynamic Tech Line Tracking SVG (Locked to Moon Center organically per Breakpoint) -->
-        <svg class="absolute inset-0 w-full h-full z-[65] pointer-events-none text-cyan-400">
+        <!-- Hidden entirely on XS so it doesn't wildly intersect the newly woven left-and-right alternating layout -->
+        <svg class="absolute inset-0 w-full h-full z-[65] pointer-events-none text-cyan-400 hidden sm:block">
           <defs><linearGradient id="techGlow" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#00ffff" stop-opacity="0.8" /><stop offset="100%" stop-color="#00ffff" stop-opacity="0.1" /></linearGradient></defs>
-          
-          <!-- Base (XS) -->
-          <g class="sm:hidden">
-            <line x1="50%" :y1="`calc(10% + 18rem - ${y * 0.2}px)`" x2="90%" y2="20%" stroke="url(#techGlow)" stroke-width="1.5" style="filter: drop-shadow(0 0 8px rgba(0,255,255,0.8));" />
-          </g>
 
           <!-- SM -->
           <g class="hidden sm:block md:hidden">
