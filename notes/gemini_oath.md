@@ -10,5 +10,6 @@
 - [x] **Step 5:** Inject `HeroUI.vue` securely onto the camera track inside `HeroParallax.vue` and draw the dynamic glowing line to the moon.
 - [x] **Step 6:** Import the completed `HeroParallax.vue` into the orchestrator (`app/pages/index.vue`).
 - [x] **Step 7:** Rework `app/app.vue` to remove the default `UHeader` and create a sleek, scroll-triggered glassy sliding navbar suitable for a SPA.
+- [/] **Step 8:** Adjust Moon positioning to "kiss the sea" or sit just below the horizon, and recalibrate the HUD targeting lines.
 
-**Current Focus:** UX Refinement Review
+**Current Focus:** Moon and Horizon Calibration

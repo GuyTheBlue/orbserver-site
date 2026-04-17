@@ -31,7 +31,7 @@ const voidOpacity = computed(() => Math.min(y.value / 600, 1))
         </div>
         
         <!-- Moon scaled massively and raised dynamically per breakpoint to keep ~20% intersecting the horizon -->
-        <div class="absolute left-1/2 w-[20rem] md:w-[28rem] top-[20%] sm:top-[10%] md:-top-[5%] lg:-top-[10%] xl:-top-[15%] -translate-x-1/2 z-20" :style="{ transform: backgroundTransform }">
+        <div class="absolute left-1/2 w-[18rem] md:w-[24rem] top-[15%] sm:top-[10%] md:top-[5%] lg:top-[5%] xl:top-[5%] -translate-x-1/2 z-20" :style="{ transform: backgroundTransform }">
           <!-- The spherical ambient glow behind the moon -->
           <div class="absolute -inset-12 md:-inset-16 rounded-full bg-cyan-100/40 blur-[70px] md:blur-[90px]"></div>
           <div class="absolute inset-0 rounded-full bg-white/60 blur-3xl"></div>
@@ -78,22 +78,22 @@ const voidOpacity = computed(() => Math.min(y.value / 600, 1))
 
           <!-- SM -->
           <g class="hidden sm:block md:hidden">
-            <line x1="50%" :y1="`calc(0% + 18rem - ${y * 0.2}px)`" x2="90%" y2="20%" stroke="url(#techGlow)" stroke-width="1.5" style="filter: drop-shadow(0 0 8px rgba(0,255,255,0.8));" />
+            <line x1="50%" :y1="`calc(10% + 9rem - ${y * 0.2}px)`" x2="90%" y2="20%" stroke="url(#techGlow)" stroke-width="1.5" style="filter: drop-shadow(0 0 8px rgba(0,255,255,0.8));" />
           </g>
 
           <!-- MD -->
           <g class="hidden md:block lg:hidden">
-            <line x1="50%" :y1="`calc(-15% + 24rem - ${y * 0.2}px)`" x2="90%" y2="20%" stroke="url(#techGlow)" stroke-width="1.5" style="filter: drop-shadow(0 0 8px rgba(0,255,255,0.8));" />
+            <line x1="50%" :y1="`calc(5% + 12rem - ${y * 0.2}px)`" x2="90%" y2="20%" stroke="url(#techGlow)" stroke-width="1.5" style="filter: drop-shadow(0 0 8px rgba(0,255,255,0.8));" />
           </g>
 
           <!-- LG -->
           <g class="hidden lg:block xl:hidden">
-            <line x1="50%" :y1="`calc(-20% + 24rem - ${y * 0.2}px)`" x2="92%" y2="20%" stroke="url(#techGlow)" stroke-width="1.5" style="filter: drop-shadow(0 0 8px rgba(0,255,255,0.8));" />
+            <line x1="50%" :y1="`calc(5% + 12rem - ${y * 0.2}px)`" x2="92%" y2="20%" stroke="url(#techGlow)" stroke-width="1.5" style="filter: drop-shadow(0 0 8px rgba(0,255,255,0.8));" />
           </g>
 
           <!-- XL / 2XL -->
           <g class="hidden xl:block">
-            <line x1="50%" :y1="`calc(-25% + 24rem - ${y * 0.2}px)`" x2="92%" y2="20%" stroke="url(#techGlow)" stroke-width="1.5" style="filter: drop-shadow(0 0 8px rgba(0,255,255,0.8));" />
+            <line x1="50%" :y1="`calc(5% + 12rem - ${y * 0.2}px)`" x2="92%" y2="20%" stroke="url(#techGlow)" stroke-width="1.5" style="filter: drop-shadow(0 0 8px rgba(0,255,255,0.8));" />
           </g>
         </svg>
 
