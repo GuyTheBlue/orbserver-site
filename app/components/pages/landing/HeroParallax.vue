@@ -31,7 +31,17 @@ const voidOpacity = computed(() => Math.min(y.value / 600, 1))
         </div>
         
         <!-- Moon scaled massively and raised dynamically per breakpoint to keep ~20% intersecting the horizon -->
-        <img src="/images/hero_layers/moon.png" class="absolute left-1/2 w-[36rem] md:w-[48rem] top-[10%] sm:top-0 md:-top-[15%] lg:-top-[20%] xl:-top-[25%] -translate-x-1/2 z-20" :style="{ transform: backgroundTransform }" alt="Moon" />
+        <div class="absolute left-1/2 w-[20rem] md:w-[28rem] top-[20%] sm:top-[10%] md:-top-[5%] lg:-top-[10%] xl:-top-[15%] -translate-x-1/2 z-20" :style="{ transform: backgroundTransform }">
+          <!-- The spherical ambient glow behind the moon -->
+          <div class="absolute -inset-8 md:-inset-16 rounded-full bg-cyan-100/40 blur-[80px] md:blur-[120px]"></div>
+          <div class="absolute inset-0 rounded-full bg-white/70 blur-3xl"></div>
+          
+          <img src="/images/hero_layers/moon.png" class="relative w-full block z-10" alt="Moon" />
+        </div>
+
+        <!-- Distant clouds rising from the sea horizon, layered in front of the moon -->
+        <img src="/images/hero_layers/cloud_2.png" class="absolute left-0 w-full max-w-none bottom-[40%] md:bottom-[45%] object-cover object-bottom z-[21] opacity-30" :style="{ transform: backgroundTransform }" alt="Cloud 2" />
+        <img src="/images/hero_layers/cloud_1.png" class="absolute left-0 w-full max-w-none bottom-[35%] md:bottom-[40%] object-cover object-bottom z-[22] opacity-30" :style="{ transform: backgroundTransform }" alt="Cloud 1" />
 
         <img src="/images/hero_layers/sea.png" class="absolute bottom-0 left-0 w-full h-[45%] object-cover object-top z-30" :style="{ transform: backgroundTransform }" alt="Sea" />
         
@@ -57,7 +67,7 @@ const voidOpacity = computed(() => Math.min(y.value / 600, 1))
           <div class="absolute bottom-0 left-0 w-full h-[25%] bg-gradient-to-t from-black to-transparent pointer-events-none"></div>
           
           <!-- The infinite black bleed anchored underneath the rock -->
-          <div class="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent"></div>
+          <div class="absolute top-full left-0 w-full h-[200vh] bg-black"></div>
         </div>
 
         <!-- Ultra-minimal tech HUD targeting system aimed strictly at the core of the moon (z-60 lifts them above rocks) -->
