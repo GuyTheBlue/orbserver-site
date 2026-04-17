@@ -70,6 +70,9 @@ const voidOpacity = computed(() => Math.min(y.value / 600, 1))
           <div class="absolute top-full left-0 w-full h-[200vh] bg-black"></div>
         </div>
 
+        <!-- Global darkening gradient over the foreground and sea, fading to transparent right at the sea horizon -->
+        <div class="absolute bottom-0 left-0 w-full h-[60%] bg-gradient-to-t from-black to-transparent opacity-100 z-[61] pointer-events-none" :style="{ transform: backgroundTransform }"></div>
+
         <!-- Ultra-minimal tech HUD targeting system aimed strictly at the core of the moon (z-60 lifts them above rocks) -->
         <!-- Hidden entirely on XS so it doesn't wildly intersect the newly woven left-and-right alternating layout -->
         <svg class="absolute inset-0 w-full h-full z-[65] pointer-events-none text-cyan-400 hidden sm:block">
