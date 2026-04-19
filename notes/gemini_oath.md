@@ -11,5 +11,6 @@
 - [x] **Step 6:** Import the completed `HeroParallax.vue` into the orchestrator (`app/pages/index.vue`).
 - [x] **Step 7:** Rework `app/app.vue` to remove the default `UHeader` and create a sleek, scroll-triggered glassy sliding navbar suitable for a SPA.
 - [/] **Step 8:** Adjust Moon positioning to "kiss the sea" or sit just below the horizon, and recalibrate the HUD targeting lines.
+- [x] **Step 9:** Integrate Google Fonts: Roboto for global text and Orbitron for the logo.
 
-**Current Focus:** Moon and Horizon Calibration
+**Current Focus:** Font Integration Complete

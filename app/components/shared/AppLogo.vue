@@ -22,7 +22,7 @@
       <text 
         x="68" 
         y="50" 
-        font-family="sans-serif" 
+        font-family="Orbitron" 
         font-weight="900" 
         font-size="38" 
         fill="#FFFFFF" 

@@ -36,7 +36,7 @@ const isGlassy = computed(() => y.value > 50)
     <UFooter class="bg-slate-950 border-t border-white/5 relative z-50">
       <template #left>
         <p class="text-sm text-slate-500">
-          Built with Nuxt 4 • © {{ new Date().getFullYear() }} Orbserver
+          Built with Nuxt 4 • © {{ new Date().getFullYear() }} <span class="font-orbitron">Orbserver</span>
         </p>
       </template>
     </UFooter>

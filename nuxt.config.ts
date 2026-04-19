@@ -2,8 +2,19 @@
 export default defineNuxtConfig({
   modules: [
     '@nuxt/eslint',
-    '@nuxt/ui'
+    '@nuxt/ui',
+    '@nuxtjs/google-fonts'
   ],
+
+  googleFonts: {
+    families: {
+      Roboto: [400, 500, 700],
+      Orbitron: [400, 700, 900]
+    },
+    display: 'swap',
+    prefetch: true,
+    preconnect: true
+  },
 
   devtools: {
     enabled: false
