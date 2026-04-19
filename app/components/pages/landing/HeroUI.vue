@@ -1,12 +1,37 @@
 <script setup lang="ts">
-// Dummy real-time stats logic
-const stats = [
-  { label: 'Distance', value: '384,400 km', scatter: -10 },
-  { label: 'Illumination', value: '98.4%', scatter: 15 },
-  { label: 'Phase', value: 'Waning Gibbous', scatter: -5 },
-  { label: 'Gravity', value: '1.62 m/s²', scatter: 22 },
-  { label: 'Orbital Spd', value: '3,683 km/h', scatter: -18 }
-]
+import { computed } from 'vue'
+
+const { isLoading, distance, fraction, phaseName, librationAngle, apparentRotation } = useMoonData()
+
+// Dynamic Hero HUD Stats
+const stats = computed(() => {
+  if (isLoading.value) return [
+    { label: 'Status', value: 'SCANNING...', scatter: -10 },
+    { label: 'Link', value: 'ESTABLISHING', scatter: 15 },
+    { label: 'Data', value: 'BUFFERING', scatter: -5 },
+    { label: 'Sync', value: 'PENDING', scatter: 22 },
+    { label: 'Signal', value: 'LOCALIZING', scatter: -18 }
+  ]
+
+  /**
+   * Keplerian Speed Approximation:
+   * v = sqrt(G*M * (2/r - 1/a))
+   * We'll approximate this visually based on distance deviation from mean.
+   * Faster near perigee (near), slower near apogee (far).
+   */
+  const meanDist = 384400
+  const baseSpeed = 3683 // km/h
+  const speedFactor = 1 + ((meanDist - distance.value) / meanDist) * 1.5
+  const currentSpeed = Math.round(baseSpeed * speedFactor).toLocaleString('en-GB')
+
+  return [
+    { label: 'Distance', value: `${distance.value.toLocaleString('en-GB')} km`, scatter: -10 },
+    { label: 'Illumination', value: `${(fraction.value * 100).toFixed(1)}%`, scatter: 15 },
+    { label: 'Phase', value: phaseName.value.toUpperCase(), scatter: -5 },
+    { label: 'Orbital Spd', value: `${currentSpeed} km/h`, scatter: 22 },
+    { label: 'App. rotation', value: `${Math.round(apparentRotation.value)}°`, scatter: -18 }
+  ]
+})
 </script>
 
 <template>
@@ -14,11 +39,11 @@ const stats = [
     
     <!-- Left Typography -->
     <div class="absolute bottom-[20%] left-[5%] md:left-[10%] max-w-xl text-left pointer-events-auto">
-      <h1 class="text-6xl md:text-8xl font-black text-white tracking-widest uppercase drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] leading-none">
+      <h1 class="font-roboto font-thin text-6xl md:text-8xl text-white tracking-[0.15em] uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.15)] leading-none">
         know thy <br/> moon.
       </h1>
-      <p class="mt-6 text-xl md:text-2xl text-teal-100 font-light tracking-wide uppercase drop-shadow">
-        Real-time stats. Real-time facts.
+      <p class="mt-6 text-lg md:text-xl text-cyan-200/60 font-roboto font-thin tracking-[0.3em] uppercase">
+        Real-time telemetry. Live orbital data.
       </p>
     </div>
 

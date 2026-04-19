@@ -4,61 +4,37 @@ import { computed } from 'vue'
 const props = defineProps<{
   fraction: number // 0 (new) → 1 (full)
   phase: number    // 0–1 position across the full lunation cycle
+  rotation?: number // Degrees of rotation relative to horizon
+  lat?: number     // Latitude for hemisphere-aware phase orientation
 }>()
 
 /**
  * Computes an SVG path for the dark shadow overlay.
+ * Northern Hemisphere convention (default):
+ *   Waxing (0→0.5): shadow LEFT, lit RIGHT
+ *   Waning (0.5→1): shadow RIGHT, lit LEFT
  *
- * ViewBox is 0 0 100 100, moon is a circle radius=50 centred at (50,50).
- * The parent <div> clips to a circle via border-radius:50% + overflow:hidden,
- * so the path only needs to describe the dark area — clipping is free.
- *
- * Northern Hemisphere convention:
- *   Waxing (phase 0 → 0.5): right side is lit, shadow grows on the LEFT
- *   Waning (phase 0.5 → 1): left side is lit, shadow grows on the RIGHT
- *
- * The shadow shape is built from two SVG arcs:
- *   1. A full semicircle on the shadowed side (left for waxing, right for waning)
- *   2. The terminator — an ellipse whose x-radius = |cos(phase·2π)·R|
- *      This smoothly transitions from crescent → quarter → gibbous and back.
- *
- * Arc direction reference (viewBox, y-axis down):
- *   Top(50,0) → Bottom(50,100): sweep=0 traces LEFT side, sweep=1 traces RIGHT side
- *   Bottom(50,100) → Top(50,0): sweep=0 traces RIGHT side, sweep=1 traces LEFT side
+ * For Southern Hemisphere: the shadow SVG is mirrored with scaleX(-1)
+ * at the usage site, placing the lit limb on the opposing side.
  */
 function getMoonShadowPath(phase: number): string {
   const R = 50
-
-  // New moon — fill the entire viewBox (parent circle clips it)
   if (phase <= 0.01) return 'M 0 0 H 100 V 100 H 0 Z'
-
-  // Full moon — no shadow at all
   if (phase >= 0.99) return ''
-
   const xRadius = Math.abs(R * Math.cos(phase * 2 * Math.PI))
   const xr = xRadius.toFixed(3)
-
   if (phase < 0.5) {
-    // ── Waxing — shadow on the LEFT ─────────────────────────────────────
-    // Arc 1: top → bottom via LEFT (sweep=0)
-    // Arc 2 (terminator):
-    //   phase < 0.25 (crescent): terminator returns via RIGHT (sweep=0) — big shadow area
-    //   phase ≥ 0.25 (gibbous):  terminator returns via LEFT  (sweep=1) — small crescent shadow
     const sweepTerminator = phase < 0.25 ? 0 : 1
     return `M 50 0 A 50 50 0 0 0 50 100 A ${xr} 50 0 0 ${sweepTerminator} 50 0 Z`
-  }
-  else {
-    // ── Waning — shadow on the RIGHT ────────────────────────────────────
-    // Arc 1: top → bottom via RIGHT (sweep=1)
-    // Arc 2 (terminator):
-    //   phase < 0.75 (gibbous):  terminator returns via RIGHT (sweep=0) — small crescent shadow
-    //   phase ≥ 0.75 (crescent): terminator returns via LEFT  (sweep=1) — big shadow area
+  } else {
     const sweepTerminator = phase < 0.75 ? 0 : 1
     return `M 50 0 A 50 50 0 0 1 50 100 A ${xr} 50 0 0 ${sweepTerminator} 50 0 Z`
   }
 }
 
 const shadowPath = computed(() => getMoonShadowPath(props.phase))
+// Mirror logic: Southern Hemisphere (lat < 0) shows lit limb on the opposite side
+const shadowTransform = computed(() => (props.lat ?? 0) < 0 ? 'scaleX(-1)' : 'none')
 
 // Ambient glow intensity scales with illumination
 const glowOpacity = computed(() => 0.15 + props.fraction * 0.45)
@@ -90,7 +66,11 @@ const glowSpread = computed(() => `${40 + props.fraction * 60}px`)
     />
 
     <!-- The moon disc: image + shadow overlay, clipped to circle -->
-    <div class="relative rounded-full overflow-hidden moon-disc-element" style="width: 100%; aspect-ratio: 1;">
+    <div 
+      class="relative rounded-full overflow-hidden moon-disc-element" 
+      style="width: 100%; aspect-ratio: 1; transition: transform 2s cubic-bezier(0.16, 1, 0.3, 1);"
+      :style="{ transform: `rotate(${rotation || 0}deg)` }"
+    >
       <!-- The full-disc moon photograph -->
       <img
         src="/images/hero_layers/moon.png"
@@ -106,6 +86,7 @@ const glowSpread = computed(() => `${40 + props.fraction * 60}px`)
         viewBox="0 0 100 100"
         xmlns="http://www.w3.org/2000/svg"
         preserveAspectRatio="none"
+        :style="{ transform: shadowTransform }"
       >
         <!-- Soft terminator edge: a blurred ellipse sitting on the boundary -->
         <defs>

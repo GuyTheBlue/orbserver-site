@@ -71,12 +71,15 @@ export function useMoonData() {
   const distance = ref(0)   // km
   const altitude = ref(0)   // degrees above/below horizon
   const azimuth = ref(0)    // degrees, 0° = North, clockwise
+  const lat = ref(0)
+  const lng = ref(0)
+  const librationAngle = ref(0) // Position angle of the bright limb
+  const apparentRotation = ref(0) // Rotation relative to observer zenith
 
   onMounted(async () => {
     if (!import.meta.client) return
 
     try {
-      // Dynamic import keeps suncalc out of the SSR bundle entirely
       const SunCalc = (await import('suncalc')).default
       const now = new Date()
 
@@ -86,32 +89,43 @@ export function useMoonData() {
       phase.value = illum.phase
       phaseName.value = getPhaseName(illum.phase)
       phaseGlyph.value = getPhaseGlyph(illum.phase)
+      librationAngle.value = illum.angle // radians
 
-      // Age in days through the lunation (0 = new moon, ~14.76 = full moon)
+      // Age in days...
       age.value = parseFloat((illum.phase * LUNAR_MONTH).toFixed(1))
 
-      // Days until next events (derived from phase position in the cycle)
-      // Full moon is at phase 0.5; if past it, next is 1.5 – phase away
+      // Days until next...
       const rawDaysToFull = illum.phase < 0.5
         ? (0.5 - illum.phase) * LUNAR_MONTH
         : (1.5 - illum.phase) * LUNAR_MONTH
       daysToFullMoon.value = Math.round(rawDaysToFull)
       nextFullMoon.value = formatFutureDate(rawDaysToFull)
 
-      // New moon is at phase 0/1 boundary
       const rawDaysToNew = (1 - illum.phase) * LUNAR_MONTH
       daysToNewMoon.value = Math.round(rawDaysToNew)
       nextNewMoon.value = formatFutureDate(rawDaysToNew)
 
       // ── Position ──────────────────────────────────────────────────────
-      const { lat, lng } = await resolveLatLng()
-      const pos = SunCalc.getMoonPosition(now, lat, lng)
-
+      const loc = await resolveLatLng()
+      lat.value = loc.lat
+      lng.value = loc.lng
+      
+      const pos = SunCalc.getMoonPosition(now, loc.lat, loc.lng)
       distance.value = Math.round(pos.distance)
       altitude.value = parseFloat((pos.altitude * (180 / Math.PI)).toFixed(1))
-
-      // suncalc azimuth is measured from south, clockwise; convert to compass bearing
       azimuth.value = parseFloat((((pos.azimuth * (180 / Math.PI)) + 180 + 360) % 360).toFixed(1))
+
+      // ── Apparent Rotation (Orientation relative to observer's sky) ────
+      // phi = latitude in radians
+      const phi = loc.lat * (Math.PI / 180)
+      // h = parallactic angle approximation from lat, moon alt, and moon az
+      const h = Math.atan2(Math.sin(pos.azimuth), Math.tan(phi) * Math.cos(pos.altitude) - Math.sin(pos.altitude) * Math.cos(pos.azimuth))
+      
+      // Calculate final rotation in degrees (PA - q).
+      // +90° offset corrects the image asset orientation — the moon.png is referenced
+      // to the zenith, not the celestial north pole, requiring a 90° shift to align
+      // the terminator correctly with the horizon for both hemispheres.
+      apparentRotation.value = (illum.angle - h) * (180 / Math.PI) + 90
     }
     catch {
       hasError.value = true
@@ -135,6 +149,10 @@ export function useMoonData() {
     nextFullMoon,
     nextNewMoon,
     daysToFullMoon,
-    daysToNewMoon
+    daysToNewMoon,
+    lat,
+    lng,
+    librationAngle,
+    apparentRotation
   }
 }
