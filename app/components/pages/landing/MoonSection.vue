@@ -272,19 +272,22 @@ onMounted(() => {
             </svg>
           </div>
 
-          <div class="relative z-10 mt-12 text-center w-full">
-            <h2 class="font-orbitron font-black text-6xl xl:text-7xl text-white tracking-widest uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.4)]">
+          <div class="relative z-10 mt-12 text-center w-full px-2">
+            <h2 class="font-orbitron font-black text-3xl sm:text-5xl xl:text-7xl text-white tracking-[0.1em] sm:tracking-widest uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.4)]">
               {{ isLoading ? '…' : phaseName }}
             </h2>
-            <div class="mt-8 flex items-stretch justify-center">
-              <div class="flex flex-col items-center px-10 border-r border-white/10">
-                <span class="font-mono text-[10px] text-cyan-400/60 tracking-[0.5em] uppercase mb-3">Age</span><span class="font-orbitron font-black text-5xl text-white">{{ age }}<span class="text-xl text-white/20 ml-1">d</span></span>
+            <div class="mt-8 flex flex-wrap items-center justify-center gap-y-8">
+              <div class="flex flex-col items-center px-6 sm:px-10 border-r border-white/10 last:border-r-0">
+                <span class="font-mono text-[10px] text-cyan-400/60 tracking-[0.5em] uppercase mb-2">Age</span>
+                <span class="font-orbitron font-black text-3xl sm:text-5xl text-white">{{ age }}<span class="text-lg text-white/20 ml-1">d</span></span>
               </div>
-              <div class="flex flex-col items-center px-10 border-r border-white/10">
-                <span class="font-mono text-[10px] text-cyan-400/60 tracking-[0.5em] uppercase mb-3">Illum</span><span class="font-orbitron font-black text-5xl text-white">{{ illuminationPct }}<span class="text-xl text-white/20 ml-1">%</span></span>
+              <div class="flex flex-col items-center px-6 sm:px-10 border-r border-white/10 last:border-r-0">
+                <span class="font-mono text-[10px] text-cyan-400/60 tracking-[0.5em] uppercase mb-2">Illum</span>
+                <span class="font-orbitron font-black text-3xl sm:text-5xl text-white">{{ illuminationPct }}<span class="text-lg text-white/20 ml-1">%</span></span>
               </div>
-              <div class="flex flex-col items-center px-10">
-                <span class="font-mono text-[10px] text-cyan-400/60 tracking-[0.5em] uppercase mb-3">Rot</span><span class="font-orbitron font-black text-5xl text-cyan-400">{{ Math.round(apparentRotation) }}<span class="text-xl text-white/20 ml-1">°</span></span>
+              <div class="flex flex-col items-center px-6 sm:px-10 border-r-0 sm:border-r last:border-r-0">
+                <span class="font-mono text-[10px] text-cyan-400/60 tracking-[0.5em] uppercase mb-2">Rot</span>
+                <span class="font-orbitron font-black text-3xl sm:text-5xl text-cyan-400">{{ Math.round(apparentRotation) }}<span class="text-lg text-white/20 ml-1">°</span></span>
               </div>
             </div>
 
