@@ -14,3 +14,18 @@
 - [x] **Step 9:** Integrate Google Fonts: Roboto for global text and Orbitron for the logo.
 
 **Current Focus:** Font Integration Complete
+
+---
+
+## IMMUTABLE SCIENTIFIC LAWS
+### 1. Lunar Orientation & Illumination
+To ensure absolute geographic accuracy (Southern Hemisphere awareness), the moon's apparent rotation MUST be calculated using SunCalc's native `parallacticAngle`. 
+
+**The Formula:**
+`apparentRotation = (illum.angle - pos.parallacticAngle) * (180 / Math.PI) + 90`
+
+*   `illum.angle`: Positional angle of the bright limb.
+*   `pos.parallacticAngle`: Native SunCalc property (added in v1.8.0) for observer-zenith correction.
+*   `+ 90`: Calibration offset to align NH-base SVG assets (defaulting to lit-on-right) with SunCalc's 0° (North) reference.
+
+**CRITICAL:** NEVER simplify or manually recalculate the parallactic angle ($h$). Always use the SunCalc property `pos.parallacticAngle`.
