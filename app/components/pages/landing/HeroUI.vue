@@ -26,11 +26,11 @@ function generateDeepWash() {
 const moonWord = ref('moon.')
 function cypherMoon() {
   const cypherSet = '!@#$%^&*()_+{}:"<>?|~'
-  // 90% chance to show cypher, 10% chance to settle on "moon."
-  if (Math.random() > 0.1) {
-    moonWord.value = Array(5).fill(0).map(() => cypherSet[Math.floor(Math.random() * cypherSet.length)]).join('')
-  } else {
+  // 75% chance to be stable, 25% chance to glitch/scramble
+  if (Math.random() > 0.25) {
     moonWord.value = 'moon.'
+  } else {
+    moonWord.value = Array(5).fill(0).map(() => cypherSet[Math.floor(Math.random() * cypherSet.length)]).join('')
   }
 }
 
