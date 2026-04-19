@@ -193,7 +193,7 @@ onMounted(() => {
 
     <!-- ── 4. DYNAMIC RED HEXAGON GLITCHES (Centralized Component) ──────── -->
     <ClientOnly>
-      <SharedGlitchSystem :z-index="400" :density="4" :base-size="54" />
+      <SharedGlitchSystem :z-index="400" :density="1.8" :base-size="64" />
     </ClientOnly>
 
     <!-- ── 4. PANELS (z-10) ──────────────────────────────────────────────── -->

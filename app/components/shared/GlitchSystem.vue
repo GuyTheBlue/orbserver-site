@@ -27,21 +27,22 @@ function spawnGlitch() {
   if (r > 0.95) type = 'sticky'
   else if (r > 0.6) type = 'wire-pop'
 
-  // Random size: minimum 32px, weighted toward larger sizes
-  const min = 32
-  const max = props.baseSize || 48
-  // Using Math.pow(Math.random(), 0.5) to weight results toward max
-  const size = Math.floor(Math.pow(Math.random(), 0.5) * (max - min) + min)
+  // Random size: minimum 40px, heavily weighted toward larger sizes
+  const min = 40
+  const max = props.baseSize || 64
+  // Using Math.pow(Math.random(), 0.3) for even stronger weighting toward max
+  const size = Math.floor(Math.pow(Math.random(), 0.3) * (max - min) + min)
 
   activeGlitches.value.push({
     id,
-    x: Math.random() * 92 + 2, // slightly more centered
+    x: Math.random() * 92 + 2,
     y: Math.random() * 85 + 5,
     size,
     type
   })
 
-  const dur = type === 'sticky' ? 10000 : 1000
+  // Sticky for 5s, pops for 0.6s
+  const dur = type === 'sticky' ? 5000 : 600
   setTimeout(() => {
     activeGlitches.value = activeGlitches.value.filter(g => g.id !== id)
   }, dur)
@@ -49,8 +50,9 @@ function spawnGlitch() {
 
 onMounted(() => {
   if (!import.meta.client) return
-  // Interval based on density
-  const interval = props.density ? 1000 / (props.density * 10) : 300
+  // Interval based on density: density 1 = 1s, density 4 = 1.2s? 
+  // Let's just make it slower: 800ms - 1500ms
+  const interval = props.density ? (2000 / props.density) : 1200
   setInterval(spawnGlitch, interval)
 })
 </script>
@@ -93,7 +95,7 @@ onMounted(() => {
   animation: glitch-instant-pop 0.35s forwards;
 }
 .hex-sticky-anim {
-  animation: glitch-long-stick 10s forwards;
+  animation: glitch-long-stick 5s forwards;
 }
 
 @keyframes glitch-instant-pop {
