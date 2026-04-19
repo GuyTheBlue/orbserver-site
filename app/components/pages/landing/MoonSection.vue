@@ -271,6 +271,40 @@ onMounted(() => {
                     fill="rgba(0,242,255,0.25)" letter-spacing="3">ORBITAL PATH — SUNCALC LIVE</text>
             </svg>
 
+            <!-- Etymology & Facts — fills the gap on xl/2xl screens -->
+            <div class="relative z-10 mt-6 hidden xl:block border-t border-cyan-400/10 pt-6 space-y-4">
+              <!-- Perigee -->
+              <div>
+                <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-2">ETYMOLOGY // PERIGEE</p>
+                <p class="font-mono text-[11px] text-cyan-400/70 leading-relaxed">
+                  From Greek <span class="text-white font-semibold drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]">περίγειον</span> — <span class="text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.4)]">peri</span> ("near") +
+                  <span class="text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.4)]">gē</span> ("Earth"). The point in the lunar orbit of
+                  <span class="text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]">closest approach</span> — approximately
+                  <span class="text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]">356,500 km</span>. At perigee, the Moon appears
+                  <span class="text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]">14% larger</span> and drives stronger <span class="text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.4)]">tidal forces</span>.
+                </p>
+              </div>
+              <!-- Apogee -->
+              <div>
+                <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-2">ETYMOLOGY // APOGEE</p>
+                <p class="font-mono text-[11px] text-cyan-400/70 leading-relaxed">
+                  From Greek <span class="text-white font-semibold drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]">ἀπόγειον</span> — <span class="text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.4)]">apo</span> ("away from") +
+                  <span class="text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.4)]">gē</span> ("Earth"). The point of
+                  <span class="text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]">maximum separation</span> — approximately
+                  <span class="text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]">406,700 km</span>. The Moon moves
+                  <span class="text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]">~30% slower</span> here per Kepler's second law — equal areas in equal times.
+                </p>
+              </div>
+              <!-- Current position -->
+              <div class="flex items-center gap-3 pt-2 border-t border-white/5">
+                <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_6px_rgba(0,255,255,1)]" />
+                <span class="font-mono text-[9px] text-cyan-400/60 tracking-[0.3em] uppercase">
+                  CURRENT_DIST: <span class="text-white/80">{{ distFormatted }} KM</span>
+                  &nbsp;//&nbsp; {{ distRatio < 50 ? 'APPROACHING PERIGEE' : 'APPROACHING APOGEE' }}
+                </span>
+              </div>
+            </div>
+
           </div>
 
           <div class="grid grid-cols-2 gap-8">
