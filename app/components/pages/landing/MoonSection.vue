@@ -308,7 +308,7 @@ onMounted(() => {
 
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-4 gap-8">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <!-- Panel: Moon Rise / Set -->
             <div class="panel-card group p-10 rounded-2xl bento-flicker">
               <div class="panel-grid-mesh" /><div class="panel-scanlines" /><div class="card-brackets" />
