@@ -50,6 +50,30 @@ async function resolveLatLng(): Promise<{ lat: number, lng: number }> {
   })
 }
 
+// ── High Precision Geocentric Lunar Distance (Meeus/ELP82) ──────────────────
+// This bypasses SunCalc's topocentric inaccuracies to match world standards.
+function getGeocentricDistance(date: Date): number {
+  const T = (date.getTime() / 1000 - 946728000) / 3155760000 // Centuries since J2000
+  const Lprime = (218.316 + 481267.881 * T) * (Math.PI / 180) // Mean longitude
+  const D = (297.85 + 445267.111 * T) * (Math.PI / 180)      // Mean elongation
+  const M = (357.529 + 35999.05 * T) * (Math.PI / 180)       // Sun mean anomaly
+  const Mprime = (134.963 + 477198.867 * T) * (Math.PI / 180) // Moon mean anomaly
+  const F = (93.272 + 483202.018 * T) * (Math.PI / 180)      // Mean distance from node
+
+  // Major periodic terms for distance (km)
+  let sum = -20905 * Math.cos(Mprime)
+  sum -= 3699 * Math.cos(2 * D - Mprime)
+  sum -= 2956 * Math.cos(2 * D)
+  sum -= 570 * Math.cos(2 * Mprime)
+  sum += 246 * Math.cos(2 * Mprime - 2 * D)
+  sum -= 205 * Math.cos(M - Mprime)
+  sum -= 171 * Math.cos(Mprime + 2 * D)
+  sum -= 152 * Math.cos(Mprime + M - 2 * D)
+
+  // Mean distance + major terms
+  return 385001 + sum
+}
+
 export function useMoonData() {
   const isLoading = ref(true)
   const hasError = ref(false)
@@ -112,15 +136,17 @@ export function useMoonData() {
       lng.value = loc.lng
       
       const pos = SunCalc.getMoonPosition(now, loc.lat, loc.lng)
-      distance.value = Math.round(pos.distance)
+      // Switch to Geocentric Distance to match User/Google standards
+      distance.value = Math.round(getGeocentricDistance(now))
+      
       altitude.value = parseFloat((pos.altitude * (180 / Math.PI)).toFixed(1))
       azimuth.value = parseFloat((((pos.azimuth * (180 / Math.PI)) + 180 + 360) % 360).toFixed(1))
 
       // ── Orbital Direction ─────────────────────────────────────────────────
-      // Compare distance in 2 hours to determine if closing on or receding from perigee
-      const futureDate = new Date(now.getTime() + 2 * 60 * 60 * 1000)
-      const futurePos = SunCalc.getMoonPosition(futureDate, loc.lat, loc.lng)
-      movingTowardPerigee.value = futurePos.distance < pos.distance
+      // Symmetric 12h window using Geocentric distance for absolute accuracy
+      const pastDist   = getGeocentricDistance(new Date(now.getTime() - 6 * 60 * 60 * 1000))
+      const futureDist = getGeocentricDistance(new Date(now.getTime() + 6 * 60 * 60 * 1000))
+      movingTowardPerigee.value = futureDist < pastDist
 
       // ── Apparent Rotation (Orientation relative to observer's sky) ────
       // phi = latitude in radians

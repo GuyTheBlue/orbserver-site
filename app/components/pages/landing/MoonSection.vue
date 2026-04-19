@@ -271,8 +271,8 @@ onMounted(() => {
                     fill="rgba(0,242,255,0.25)" letter-spacing="3">ORBITAL PATH — SUNCALC LIVE</text>
             </svg>
 
-            <!-- Etymology & Facts — fills the gap on xl/2xl screens -->
-            <div class="relative z-10 mt-6 hidden xl:block border-t border-cyan-400/10 pt-6 space-y-4">
+            <!-- Etymology & Facts — enabled for all screens -->
+            <div class="relative z-10 mt-6 border-t border-cyan-400/10 pt-6 space-y-4">
               <!-- Perigee -->
               <div>
                 <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-2">ETYMOLOGY // PERIGEE</p>
