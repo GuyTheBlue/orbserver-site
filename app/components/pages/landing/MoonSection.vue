@@ -95,17 +95,15 @@ onMounted(() => {
   <section ref="sectionEl" class="relative bg-[#010810] overflow-hidden broken-terminal-jitter" style="min-height: 120vh;">
 
     <!-- ── 1. BACKGROUND TERMINAL (z-0, absolute, full section) ─────────── -->
-    <!-- Larger font as a typographic wash -->
     <ClientOnly>
       <div class="absolute inset-0 z-0 p-10 lg:p-16 font-mono overflow-hidden select-none pointer-events-none">
-        <!-- Cyan Mac-style dots via stepped opacity -->
         <div class="flex items-center gap-2.5 mb-10 opacity-60">
           <span class="w-3 h-3 rounded-full bg-cyan-400 opacity-100 shadow-[0_0_8px_rgba(0,255,255,0.6)]" />
           <span class="w-3 h-3 rounded-full bg-cyan-400 opacity-70" />
           <span class="w-3 h-3 rounded-full bg-cyan-400 opacity-40" />
           <span class="ml-6 text-[13px] text-cyan-400/40 tracking-[0.4em] uppercase">terminal_bg::process_feed</span>
         </div>
-        <!-- Typed output - BIGGER for depth wash -->
+        <!-- BIGGER wash for depth -->
         <div class="text-[22px] leading-relaxed opacity-[0.18]">
           <div v-for="(line, i) in termLines" :key="i">
             <div v-if="line.cls === 'term-blank'" class="h-6" />
@@ -124,11 +122,8 @@ onMounted(() => {
     </ClientOnly>
 
     <!-- ── 2. CRT LAYER STACK (above terminal, below panels) ──────────────── -->
-    <!-- Grid lines -->
     <div class="absolute inset-0 z-[2] pointer-events-none opacity-[0.12] grid-overlay" />
-    <!-- Heavy scanlines -->
     <div class="absolute inset-0 z-[3] pointer-events-none opacity-[0.35] scanline-overlay" />
-    <!-- Vignette -->
     <div class="absolute inset-0 z-[4] pointer-events-none crt-vignette opacity-50" />
 
     <!-- ── 3. BACKGROUND TYPOGRAPHY WASH ────────────────────────────────── -->
@@ -137,13 +132,10 @@ onMounted(() => {
         class="absolute -top-[5%] -left-[5%] font-orbitron font-black text-white/[0.035] whitespace-nowrap leading-none"
         style="font-size: clamp(100px, 22vw, 320px); transform: rotate(-5deg);"
       >{{ latStr }}</div>
-      <div
-        class="absolute bottom-[5%] -right-[5%] font-orbitron font-black text-white/[0.02] whitespace-nowrap leading-none"
-        style="font-size: clamp(80px, 16vw, 240px); transform: rotate(2deg);"
-      >LUNAR_OBS</div>
+      <div class="absolute bottom-[5%] -right-[5%] font-orbitron font-black text-white/[0.02] whitespace-nowrap leading-none" style="font-size: clamp(80px, 16vw, 240px); transform: rotate(2deg);">LUNAR_OBS</div>
     </div>
 
-    <!-- ── 4. PANELS (z-10, backdrop-blur for FROSTED REVEAL) ─────────────── -->
+    <!-- ── 4. PANELS (z-10) ──────────────────────────────────────────────── -->
     <div class="relative z-10 max-w-[1600px] mx-auto px-6 pt-24 pb-24 2xl:pt-32">
 
       <!-- STATUS BAR -->
@@ -167,120 +159,88 @@ onMounted(() => {
 
         <!-- MOON PANEL -->
         <div class="xl:col-span-7 panel-card group flex flex-col items-center justify-center min-h-[580px] lg:min-h-[700px] p-12 rounded-2xl bento-flicker">
+          <div class="panel-grid-mesh" />
+          <div class="panel-scanlines" />
           <div class="card-brackets" />
           <div class="card-glow" />
-          <div class="panel-scanlines" />
-          <label class="font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase mb-8 self-start">VISUAL_FEED::PRIMARY</label>
+          <!-- Logo Watermark -->
+          <svg class="absolute bottom-6 left-6 w-10 h-10 text-cyan-400/10 pointer-events-none" viewBox="0 0 50 43"><path d="M12.5 0L37.5 0L50 21.5L37.5 43L12.5 43L0 21.5Z" fill="none" stroke="currentColor" stroke-width="1.5" /></svg>
+          
+          <label class="relative z-10 font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase mb-8 self-start">VISUAL_FEED::PRIMARY</label>
 
-          <div
-            class="relative w-full max-w-[400px] xl:max-w-[480px] transition-all duration-1000"
-            :class="isVisible ? 'opacity-100 rotate-0' : 'opacity-0 rotate-12'"
-          >
+          <div class="relative z-10 w-full max-w-[400px] xl:max-w-[480px] transition-all duration-1000" :class="isVisible ? 'opacity-100 rotate-0' : 'opacity-0 rotate-12'">
             <SharedMoonPhase :fraction="fraction" :phase="phase" :rotation="apparentRotation" :lat="lat" />
             <svg class="absolute pointer-events-none text-cyan-400/30 rotate-ring" style="inset:-15%;width:130%;height:130%;">
-              <circle cx="50%" cy="50%" r="44%" stroke="currentColor" fill="none" stroke-dasharray="4 14" stroke-width="1"/>
-              <g stroke="currentColor" stroke-width="1">
-                <line x1="50%" y1="0%" x2="50%" y2="8%"/>
-                <line x1="50%" y1="92%" x2="50%" y2="100%"/>
-                <line x1="0%" y1="50%" x2="8%" y2="50%"/>
-                <line x1="92%" y1="50%" x2="100%" y2="50%"/>
-              </g>
+              <circle cx="50%" cy="50%" r="44%" stroke="currentColor" fill="none" stroke-dasharray="4 14" stroke-width="1"/><g stroke="currentColor" stroke-width="1"><line x1="50%" y1="0%" x2="50%" y2="8%"/><line x1="50%" y1="92%" x2="50%" y2="100%"/><line x1="0%" y1="50%" x2="8%" y2="50%"/><line x1="92%" y1="50%" x2="100%" y2="50%"/></g>
             </svg>
           </div>
 
-          <div class="mt-12 text-center w-full">
-            <h2 class="font-orbitron font-black text-6xl xl:text-7xl text-white tracking-widest uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.4)]">
-              {{ isLoading ? '…' : phaseName }}
-            </h2>
+          <div class="relative z-10 mt-12 text-center w-full">
+            <h2 class="font-orbitron font-black text-6xl xl:text-7xl text-white tracking-widest uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.4)]">{{ isLoading ? '…' : phaseName }}</h2>
             <div class="mt-8 flex items-stretch justify-center">
-              <div class="flex flex-col items-center px-10 border-r border-white/10">
-                <span class="font-mono text-[10px] text-cyan-400/60 tracking-[0.5em] uppercase mb-3">Age</span>
-                <span class="font-orbitron font-black text-5xl text-white">{{ age }}<span class="text-xl text-white/20 ml-1">d</span></span>
-              </div>
-              <div class="flex flex-col items-center px-10 border-r border-white/10">
-                <span class="font-mono text-[10px] text-cyan-400/60 tracking-[0.5em] uppercase mb-3">Illum</span>
-                <span class="font-orbitron font-black text-5xl text-white">{{ illuminationPct }}<span class="text-xl text-white/20 ml-1">%</span></span>
-              </div>
-              <div class="flex flex-col items-center px-10">
-                <span class="font-mono text-[10px] text-cyan-400/60 tracking-[0.5em] uppercase mb-3">Rot</span>
-                <span class="font-orbitron font-black text-5xl text-cyan-400">{{ Math.round(apparentRotation) }}<span class="text-xl text-white/20 ml-1">°</span></span>
-              </div>
+              <div class="flex flex-col items-center px-10 border-r border-white/10"><span class="font-mono text-[10px] text-cyan-400/60 tracking-[0.5em] uppercase mb-3">Age</span><span class="font-orbitron font-black text-5xl text-white">{{ age }}<span class="text-xl text-white/20 ml-1">d</span></span></div>
+              <div class="flex flex-col items-center px-10 border-r border-white/10"><span class="font-mono text-[10px] text-cyan-400/60 tracking-[0.5em] uppercase mb-3">Illum</span><span class="font-orbitron font-black text-5xl text-white">{{ illuminationPct }}<span class="text-xl text-white/20 ml-1">%</span></span></div>
+              <div class="flex flex-col items-center px-10"><span class="font-mono text-[10px] text-cyan-400/60 tracking-[0.5em] uppercase mb-3">Rot</span><span class="font-orbitron font-black text-5xl text-cyan-400">{{ Math.round(apparentRotation) }}<span class="text-xl text-white/20 ml-1">°</span></span></div>
             </div>
           </div>
         </div>
 
         <!-- SIDE STATS COLUMN -->
         <div class="xl:col-span-5 flex flex-col gap-8">
-
-          <!-- Distance -->
           <div class="panel-card group flex-1 p-10 rounded-2xl bento-flicker">
-            <div class="card-brackets" /><div class="card-glow" /><div class="card-scan" />
-            <label class="font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase block mb-6">RADAR::DIST_CAL</label>
-            <div class="font-orbitron font-black text-5xl xl:text-7xl text-white tracking-tighter mb-6">
-              {{ distFormatted }}<span class="text-xl text-white/30 ml-4 font-mono">KM</span>
-            </div>
-            <div class="relative h-2 bg-white/5 rounded-full mb-4">
+            <div class="panel-grid-mesh" /><div class="panel-scanlines" /><div class="card-brackets" /><div class="card-glow" /><div class="card-scan" />
+            <svg class="absolute bottom-6 right-6 w-8 h-8 text-white/5 pointer-events-none" viewBox="0 0 50 43"><path d="M12.5 0L37.5 0L50 21.5L37.5 43L12.5 43L0 21.5Z" fill="none" stroke="currentColor" stroke-width="1.5" /></svg>
+            <label class="relative z-10 font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase block mb-6">RADAR::DIST_CAL</label>
+            <div class="relative z-10 font-orbitron font-black text-5xl xl:text-7xl text-white tracking-tighter mb-6">{{ distFormatted }}<span class="text-xl text-white/30 ml-4 font-mono">KM</span></div>
+            <div class="relative z-10 h-2 bg-white/5 rounded-full mb-4">
               <div class="absolute inset-y-0 left-0 bg-cyan-400 shadow-[0_0_15px_rgba(0,255,255,1)] rounded-full transition-all duration-1000" :style="{ width: `${distRatio}%` }" />
-              <div class="absolute -top-1.5 w-5 h-5 bg-white rounded-full shadow-[0_0_15px_white] transition-all duration-1000" :style="{ left: `calc(${distRatio}% - 10px)` }" />
+              <div class="absolute -top-1.5 w-5 h-5 bg-white rounded-full transition-all duration-1000" :style="{ left: `calc(${distRatio}% - 10px)` }" />
             </div>
-            <div class="flex justify-between font-mono text-[10px] text-white/30 uppercase tracking-[0.4em]">
-              <span>[PRG] NEAR</span><span>[APG] FAR</span>
-            </div>
+            <div class="relative z-10 flex justify-between font-mono text-[10px] text-white/30 uppercase tracking-[0.4em]"><span>[PRG] NEAR</span><span>[APG] FAR</span></div>
           </div>
 
-          <!-- Next events (2 col) -->
           <div class="grid grid-cols-2 gap-8">
             <div class="panel-card group p-10 rounded-2xl bento-flicker" style="animation-delay:0.8s">
-              <div class="card-brackets" /><div class="card-glow opacity-60" />
-              <label class="font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase block mb-6">NEXT_FULL</label>
-              <div class="font-orbitron font-black text-5xl xl:text-6xl text-white">{{ daysToFullMoon }}<span class="text-2xl text-white/20 ml-2">d</span></div>
-              <p class="font-mono text-[10px] text-white/20 uppercase tracking-[0.3em] mt-6 truncate">{{ nextFullMoon }}</p>
+              <div class="panel-grid-mesh" /><div class="panel-scanlines" /><div class="card-brackets" />
+              <svg class="absolute top-6 right-6 w-6 h-6 text-white/5 pointer-events-none" viewBox="0 0 50 43"><path d="M12.5 0L37.5 0L50 21.5L37.5 43L12.5 43L0 21.5Z" fill="none" stroke="currentColor" stroke-width="1" /></svg>
+              <label class="relative z-10 font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase block mb-6">NEXT_FULL</label>
+              <div class="relative z-10 font-orbitron font-black text-5xl xl:text-6xl text-white">{{ daysToFullMoon }}<span class="text-2xl text-white/20 ml-2">d</span></div>
+              <p class="relative z-10 font-mono text-[10px] text-white/20 uppercase tracking-[0.3em] mt-6 truncate">{{ nextFullMoon }}</p>
             </div>
             <div class="panel-card group p-10 rounded-2xl bento-flicker" style="animation-delay:1.4s">
-              <div class="card-brackets" /><div class="card-glow opacity-60" />
-              <label class="font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase block mb-6">NEXT_NEW</label>
-              <div class="font-orbitron font-black text-5xl xl:text-6xl text-cyan-400">{{ daysToNewMoon }}<span class="text-2xl text-white/20 ml-2">d</span></div>
-              <p class="font-mono text-[10px] text-white/20 uppercase tracking-[0.3em] mt-6 truncate">{{ nextNewMoon }}</p>
+              <div class="panel-grid-mesh" /><div class="panel-scanlines" /><div class="card-brackets" />
+              <svg class="absolute top-6 right-6 w-6 h-6 text-white/5 pointer-events-none" viewBox="0 0 50 43"><path d="M12.5 0L37.5 0L50 21.5L37.5 43L12.5 43L0 21.5Z" fill="none" stroke="currentColor" stroke-width="1" /></svg>
+              <label class="relative z-10 font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase block mb-6">NEXT_NEW</label>
+              <div class="relative z-10 font-orbitron font-black text-5xl xl:text-6xl text-cyan-400">{{ daysToNewMoon }}<span class="text-2xl text-white/20 ml-2">d</span></div>
+              <p class="relative z-10 font-mono text-[10px] text-white/20 uppercase tracking-[0.3em] mt-6 truncate">{{ nextNewMoon }}</p>
             </div>
           </div>
-
         </div>
       </div>
 
       <!-- ── ROW 2: OBSERVER COORDS + ALT/AZ ──────────────────────────────── -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
         <div class="lg:col-span-2 panel-card group p-10 rounded-2xl bento-flicker" style="animation-delay:2s">
-          <div class="card-brackets" /><div class="card-glow" />
-          <label class="font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase block mb-10">LOC_SYSLOG::COORDS</label>
-          <div class="grid grid-cols-2 gap-8">
-            <div>
-              <span class="font-mono text-[11px] text-white/20 uppercase tracking-[0.4em] block mb-4">LATITUDE</span>
-              <span class="font-orbitron font-black text-4xl xl:text-6xl text-white">{{ latStr }}</span>
-            </div>
-            <div>
-              <span class="font-mono text-[11px] text-white/20 uppercase tracking-[0.4em] block mb-4">LONGITUDE</span>
-              <span class="font-orbitron font-black text-4xl xl:text-6xl text-white">{{ lngStr }}</span>
-            </div>
+          <div class="panel-grid-mesh" /><div class="panel-scanlines" /><div class="card-brackets" />
+          <svg class="absolute top-6 right-8 w-10 h-10 text-cyan-400/5 pointer-events-none" viewBox="0 0 50 43"><path d="M12.5 0L37.5 0L50 21.5L37.5 43L12.5 43L0 21.5Z" fill="none" stroke="currentColor" stroke-width="1" /></svg>
+          <label class="relative z-10 font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase block mb-10">LOC_SYSLOG::COORDS</label>
+          <div class="relative z-10 grid grid-cols-2 gap-8">
+            <div><span class="font-mono text-[11px] text-white/20 uppercase tracking-[0.4em] block mb-4">LATITUDE</span><span class="font-orbitron font-black text-4xl xl:text-6xl text-white">{{ latStr }}</span></div>
+            <div><span class="font-mono text-[11px] text-white/20 uppercase tracking-[0.4em] block mb-4">LONGITUDE</span><span class="font-orbitron font-black text-4xl xl:text-6xl text-white">{{ lngStr }}</span></div>
           </div>
-          <div class="mt-10 flex items-center gap-4 px-6 py-4 border border-cyan-400/20 bg-cyan-400/5 transition-all group-hover:bg-cyan-400/10">
+          <div class="relative z-10 mt-10 flex items-center gap-4 px-6 py-4 border border-cyan-400/20 bg-cyan-400/5">
             <div class="w-3 h-3 rounded-full bg-[#28c840] animate-pulse shadow-[0_0_12px_rgba(40,200,64,1)]" />
             <span class="font-mono text-[11px] text-cyan-400 tracking-[0.4em] uppercase">SH_CALIBRATION: ACTIVE // FEED: SYNCED</span>
           </div>
         </div>
 
         <div class="panel-card group p-10 rounded-2xl flex flex-col justify-between bento-flicker" style="animation-delay:2.8s">
-          <div class="card-brackets" /><div class="card-glow opacity-60" />
-          <label class="font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase block mb-10">POSITION_DATA</label>
-          <div class="flex flex-col gap-8">
-            <div class="border-b border-white/10 pb-8">
-              <span class="font-mono text-[11px] text-white/20 uppercase tracking-widest block mb-4">ALTITUDE</span>
-              <span class="font-orbitron font-black text-5xl xl:text-6xl text-white">{{ altStr }}</span>
-            </div>
-            <div>
-              <span class="font-mono text-[11px] text-white/20 uppercase tracking-widest block mb-4">AZIMUTH</span>
-              <span class="font-orbitron font-black text-5xl xl:text-6xl text-white">{{ azStr }}</span>
-            </div>
+          <div class="panel-grid-mesh" /><div class="panel-scanlines" /><div class="card-brackets" />
+          <svg class="absolute bottom-6 right-6 w-8 h-8 text-white/5 pointer-events-none" viewBox="0 0 50 43"><path d="M12.5 0L37.5 0L50 21.5L37.5 43L12.5 43L0 21.5Z" fill="none" stroke="currentColor" stroke-width="1.5" /></svg>
+          <label class="relative z-10 font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase block mb-10">POSITION_DATA</label>
+          <div class="relative z-10 flex flex-col gap-8">
+            <div class="border-b border-white/10 pb-8"><span class="font-mono text-[11px] text-white/20 uppercase tracking-widest block mb-4">ALTITUDE</span><span class="font-orbitron font-black text-5xl xl:text-6xl text-white">{{ altStr }}</span></div>
+            <div><span class="font-mono text-[11px] text-white/20 uppercase tracking-widest block mb-4">AZIMUTH</span><span class="font-orbitron font-black text-5xl xl:text-6xl text-white">{{ azStr }}</span></div>
           </div>
         </div>
       </div>
@@ -290,10 +250,7 @@ onMounted(() => {
 
 <style scoped>
 /* ── BROKEN TERMINAL ANIMATIONS ── */
-.broken-terminal-jitter {
-  animation: glitch-jitter 12s infinite alternate;
-}
-
+.broken-terminal-jitter { animation: glitch-jitter 12s infinite alternate; }
 @keyframes glitch-jitter {
   0%, 95%, 100% { transform: translate(0); filter: hue-rotate(0deg); }
   96% { transform: translate(2px, -1px); filter: hue-rotate(5deg) brightness(1.1); }
@@ -303,29 +260,14 @@ onMounted(() => {
 }
 
 /* ── CRT STACK ── */
-.grid-overlay {
-  background-image:
-    linear-gradient(rgba(0, 242, 255, 0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 242, 255, 0.1) 1px, transparent 1px);
-  background-size: 32px 32px;
-}
-.scanline-overlay {
-  background: repeating-linear-gradient(
-    0deg,
-    rgba(0, 0, 0, 0.8) 0px,
-    rgba(0, 0, 0, 0.8) 1.5px,
-    transparent 1.5px,
-    transparent 4px
-  );
-}
-.crt-vignette {
-  background: radial-gradient(circle at 50% 50%, transparent 25%, rgba(0,0,0,0.95) 100%);
-}
+.grid-overlay { background-image: linear-gradient(rgba(0, 242, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 242, 255, 0.1) 1px, transparent 1px); background-size: 32px 32px; }
+.scanline-overlay { background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.8) 0px, rgba(0, 0, 0, 0.8) 1.5px, transparent 1.5px, transparent 4px); }
+.crt-vignette { background: radial-gradient(circle at 50% 50%, transparent 25%, rgba(0,0,0,0.95) 100%); }
 
-/* ── PANEL CARDS (FROSTED REVEAL) ── */
+/* ── PANEL CARDS ── */
 .panel-card {
   position: relative;
-  background: rgba(4, 12, 18, 0.45); /* LIGHTER for bleed through */
+  background: rgba(4, 12, 18, 0.45);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border: 1.5px solid rgba(0, 242, 255, 0.15);
@@ -333,83 +275,48 @@ onMounted(() => {
   overflow: hidden;
 }
 
-/* Red Alert / Glitch Theme (Random occurrence via animation) */
+/* PERMANENT INTERNAL GRID */
+.panel-grid-mesh {
+  position: absolute; inset: 0;
+  background-image: 
+    linear-gradient(rgba(0, 242, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 242, 255, 0.04) 1px, transparent 1px);
+  background-size: 20px 20px;
+  pointer-events: none; z-index: 0;
+}
+
+/* Red Alert / Glitch Theme (INTERNAL ONLY) */
 @keyframes red-glitch-alert {
   0%, 88%, 100% { 
-    background: rgba(4, 12, 18, 0.45); 
-    border-color: rgba(0, 242, 255, 0.15);
+    background: rgba(4, 12, 18, 0.45); border-color: rgba(0, 242, 255, 0.15);
   }
   89%, 91% { 
-    background: rgba(180, 20, 20, 0.3); 
-    border-color: rgba(255, 0, 80, 0.8);
-    box-shadow: 0 0 40px rgba(255, 0, 80, 0.3);
+    background: rgba(180, 10, 10, 0.25); border-color: rgba(255, 0, 50, 0.6);
   }
 }
 
-.bento-flicker {
-  animation: signal-flicker 11s infinite, red-glitch-alert 15s infinite;
-}
+.bento-flicker { animation: signal-flicker 11s infinite, red-glitch-alert 15s infinite; }
+.panel-card:hover { border-color: rgba(0, 242, 255, 0.6); background: rgba(4, 12, 18, 0.55); box-shadow: 0 0 80px rgba(0, 242, 255, 0.12); }
 
-.panel-card:hover {
-  border-color: rgba(0, 242, 255, 0.6);
-  background: rgba(4, 12, 18, 0.55);
-  box-shadow: 0 0 80px rgba(0, 242, 255, 0.12);
-}
-
-/* HEAVIER CRT scanlines inside each panel */
 .panel-scanlines {
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    rgba(0, 0, 0, 0.5) 0px,
-    rgba(0, 0, 0, 0.5) 1px,
-    transparent 1px,
-    transparent 3px
-  );
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.7;
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.4) 0px, rgba(0, 0, 0, 0.4) 1px, transparent 1px, transparent 3px);
+  pointer-events: none; z-index: 0; opacity: 0.6;
 }
 
-/* Brackets */
-.card-brackets::before, .card-brackets::after {
-  content: '';
-  position: absolute;
-  width: 24px; height: 24px;
-  border-color: rgba(0, 242, 255, 0.6);
-  z-index: 20;
-}
+.card-brackets::before, .card-brackets::after { content: ''; position: absolute; width: 24px; height: 24px; border-color: rgba(0, 242, 255, 0.6); z-index: 20; }
 .card-brackets::before { top: 0; left: 0; border-top: 3px solid; border-left: 3px solid; }
 .card-brackets::after  { bottom: 0; right: 0; border-bottom: 3px solid; border-right: 3px solid; }
 
-/* ── SIGNAL FLICKER ── */
 @keyframes signal-flicker {
   0%   { opacity: 1; filter: contrast(1); }
-  1%   { opacity: 0.85; filter: contrast(1.4) brightness(1.2) grayscale(0.5); }
+  1%   { opacity: 0.85; filter: contrast(1.4) brightness(1.2); }
   2%   { opacity: 1; filter: contrast(1); }
-  55%  { opacity: 1; }
-  56%  { opacity: 0.95; filter: contrast(1.1); transform: scaleY(1.01); }
-  57%  { opacity: 1; }
 }
 
-/* ── MISC ── */
 .rotate-ring { animation: rotate-slow 90s linear infinite; }
-@keyframes rotate-slow {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-
+@keyframes rotate-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 .ticker-wrap { mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent); }
 .ticker-content { display: inline-block; animation: ticker 40s linear infinite; }
-@keyframes ticker {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-.hex-cluster {
-  background-image: url("data:image/svg+xml,%3Csvg width='50' height='43' viewBox='0 0 50 43' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.5 0L37.5 0L50 21.5L37.5 43L12.5 43L0 21.5Z' fill='none' stroke='%2300f2ff' stroke-width='1' /%3E%3C/svg%3E");
-  background-size: 30px 26px;
-  mask-image: radial-gradient(circle, black 20%, transparent 75%);
-}
+@keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 </style>
