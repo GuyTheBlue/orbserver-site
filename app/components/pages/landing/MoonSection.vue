@@ -6,7 +6,7 @@ const {
   isLoading, fraction, phase, phaseName, age,
   distance, altitude, azimuth,
   nextFullMoon, nextNewMoon, daysToFullMoon, daysToNewMoon,
-  apparentRotation, lat, lng
+  apparentRotation, lat, lng, movingTowardPerigee
 } = useMoonData()
 
 // ── Intersection ────────────────────────────────────────────────────────────
@@ -300,7 +300,7 @@ onMounted(() => {
                 <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_6px_rgba(0,255,255,1)]" />
                 <span class="font-mono text-[9px] text-cyan-400/60 tracking-[0.3em] uppercase">
                   CURRENT_DIST: <span class="text-white/80">{{ distFormatted }} KM</span>
-                  &nbsp;//&nbsp; {{ distRatio < 50 ? 'APPROACHING PERIGEE' : 'APPROACHING APOGEE' }}
+                  &nbsp;//&nbsp; {{ movingTowardPerigee ? 'APPROACHING PERIGEE' : 'RECEDING → APOGEE' }}
                 </span>
               </div>
             </div>

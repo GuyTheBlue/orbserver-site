@@ -75,6 +75,7 @@ export function useMoonData() {
   const lng = ref(0)
   const librationAngle = ref(0) // Position angle of the bright limb
   const apparentRotation = ref(0) // Rotation relative to observer zenith
+  const movingTowardPerigee = ref(false) // true = distance shrinking (toward perigee)
 
   onMounted(async () => {
     if (!import.meta.client) return
@@ -115,6 +116,12 @@ export function useMoonData() {
       altitude.value = parseFloat((pos.altitude * (180 / Math.PI)).toFixed(1))
       azimuth.value = parseFloat((((pos.azimuth * (180 / Math.PI)) + 180 + 360) % 360).toFixed(1))
 
+      // ── Orbital Direction ─────────────────────────────────────────────────
+      // Compare distance in 2 hours to determine if closing on or receding from perigee
+      const futureDate = new Date(now.getTime() + 2 * 60 * 60 * 1000)
+      const futurePos = SunCalc.getMoonPosition(futureDate, loc.lat, loc.lng)
+      movingTowardPerigee.value = futurePos.distance < pos.distance
+
       // ── Apparent Rotation (Orientation relative to observer's sky) ────
       // phi = latitude in radians
       const phi = loc.lat * (Math.PI / 180)
@@ -153,6 +160,7 @@ export function useMoonData() {
     lat,
     lng,
     librationAngle,
-    apparentRotation
+    apparentRotation,
+    movingTowardPerigee
   }
 }
