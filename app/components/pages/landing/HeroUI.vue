@@ -119,7 +119,9 @@ onMounted(() => {
     </div>
 
     <!-- 1b. DYNAMIC RED HEXAGON GLITCHES (Centralized Component) ──────── -->
-    <SharedGlitchSystem :z-index="500" :density="4" :base-size="48" />
+    <ClientOnly>
+      <SharedGlitchSystem :z-index="500" :density="4" :base-size="64" />
+    </ClientOnly>
 
     <!-- 2. "KNOW THY MOON" DASHBOARD CTA (Corrected Size + OS Style) -->
     <div class="absolute bottom-[20%] left-[5%] md:left-[8%] pointer-events-auto">

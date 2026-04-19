@@ -27,14 +27,16 @@ function spawnGlitch() {
   if (r > 0.95) type = 'sticky'
   else if (r > 0.6) type = 'wire-pop'
 
-  // Random size from 25% to 100% of baseSize
-  const max = props.baseSize || 40
-  const size = Math.floor(Math.random() * (max - 12) + 12)
+  // Random size: minimum 32px, weighted toward larger sizes
+  const min = 32
+  const max = props.baseSize || 48
+  // Using Math.pow(Math.random(), 0.5) to weight results toward max
+  const size = Math.floor(Math.pow(Math.random(), 0.5) * (max - min) + min)
 
   activeGlitches.value.push({
     id,
-    x: Math.random() * 90 + 5,
-    y: Math.random() * 80 + 10,
+    x: Math.random() * 92 + 2, // slightly more centered
+    y: Math.random() * 85 + 5,
     size,
     type
   })
@@ -54,34 +56,36 @@ onMounted(() => {
 </script>
 
 <template>
-  <div 
-    class="absolute inset-0 pointer-events-none overflow-hidden"
-    :style="{ zIndex: zIndex || 500 }"
-  >
-    <svg 
-      v-for="g in activeGlitches" 
-      :key="g.id"
-      class="absolute opacity-0"
-      :class="{
-        'hex-sticky-anim': g.type === 'sticky',
-        'hex-pop-anim': g.type !== 'sticky'
-      }"
-      :style="{
-        top: `${g.y}%`,
-        left: `${g.x}%`,
-        width: `${g.size}px`,
-        height: `${g.size}px`
-      }"
-      viewBox="0 0 100 100"
+  <ClientOnly>
+    <div 
+      class="absolute inset-0 pointer-events-none overflow-hidden"
+      :style="{ zIndex: zIndex || 500 }"
     >
-      <polygon
-        points="50,5 95,25 95,75 50,95 5,75 5,25"
-        :fill="g.type === 'solid-pop' ? 'rgba(239,68,68,0.7)' : 'none'"
-        :stroke="'rgba(239,68,68,0.9)'"
-        :stroke-width="g.type === 'solid-pop' ? '0' : '4'"
-      />
-    </svg>
-  </div>
+      <svg 
+        v-for="g in activeGlitches" 
+        :key="g.id"
+        class="absolute opacity-0"
+        :class="{
+          'hex-sticky-anim': g.type === 'sticky',
+          'hex-pop-anim': g.type !== 'sticky'
+        }"
+        :style="{
+          top: `${g.y}%`,
+          left: `${g.x}%`,
+          width: `${g.size}px`,
+          height: `${g.size}px`
+        }"
+        viewBox="0 0 100 100"
+      >
+        <polygon
+          points="50,5 95,25 95,75 50,95 5,75 5,25"
+          :fill="g.type === 'solid-pop' ? 'rgba(239,68,68,0.7)' : 'none'"
+          :stroke="'rgba(239,68,68,0.9)'"
+          :stroke-width="g.type === 'solid-pop' ? '0' : '4'"
+        />
+      </svg>
+    </div>
+  </ClientOnly>
 </template>
 
 <style scoped>

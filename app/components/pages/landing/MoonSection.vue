@@ -114,16 +114,6 @@ onMounted(() => {
   if (!import.meta.client) return
   setInterval(() => { termCursor.value = !termCursor.value }, 530)
   setTimeout(runSession, 1400)
-
-  // Rhythmic Spawner (HIGH DENSITY // RAPID)
-  setInterval(() => {
-    const r = Math.random()
-    // Sticky remains rare
-    if (r > 0.96) spawnGlitch('sticky')
-    // Rapid pops are much more common
-    else if (r > 0.4) spawnGlitch('solid-pop')
-    else if (r > 0.1) spawnGlitch('wire-pop')
-  }, 250)
 })
 </script>
 
@@ -202,7 +192,9 @@ onMounted(() => {
     </div>
 
     <!-- ── 4. DYNAMIC RED HEXAGON GLITCHES (Centralized Component) ──────── -->
-    <SharedGlitchSystem :z-index="400" :density="4" :base-size="48" />
+    <ClientOnly>
+      <SharedGlitchSystem :z-index="400" :density="4" :base-size="54" />
+    </ClientOnly>
 
     <!-- ── 4. PANELS (z-10) ──────────────────────────────────────────────── -->
     <div class="relative z-10 max-w-[1600px] mx-auto px-6 pt-24 pb-24 2xl:pt-32">
@@ -987,13 +979,5 @@ onMounted(() => {
   background: transparent;
   border: 1px solid rgba(239, 68, 68, 0.4);
   animation: glitch-stick linear infinite;
-}
-
-  to   { transform: translate(100px, 60px) rotate(360deg) translateX(90px) scaleY(0.4) rotate(-360deg); }
-}
-
-@keyframes moon-orbit {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
 }
 </style>
