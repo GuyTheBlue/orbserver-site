@@ -95,6 +95,31 @@ const telemetryRows = computed(() => {
   ]
 })
 
+// ── GLITCH SPAWNER (Dynamic random glitches) ───────────────────────────────
+interface GlitchInstance {
+  id: number
+  x: number
+  y: number
+  type: 'solid-pop' | 'wire-pop' | 'sticky'
+}
+const activeGlitches = ref<GlitchInstance[]>([])
+let glitchId = 0
+
+function spawnGlitch(type: 'solid-pop' | 'wire-pop' | 'sticky') {
+  if (!import.meta.client) return
+  const id = glitchId++
+  activeGlitches.value.push({
+    id,
+    x: Math.random() * 80 + 10,
+    y: Math.random() * 80 + 10,
+    type
+  })
+  const dur = type === 'sticky' ? 10000 : 1000
+  setTimeout(() => {
+    activeGlitches.value = activeGlitches.value.filter(g => g.id !== id)
+  }, dur)
+}
+
 onMounted(() => {
   if (!import.meta.client) return
   generateDeepWash()
@@ -102,6 +127,14 @@ onMounted(() => {
   setInterval(cypherMoon, 80)
   setInterval(triggerGlitch, 2000)
   typeFactoid()
+
+  // Rhythmic Spawner (HIGH DENSITY // RAPID)
+  setInterval(() => {
+    const r = Math.random()
+    if (r > 0.96) spawnGlitch('sticky')
+    else if (r > 0.4) spawnGlitch('solid-pop')
+    else if (r > 0.1) spawnGlitch('wire-pop')
+  }, 250)
 })
 </script>
 
@@ -115,19 +148,29 @@ onMounted(() => {
       </div>
     </div>
 
-    <!-- 1b. RED HEXAGON GLITCHES (Sharp/Active) -->
-    <div class="absolute inset-0 z-[120] pointer-events-none overflow-hidden">
-      <div 
-        v-for="i in 5" 
-        :key="i"
-        class="absolute w-32 h-32 bg-red-600/20 hexagon-glitch opacity-0"
-        :style="{
-          top: `${Math.random() * 80 + 10}%`,
-          left: `${Math.random() * 80 + 10}%`,
-          animationDelay: `${Math.random() * 2}s`,
-          animationDuration: `${Math.random() * 4 + 2}s`
+    <!-- 1b. DYNAMIC RED HEXAGON GLITCHES (SVG Spawner driven) ────────────── -->
+    <div class="absolute inset-0 z-[500] pointer-events-none overflow-hidden">
+      <svg 
+        v-for="g in activeGlitches" 
+        :key="g.id"
+        class="absolute w-40 h-40 opacity-0"
+        :class="{
+          'hex-sticky-anim': g.type === 'sticky',
+          'hex-pop-anim': g.type !== 'sticky'
         }"
-      />
+        :style="{
+          top: `${g.y}%`,
+          left: `${g.x}%`
+        }"
+        viewBox="0 0 100 100"
+      >
+        <polygon
+          points="50,5 95,25 95,75 50,95 5,75 5,25"
+          :fill="g.type === 'solid-pop' ? 'rgba(239,68,68,0.7)' : 'none'"
+          :stroke="'rgba(239,68,68,0.9)'"
+          :stroke-width="g.type === 'solid-pop' ? '0' : '4'"
+        />
+      </svg>
     </div>
 
     <!-- 2. "KNOW THY MOON" DASHBOARD CTA (Corrected Size + OS Style) -->
@@ -240,10 +283,49 @@ onMounted(() => {
   animation: glitch-pop-hero linear infinite;
 }
 
+.hexagon-glitch:nth-child(even) {
+  background: transparent !important;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+}
+.hexagon-glitch:nth-child(3n) {
+  background: rgba(239, 68, 68, 0.05) !important;
+  border: 2px solid rgba(239, 68, 68, 0.3);
+}
+
 @keyframes glitch-pop-hero {
   0%, 96%, 100% { opacity: 0; transform: scale(0.6) rotate(0deg); }
   97% { opacity: 0.5; transform: scale(1.1) rotate(10deg); }
   98% { opacity: 0.2; transform: scale(0.9) rotate(-5deg); }
   99% { opacity: 0.6; transform: scale(1.0) rotate(0deg); }
+}
+
+.hexagon-sticky {
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+  background: transparent;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  animation: glitch-stick-hero linear infinite;
+}
+
+/* New v2 Hexagon Glitches (SVG Spawner optimized) */
+.hex-pop-anim {
+  animation: glitch-instant-pop 0.35s forwards;
+}
+.hex-sticky-anim {
+  animation: glitch-long-stick 10s forwards;
+}
+
+@keyframes glitch-instant-pop {
+  0% { opacity: 0; transform: scale(0.6); }
+  10% { opacity: 0.8; transform: scale(1.1); }
+  20% { opacity: 0.2; transform: scale(0.9); }
+  30% { opacity: 0.6; transform: scale(1.0); }
+  100% { opacity: 0; transform: scale(1.2); }
+}
+
+@keyframes glitch-long-stick {
+  0% { opacity: 0; transform: scale(0.9); }
+  2% { opacity: 0.9; transform: scale(1.05); } /* Flash in */
+  5%, 85% { opacity: 0.5; transform: scale(1); } /* Stick */
+  100% { opacity: 0; transform: scale(1.1); }
 }
 </style>
