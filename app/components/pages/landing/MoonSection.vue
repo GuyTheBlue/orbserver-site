@@ -200,8 +200,8 @@ onMounted(() => {
               <div class="flex flex-col items-center px-10"><span class="font-mono text-[10px] text-cyan-400/60 tracking-[0.5em] uppercase mb-3">Rot</span><span class="font-orbitron font-black text-5xl text-cyan-400">{{ Math.round(apparentRotation) }}<span class="text-xl text-white/20 ml-1">°</span></span></div>
             </div>
 
-            <!-- Technical Briefing: Factoids for xl+ screens -->
-            <div class="mt-12 hidden xl:grid grid-cols-3 gap-y-12 gap-x-10 border-t border-white/5 pt-10 text-left">
+            <!-- Technical Briefing: Factoids — enabled for ALL screens -->
+            <div class="mt-12 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-y-12 gap-x-10 border-t border-white/5 pt-10 text-left">
               <!-- Row 1 -->
               <div>
                 <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-3">PHASE // ALBEDO</p>
