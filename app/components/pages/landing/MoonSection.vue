@@ -6,7 +6,8 @@ const {
   isLoading, fraction, phase, phaseName, age,
   distance, altitude, azimuth,
   nextFullMoon, nextNewMoon, daysToFullMoon, daysToNewMoon,
-  apparentRotation, lat, lng, movingTowardPerigee
+  apparentRotation, lat, lng, movingTowardPerigee,
+  moonrise, moonset, tideStatus
 } = useMoonData()
 
 // ── Intersection ────────────────────────────────────────────────────────────
@@ -307,20 +308,89 @@ onMounted(() => {
 
           </div>
 
-          <div class="grid grid-cols-2 gap-8">
+          <div class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-4 gap-8">
+            <!-- Panel: Moon Rise / Set -->
+            <div class="panel-card group p-10 rounded-2xl bento-flicker">
+              <div class="panel-grid-mesh" /><div class="panel-scanlines" /><div class="card-brackets" />
+              <div class="relative z-10 flex flex-col h-full">
+                <label class="font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase block mb-6">EVENT::RISE_SET</label>
+                <div class="flex justify-between items-end mb-8">
+                  <div>
+                    <span class="block font-mono text-[9px] text-white/30 uppercase tracking-[0.3em] mb-1">Rise</span>
+                    <span class="font-orbitron font-black text-4xl text-white">{{ moonrise }}</span>
+                  </div>
+                  <div class="text-right">
+                    <span class="block font-mono text-[9px] text-white/30 uppercase tracking-[0.3em] mb-1">Set</span>
+                    <span class="font-orbitron font-black text-4xl text-white">{{ moonset }}</span>
+                  </div>
+                </div>
+                <!-- Factoid -->
+                <div class="mt-auto pt-6 border-t border-white/5">
+                  <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-2">REFRACTION // ERR_CAL</p>
+                  <p class="font-mono text-[10px] text-cyan-400/60 leading-relaxed">
+                    Light bends through the <span class="text-white shadow-sm">atmosphere</span> causing the Moon to appear <span class="text-white">flattened</span> and larger near the horizon.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Panel: Tidal Status -->
+            <div class="panel-card group p-10 rounded-2xl bento-flicker" style="animation-delay:0.4s">
+              <div class="panel-grid-mesh" /><div class="panel-scanlines" /><div class="card-brackets" />
+              <div class="relative z-10 flex flex-col h-full">
+                <label class="font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase block mb-6">TIDAL::HARMONIC</label>
+                <div class="mb-8">
+                  <div class="flex justify-between items-baseline mb-2">
+                    <span class="font-orbitron font-black text-4xl text-cyan-400">{{ tideStatus.type }}</span>
+                    <span class="font-mono text-[10px] text-white/30">{{ tideStatus.intensity }}% FORCE</span>
+                  </div>
+                  <div class="h-1 bg-white/5 rounded-full overflow-hidden">
+                    <div class="h-full bg-cyan-400 shadow-[0_0_8px_cyan]" :style="{ width: tideStatus.intensity + '%' }" />
+                  </div>
+                  <p class="font-mono text-[10px] text-white/40 mt-3 uppercase tracking-[0.2em]">Next High: <span class="text-white">{{ tideStatus.nextHigh }}</span></p>
+                </div>
+                <!-- Factoid -->
+                <div class="mt-auto pt-6 border-t border-white/5">
+                  <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-2">SYZYGY // FORCES</p>
+                  <p class="font-mono text-[10px] text-cyan-400/60 leading-relaxed">
+                    When Sun, Moon, and Earth <span class="text-white">align</span> (Full/New), gravitational pull combines to create <span class="text-white">maximum</span> tidal range.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Panel: Next Full -->
             <div class="panel-card group p-10 rounded-2xl bento-flicker" style="animation-delay:0.8s">
               <div class="panel-grid-mesh" /><div class="panel-scanlines" /><div class="card-brackets" />
-              <svg class="absolute top-6 right-6 w-6 h-6 text-white/5 pointer-events-none" viewBox="0 0 50 43"><path d="M12.5 0L37.5 0L50 21.5L37.5 43L12.5 43L0 21.5Z" fill="none" stroke="currentColor" stroke-width="1" /></svg>
-              <label class="relative z-10 font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase block mb-6">NEXT_FULL</label>
-              <div class="relative z-10 font-orbitron font-black text-5xl xl:text-6xl text-white">{{ daysToFullMoon }}<span class="text-2xl text-white/20 ml-2">d</span></div>
-              <p class="relative z-10 font-mono text-[10px] text-white/20 uppercase tracking-[0.3em] mt-6 truncate">{{ nextFullMoon }}</p>
+              <div class="relative z-10 h-full flex flex-col">
+                <label class="font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase block mb-6">NEXT_FULL</label>
+                <div class="font-orbitron font-black text-5xl xl:text-6xl text-white mb-2">{{ daysToFullMoon }}<span class="text-2xl text-white/20 ml-2">d</span></div>
+                <p class="font-mono text-[10px] text-white/20 uppercase tracking-[0.3em] mb-6 truncate">{{ nextFullMoon }}</p>
+                <!-- Factoid -->
+                <div class="mt-auto pt-6 border-t border-white/5">
+                  <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-2">OPPOSITION // LUM</p>
+                  <p class="font-mono text-[10px] text-cyan-400/60 leading-relaxed">
+                    The Moon reaches <span class="text-white">opposition</span> when it is on the opposite side of Earth from the Sun, appearing <span class="text-white">100% lit</span>.
+                  </p>
+                </div>
+              </div>
             </div>
+
+            <!-- Panel: Next New -->
             <div class="panel-card group p-10 rounded-2xl bento-flicker" style="animation-delay:1.4s">
               <div class="panel-grid-mesh" /><div class="panel-scanlines" /><div class="card-brackets" />
-              <svg class="absolute top-6 right-6 w-6 h-6 text-white/5 pointer-events-none" viewBox="0 0 50 43"><path d="M12.5 0L37.5 0L50 21.5L37.5 43L12.5 43L0 21.5Z" fill="none" stroke="currentColor" stroke-width="1" /></svg>
-              <label class="relative z-10 font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase block mb-6">NEXT_NEW</label>
-              <div class="relative z-10 font-orbitron font-black text-5xl xl:text-6xl text-cyan-400">{{ daysToNewMoon }}<span class="text-2xl text-white/20 ml-2">d</span></div>
-              <p class="relative z-10 font-mono text-[10px] text-white/20 uppercase tracking-[0.3em] mt-6 truncate">{{ nextNewMoon }}</p>
+              <div class="relative z-10 h-full flex flex-col">
+                <label class="font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase block mb-6">NEXT_NEW</label>
+                <div class="font-orbitron font-black text-5xl xl:text-6xl text-cyan-400 mb-2">{{ daysToNewMoon }}<span class="text-2xl text-white/20 ml-2">d</span></div>
+                <p class="font-mono text-[10px] text-white/20 uppercase tracking-[0.3em] mb-6 truncate">{{ nextNewMoon }}</p>
+                <!-- Factoid -->
+                <div class="mt-auto pt-6 border-t border-white/5">
+                  <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-2">CONJUNCTION // DARK</p>
+                  <p class="font-mono text-[10px] text-cyan-400/60 leading-relaxed">
+                    Occurs at <span class="text-white">conjunction</span> — Moon and Sun share the same ecliptic longitude, making the near-side <span class="text-white">invisible</span>.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>

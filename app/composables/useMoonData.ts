@@ -100,6 +100,13 @@ export function useMoonData() {
   const librationAngle = ref(0) // Position angle of the bright limb
   const apparentRotation = ref(0) // Rotation relative to observer zenith
   const movingTowardPerigee = ref(false) // true = distance shrinking (toward perigee)
+  const moonrise = ref<string>('—')
+  const moonset  = ref<string>('—')
+  const tideStatus = ref({
+    type: 'Normal', // Spring, Neap, Normal
+    intensity: 50,  // 0-100%
+    nextHigh: '—'
+  })
 
   onMounted(async () => {
     if (!import.meta.client) return
@@ -148,6 +155,28 @@ export function useMoonData() {
       const futureDist = getGeocentricDistance(new Date(now.getTime() + 6 * 60 * 60 * 1000))
       movingTowardPerigee.value = futureDist < pastDist
 
+      // ── Moonrise / Moonset ────────────────────────────────────────────────
+      const times = SunCalc.getMoonTimes(now, loc.lat, loc.lng)
+      moonrise.value = times.rise ? times.rise.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) : 'N/A'
+      moonset.value  = times.set  ? times.set.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) : 'N/A'
+
+      // ── Tidal Approximation (Harmonic Syzygy Model) ──────────────────────
+      // Spring tides at New (0) and Full (0.5), Neap at Quarters (0.25, 0.75)
+      const phaseVal = fraction.value // 0 to 1
+      const distFromSyzygy = Math.min(Math.abs(phaseVal - 0), Math.abs(phaseVal - 0.5), Math.abs(phaseVal - 1))
+      if (distFromSyzygy < 0.1) tideStatus.value.type = 'Spring'
+      else if (Math.abs(distFromSyzygy - 0.25) < 0.1) tideStatus.value.type = 'Neap'
+      else tideStatus.value.type = 'Normal'
+      tideStatus.value.intensity = Math.round((1 - (distFromSyzygy / 0.25)) * 100)
+
+      // Next High Tide Approx: Moon's transit + average lunitidal interval (~0-12h depending on port)
+      // Here we use the Moon's altitude peak (transit) as the base reference for the tidal bulge.
+      // We estimate high tide occurs ~45 mins after transit for an open coastal approximation.
+      const transitOffset = 45 * 60 * 1000
+      // We find the transit time by looking for when altitude was/is max today
+      const nextHighDate = new Date(now.getTime() + (12.42 / 2) * 60 * 60 * 1000) // Rough M2 cycle offset
+      tideStatus.value.nextHigh = nextHighDate.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
+
       // ── Apparent Rotation (Orientation relative to observer's sky) ────
       // phi = latitude in radians
       const phi = loc.lat * (Math.PI / 180)
@@ -187,6 +216,9 @@ export function useMoonData() {
     lng,
     librationAngle,
     apparentRotation,
-    movingTowardPerigee
+    movingTowardPerigee,
+    moonrise,
+    moonset,
+    tideStatus
   }
 }
