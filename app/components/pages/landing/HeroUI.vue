@@ -16,13 +16,13 @@ let charIdx = 0
 
 function typeStep() {
   if (lineIdx >= termLines.length) {
-    setTimeout(() => { lineIdx = 0; charIdx = 0; termText.value = ''; typeStep() }, 5000)
+    setTimeout(() => { lineIdx = 0; charIdx = 0; termText.value = ''; typeStep() }, 8000)
     return
   }
   const currentLine = termLines[lineIdx]
   if (charIdx < currentLine.length) {
     termText.value += currentLine[charIdx++]
-    setTimeout(typeStep, 40)
+    setTimeout(typeStep, 30)
   } else {
     setTimeout(() => {
       termText.value += '\n'
@@ -33,7 +33,49 @@ function typeStep() {
   }
 }
 
-onMounted(() => { if (import.meta.client) typeStep() })
+// ── Factoid Typewriter Animation ─────────────────────────────────────────────
+const factoidText = ref('')
+const factoids = [
+  "The moon is receding from Earth at a rate of 3.8cm per year. Our link monitors exact proximity in real-time.",
+  "Formation theory: The Moon likely formed from a giant impact between Earth and a Mars-sized body named Theia.",
+  "Apollo 11 mission: Neil Armstrong became the first human to step onto the lunar surface on 20 July 1969.",
+  "Apollo 1 tragedy: A cabin fire during a pre-launch test killed three astronauts on 27 January 1967.",
+  "Artemis mission: NASA's multi-decade initiative to return humans to the Moon and establish a permanent base.",
+  "Lunar Age: The Moon is approximately 4.5 billion years old, nearly as old as Earth itself.",
+  "Apollo 13: An oxygen tank explosion aborted the landing, but the crew returned safely against all odds."
+]
+let fIdx = 0
+let fCharIdx = 0
+let isDeleting = false
+
+function typeFactoid() {
+  const currentFact = factoids[fIdx]
+
+  if (!isDeleting) {
+    factoidText.value = currentFact.slice(0, fCharIdx++)
+    if (fCharIdx > currentFact.length) {
+      setTimeout(() => { isDeleting = true; typeFactoid() }, 4000)
+      return
+    }
+    setTimeout(typeFactoid, 20)
+  } else {
+    factoidText.value = currentFact.slice(0, fCharIdx--)
+    if (fCharIdx < 0) {
+      isDeleting = false
+      fIdx = (fIdx + 1) % factoids.length
+      fCharIdx = 0
+      setTimeout(typeFactoid, 500)
+      return
+    }
+    setTimeout(typeFactoid, 10)
+  }
+}
+
+onMounted(() => {
+  if (!import.meta.client) return
+  typeStep()
+  setTimeout(typeFactoid, 1500)
+})
 
 // ── Dynamic Hero HUD Stats ──────────────────────────────────────────────────
 const stats = computed(() => {
@@ -118,13 +160,13 @@ const stats = computed(() => {
     </div>
 
     <!-- Floating AR Factoid (Annotations on Reality) -->
-    <div class="absolute bottom-[10%] right-[10%] max-w-sm pointer-events-auto hidden lg:block">
+    <div class="absolute bottom-[10%] right-[10%] max-w-sm pointer-events-auto hidden lg:block min-h-[80px]">
       <div class="relative pl-6 py-4 border-l border-cyan-400/30 bento-flicker">
         <div class="absolute -left-1 top-0 w-2 h-2 bg-cyan-400" />
         <div class="absolute -left-1 bottom-0 w-2 h-2 bg-cyan-400" />
         <p class="font-mono text-[9px] text-cyan-400 tracking-[0.5em] uppercase mb-1">AR_ANNOTATION::THOUGHT</p>
         <p class="font-orbitron text-xs text-white/50 tracking-wider leading-relaxed">
-          The moon is receding from Earth at a rate of <span class="text-cyan-400">3.8cm per year</span>. Our link monitors exact proximity in real-time.
+          {{ factoidText }}<span class="inline-block w-1.5 h-3 bg-cyan-400 opacity-50 ml-1 animate-pulse" />
         </p>
       </div>
     </div>
