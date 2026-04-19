@@ -39,7 +39,7 @@ const stats = computed(() => {
     
     <!-- Left Typography -->
     <div class="absolute bottom-[20%] left-[5%] md:left-[10%] max-w-xl text-left pointer-events-auto">
-      <h1 class="font-roboto font-thin text-6xl md:text-8xl text-white tracking-[0.15em] uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.15)] leading-none">
+      <h1 class="font-roboto text-6xl md:text-8xl text-white tracking-[0.2em] uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.15)] leading-none" style="font-weight: 100;">
         know thy <br/> moon.
       </h1>
       <p class="mt-6 text-lg md:text-xl text-cyan-200/60 font-roboto font-thin tracking-[0.3em] uppercase">
