@@ -104,7 +104,7 @@ onMounted(() => {
           <span class="ml-6 text-[13px] text-cyan-400/40 tracking-[0.4em] uppercase">terminal_bg::process_feed</span>
         </div>
         <!-- BIGGER wash for depth -->
-        <div class="text-[22px] leading-relaxed opacity-[0.18]">
+        <div class="text-[22px] leading-relaxed opacity-[0.35]">
           <div v-for="(line, i) in termLines" :key="i">
             <div v-if="line.cls === 'term-blank'" class="h-6" />
             <div v-else :class="{
@@ -267,9 +267,9 @@ onMounted(() => {
 /* ── PANEL CARDS ── */
 .panel-card {
   position: relative;
-  background: rgba(4, 12, 18, 0.45);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: rgba(4, 12, 18, 0.25); /* LIGHTER for bleed through */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: 1.5px solid rgba(0, 242, 255, 0.15);
   transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
@@ -288,10 +288,10 @@ onMounted(() => {
 /* Red Alert / Glitch Theme (INTERNAL ONLY) */
 @keyframes red-glitch-alert {
   0%, 88%, 100% { 
-    background: rgba(4, 12, 18, 0.45); border-color: rgba(0, 242, 255, 0.15);
+    background: rgba(4, 12, 18, 0.25); border-color: rgba(0, 242, 255, 0.15);
   }
   89%, 91% { 
-    background: rgba(180, 10, 10, 0.25); border-color: rgba(255, 0, 50, 0.6);
+    background: rgba(180, 10, 10, 0.15); border-color: rgba(255, 0, 50, 0.6);
   }
 }
 
