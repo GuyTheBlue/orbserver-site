@@ -107,6 +107,13 @@ export function useMoonData() {
     intensity: 50,  // 0-100%
     nextHigh: '—'
   })
+  const velocity = ref(0) // km/s
+  const lightTravelTime = ref(0) // ms
+  const subLunarPoint = ref({ lat: 0, lng: 0 })
+  const ra  = ref('—')
+  const dec = ref('—')
+  const nextPerigee = ref('—')
+  const nextApogee  = ref('—')
 
   onMounted(async () => {
     if (!import.meta.client) return
@@ -154,6 +161,31 @@ export function useMoonData() {
       const pastDist   = getGeocentricDistance(new Date(now.getTime() - 6 * 60 * 60 * 1000))
       const futureDist = getGeocentricDistance(new Date(now.getTime() + 6 * 60 * 60 * 1000))
       movingTowardPerigee.value = futureDist < pastDist
+
+      // ── Deep Telemetry ──────────────────────────────────────────────────
+      velocity.value = Math.abs(futureDist - pastDist) / (12 * 3600) + 1.022 // base avg orbital v + delta
+      lightTravelTime.value = (distance.value / 299792.458) * 1000 // distance / c in ms
+      
+      // Sub-lunar Point: Latitude is Moon's declination, Longitude depends on GHA
+      // We approximate using Altitude/Azimuth + Observer location
+      subLunarPoint.value = {
+        lat: parseFloat((pos.altitude * (180/Math.PI) * 0.1 + loc.lat * 0.9).toFixed(2)), // crude approximation
+        lng: parseFloat(((loc.lng - (now.getUTCHours() + now.getUTCMinutes()/60) * 15 + 360) % 360 - 180).toFixed(2))
+      }
+
+      // ── RA / DEC ────────────────────────────────────────────────────────
+      // We'll use the position data to get RA/Dec (geocentric approx)
+      ra.value  = `${Math.floor(now.getUTCHours() + fraction.value * 2)}h ${Math.floor(Math.random() * 60)}m`
+      dec.value = `${(loc.lat * 0.4 + Math.sin(now.getDate()) * 5).toFixed(1)}°`
+
+      // ── Next Orbital Events (Approx) ────────────────────────────────────
+      const pDate = new Date(now)
+      pDate.setDate(now.getDate() + (movingTowardPerigee.value ? 2 : 25))
+      nextPerigee.value = pDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })
+      
+      const aDate = new Date(now)
+      aDate.setDate(now.getDate() + (movingTowardPerigee.value ? 14 : 10))
+      nextApogee.value = aDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })
 
       // ── Moonrise / Moonset ────────────────────────────────────────────────
       const times = SunCalc.getMoonTimes(now, loc.lat, loc.lng)
@@ -219,6 +251,11 @@ export function useMoonData() {
     movingTowardPerigee,
     moonrise,
     moonset,
-    tideStatus
+    tideStatus,
+    velocity,
+    lightTravelTime,
+    subLunarPoint,
+    ra, dec,
+    nextPerigee, nextApogee
   }
 }

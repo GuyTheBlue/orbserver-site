@@ -7,7 +7,9 @@ const {
   distance, altitude, azimuth,
   nextFullMoon, nextNewMoon, daysToFullMoon, daysToNewMoon,
   apparentRotation, lat, lng, movingTowardPerigee,
-  moonrise, moonset, tideStatus
+  moonrise, moonset, tideStatus,
+  velocity, lightTravelTime, subLunarPoint,
+  ra, dec, nextPerigee, nextApogee
 } = useMoonData()
 
 // ── Intersection ────────────────────────────────────────────────────────────
@@ -197,6 +199,103 @@ onMounted(() => {
               <div class="flex flex-col items-center px-10 border-r border-white/10"><span class="font-mono text-[10px] text-cyan-400/60 tracking-[0.5em] uppercase mb-3">Illum</span><span class="font-orbitron font-black text-5xl text-white">{{ illuminationPct }}<span class="text-xl text-white/20 ml-1">%</span></span></div>
               <div class="flex flex-col items-center px-10"><span class="font-mono text-[10px] text-cyan-400/60 tracking-[0.5em] uppercase mb-3">Rot</span><span class="font-orbitron font-black text-5xl text-cyan-400">{{ Math.round(apparentRotation) }}<span class="text-xl text-white/20 ml-1">°</span></span></div>
             </div>
+
+            <!-- Technical Briefing: Factoids for xl+ screens -->
+            <div class="mt-12 hidden xl:grid grid-cols-3 gap-y-12 gap-x-10 border-t border-white/5 pt-10 text-left">
+              <!-- Row 1 -->
+              <div>
+                <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-3">PHASE // ALBEDO</p>
+                <p class="font-mono text-[10px] text-cyan-400/60 leading-relaxed uppercase tracking-wider">
+                  Analysis detects <span class="text-white">fragmented albedo</span>. The Moon's reflectivity is approx <span class="text-white">0.11</span> — nearly identical to worn <span class="text-white">asphalt</span>. High luminosity is purely a function of <span class="text-white">solar opposition</span>.
+                </p>
+              </div>
+              <div>
+                <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-3">TEMPORAL // SYNODIC</p>
+                <p class="font-mono text-[10px] text-cyan-400/60 leading-relaxed uppercase tracking-wider">
+                  The <span class="text-white">synodic cycle</span> averages <span class="text-white">29.53 days</span>. Every lunation tracks the return to precise <span class="text-white">Sun-Earth alignment</span>, distinct from the sidereal period.
+                </p>
+              </div>
+              <div>
+                <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-3">SPATIAL // ZENITH</p>
+                <p class="font-mono text-[10px] text-cyan-400/60 leading-relaxed uppercase tracking-wider">
+                  Rotation is relative to your <span class="text-white">local zenith</span>. The apparent "tilt" accounts for <span class="text-white">parallactic rotation</span> — a visual shift caused by the observer's motion through Earth's <span class="text-white">polar axis</span>.
+                </p>
+              </div>
+
+              <!-- Row 2: DEEP DATA -->
+              <div>
+                <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-3">MOTION // LIBRATION</p>
+                <p class="font-mono text-[10px] text-cyan-400/60 leading-relaxed uppercase tracking-wider">
+                  Detected <span class="text-white">optical libration</span>. Despite tidal locking, the Moon "wobbles" allowing observers to view <span class="text-white">59%</span> of the lunar surface over time.
+                </p>
+              </div>
+              <div>
+                <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-3">PHYSICS // TIDAL_LOCK</p>
+                <p class="font-mono text-[10px] text-cyan-400/60 leading-relaxed uppercase tracking-wider">
+                  Synchronous rotation forced by <span class="text-white">Earth's torque</span>. The Moon's internal center of mass is offset by <span class="text-white">2km</span>, perpetually anchoring the near-side to the planet.
+                </p>
+              </div>
+              <div>
+                <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-3">ORBITAL // VELOCITY</p>
+                <div class="space-y-4">
+                  <div class="flex justify-between border-b border-white/5 pb-2">
+                    <span class="font-mono text-[10px] text-white/20">V_ORB</span>
+                    <span class="font-orbitron font-black text-white">{{ velocity.toFixed(3) }} <small class="text-[8px] opacity-30">KM/S</small></span>
+                  </div>
+                  <div class="flex justify-between border-b border-white/5 pb-2">
+                    <span class="font-mono text-[10px] text-white/20">SIG_DELAY</span>
+                    <span class="font-orbitron font-black text-white">{{ lightTravelTime.toFixed(2) }} <small class="text-[8px] opacity-30">MS</small></span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="font-mono text-[10px] text-white/20">SUB_LUNA</span>
+                    <span class="font-orbitron font-black text-cyan-400 text-xs">{{ subLunarPoint.lat > 0 ? subLunarPoint.lat + 'N' : Math.abs(subLunarPoint.lat) + 'S' }}, {{ subLunarPoint.lng > 0 ? subLunarPoint.lng + 'E' : Math.abs(subLunarPoint.lng) + 'W' }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Row 3: COORDINATES & EVENTS -->
+              <div>
+                <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-3">COORDINATES // RA_DEC</p>
+                <div class="space-y-4">
+                  <div class="flex justify-between border-b border-white/5 pb-2">
+                    <span class="font-mono text-[10px] text-white/20">R_ASCENSION</span>
+                    <span class="font-orbitron font-black text-white ml-2">{{ ra }}</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="font-mono text-[10px] text-white/20">DECLINATION</span>
+                    <span class="font-orbitron font-black text-white ml-2">{{ dec }}</span>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-3">ORBITAL // EVENTS</p>
+                <div class="space-y-4">
+                  <div class="flex justify-between border-b border-white/5 pb-2">
+                    <span class="font-mono text-[10px] text-white/20">NEXT_PERIGEE</span>
+                    <span class="font-orbitron font-black text-cyan-400 ml-2 uppercase">{{ nextPerigee }}</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="font-mono text-[10px] text-white/20">NEXT_APOGEE</span>
+                    <span class="font-orbitron font-black text-white/40 ml-2 uppercase">{{ nextApogee }}</span>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-3">PHYSICS // CONSTANTS</p>
+                <div class="space-y-4">
+                  <div class="flex justify-between border-b border-white/5 pb-2">
+                    <span class="font-mono text-[10px] text-white/20">GRAVITY</span>
+                    <span class="font-orbitron font-black text-white ml-2">1.62 <small class="text-[8px] opacity-30">M/S²</small></span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="font-mono text-[10px] text-white/20">ESCAPE_V</span>
+                    <span class="font-orbitron font-black text-white ml-2">2.38 <small class="text-[8px] opacity-30">KM/S</small></span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
           </div>
         </div>
 
