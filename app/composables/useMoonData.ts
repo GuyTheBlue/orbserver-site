@@ -270,10 +270,10 @@ export function useMoonData() {
       moonrise.value = times.rise ? times.rise.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) : 'N/A'
       moonset.value  = times.set  ? times.set.toLocaleTimeString('en-GB',  { hour: '2-digit', minute: '2-digit' }) : 'N/A'
 
-      // ── Apparent Rotation ─────────────────────────────────────────────────
-      const phi = loc.lat * (Math.PI / 180)
-      const h   = Math.atan2(Math.sin(pos.azimuth), Math.tan(phi) * Math.cos(pos.altitude) - Math.sin(pos.altitude) * Math.cos(pos.azimuth))
-      apparentRotation.value = (illum.angle - h) * (180 / Math.PI) + 90
+      // ── Apparent Rotation (Orientation relative to observer's sky) ────
+      // Corrected to use SunCalc's native parallacticAngle for absolute accuracy.
+      // This properly handles being 'upside down' in the Southern Hemisphere.
+      apparentRotation.value = (illum.angle - pos.parallacticAngle) * (180 / Math.PI) + 90
 
     } catch {
       hasError.value = true
