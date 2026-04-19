@@ -817,73 +817,10 @@ onMounted(() => {
 </template>
 
 <style scoped>
-/* ── BROKEN TERMINAL ANIMATIONS ── */
-.broken-terminal-jitter { animation: glitch-jitter 12s infinite alternate; }
-@keyframes glitch-jitter {
-  0%, 95%, 100% { transform: translate(0); filter: hue-rotate(0deg); }
-  96% { transform: translate(2px, -1px); filter: hue-rotate(5deg) brightness(1.1); }
-  97% { transform: translate(-2px, 1px); filter: hue-rotate(-5deg); }
-  98% { transform: translate(4px, 0px); }
-  99% { transform: translate(-3px, -2px); }
-}
-
-/* ── CRT STACK ── */
-.grid-overlay { background-image: linear-gradient(rgba(0, 242, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 242, 255, 0.1) 1px, transparent 1px); background-size: 32px 32px; }
-.scanline-overlay { background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.8) 0px, rgba(0, 0, 0, 0.8) 1.5px, transparent 1.5px, transparent 4px); }
-.crt-vignette { background: radial-gradient(circle at 50% 50%, transparent 25%, rgba(0,0,0,0.95) 100%); }
-
-/* ── PANEL CARDS ── */
-.panel-card {
-  position: relative;
-  background: rgba(4, 12, 18, 0.25); /* LIGHTER for bleed through */
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1.5px solid rgba(0, 242, 255, 0.15);
-  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  overflow: hidden;
-}
-
-/* PERMANENT INTERNAL GRID */
-.panel-grid-mesh {
-  position: absolute; inset: 0;
-  background-image:
-    linear-gradient(rgba(0, 242, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 242, 255, 0.04) 1px, transparent 1px);
-  background-size: 20px 20px;
-  pointer-events: none; z-index: 0;
-}
-
-/* Red Alert / Glitch Theme (INTERNAL ONLY) */
-@keyframes red-glitch-alert {
-  0%, 88%, 100% {
-    background: rgba(4, 12, 18, 0.25); border-color: rgba(0, 242, 255, 0.15);
-  }
-  89%, 91% {
-    background: rgba(180, 10, 10, 0.15); border-color: rgba(255, 0, 50, 0.6);
-  }
-}
-
-.bento-flicker { animation: signal-flicker 11s infinite, red-glitch-alert 15s infinite; }
-.panel-card:hover { border-color: rgba(0, 242, 255, 0.6); background: rgba(4, 12, 18, 0.55); box-shadow: 0 0 80px rgba(0, 242, 255, 0.12); }
-
-.panel-scanlines {
-  position: absolute; inset: 0;
-  background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.4) 0px, rgba(0, 0, 0, 0.4) 1px, transparent 1px, transparent 3px);
-  pointer-events: none; z-index: 0; opacity: 0.6;
-}
-
-.card-brackets::before, .card-brackets::after { content: ''; position: absolute; width: 24px; height: 24px; border-color: rgba(0, 242, 255, 0.6); z-index: 20; }
-.card-brackets::before { top: 0; left: 0; border-top: 3px solid; border-left: 3px solid; }
-.card-brackets::after  { bottom: 0; right: 0; border-bottom: 3px solid; border-right: 3px solid; }
-
-@keyframes signal-flicker {
-  0%   { opacity: 1; filter: contrast(1); }
-  1%   { opacity: 0.85; filter: contrast(1.4) brightness(1.2); }
-  2%   { opacity: 1; filter: contrast(1); }
-}
-
+/* ── COMPONENT-SPECIFIC ANIMATIONS ── */
 .rotate-ring { animation: rotate-slow 90s linear infinite; }
 @keyframes rotate-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
 .ticker-wrap { mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent); }
 .ticker-content { display: inline-block; animation: ticker 40s linear infinite; }
 @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }

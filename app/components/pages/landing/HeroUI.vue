@@ -1,168 +1,152 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 
-const { isLoading, distance, fraction, phaseName, librationAngle, apparentRotation } = useMoonData()
+const { isLoading, distance, fraction, phaseName, apparentRotation } = useMoonData()
 
-// Dynamic Hero HUD Stats
+// ── Command Line Animation ───────────────────────────────────────────────────
+const termText = ref('')
+const termLines = [
+  'ESTABLISHING SECURE_LINK...',
+  'SCANNING LUNAR_SURFACE...',
+  'DECODING TELEMETRY_STREAM...',
+  'PROTOCOL 001 ACTIVE.'
+]
+let lineIdx = 0
+let charIdx = 0
+
+function typeStep() {
+  if (lineIdx >= termLines.length) {
+    setTimeout(() => { lineIdx = 0; charIdx = 0; termText.value = ''; typeStep() }, 5000)
+    return
+  }
+  const currentLine = termLines[lineIdx]
+  if (charIdx < currentLine.length) {
+    termText.value += currentLine[charIdx++]
+    setTimeout(typeStep, 40)
+  } else {
+    setTimeout(() => {
+      termText.value += '\n'
+      lineIdx++
+      charIdx = 0
+      typeStep()
+    }, 600)
+  }
+}
+
+onMounted(() => { if (import.meta.client) typeStep() })
+
+// ── Dynamic Hero HUD Stats ──────────────────────────────────────────────────
 const stats = computed(() => {
   if (isLoading.value) return [
-    { label: 'Status', value: 'SCANNING...', scatter: -10 },
-    { label: 'Link', value: 'ESTABLISHING', scatter: 15 },
-    { label: 'Data', value: 'BUFFERING', scatter: -5 },
-    { label: 'Sync', value: 'PENDING', scatter: 22 },
-    { label: 'Signal', value: 'LOCALIZING', scatter: -18 }
+    { label: 'Status', value: 'SCANNING', scatter: -10 },
+    { label: 'Signal', value: 'LOCKING', scatter: 15 }
   ]
 
-  /**
-   * Keplerian Speed Approximation:
-   * v = sqrt(G*M * (2/r - 1/a))
-   * We'll approximate this visually based on distance deviation from mean.
-   * Faster near perigee (near), slower near apogee (far).
-   */
   const meanDist = 384400
-  const baseSpeed = 3683 // km/h
-  const speedFactor = 1 + ((meanDist - distance.value) / meanDist) * 1.5
-  const currentSpeed = Math.round(baseSpeed * speedFactor).toLocaleString('en-GB')
+  const baseSpeed = 3683
+  const currentSpeed = Math.round(baseSpeed * (1 + ((meanDist - distance.value) / meanDist) * 1.5)).toLocaleString('en-GB')
 
   return [
-    { label: 'Distance', value: `${distance.value.toLocaleString('en-GB')} km`, scatter: -10 },
-    { label: 'Illumination', value: `${(fraction.value * 100).toFixed(1)}%`, scatter: 15 },
-    { label: 'Phase', value: phaseName.value.toUpperCase(), scatter: -5 },
-    { label: 'Orbital Spd', value: `${currentSpeed} km/h`, scatter: 22 },
-    { label: 'App. rotation', value: `${Math.round(apparentRotation.value)}°`, scatter: -18 }
+    { label: 'DIST_KM', value: distance.value.toLocaleString('en-GB'), scatter: -10 },
+    { label: 'PHASE_ANG', value: phaseName.value.toUpperCase(), scatter: 15 },
+    { label: 'VEL_KMH', value: currentSpeed, scatter: -5 },
+    { label: 'APP_ROT', value: `${Math.round(apparentRotation.value)}°`, scatter: 22 }
   ]
 })
 </script>
 
 <template>
   <div class="absolute inset-0 pointer-events-none">
-    <!-- Left Typography -->
-    <div class="absolute bottom-[20%] left-[5%] md:left-[10%] max-w-xl text-left pointer-events-auto">
-      <h1
-        class="font-roboto text-6xl md:text-8xl text-white tracking-[0.2em] uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.15)] leading-none"
-        style="font-weight: 100;"
-      >
-        know thy <br> moon.
-      </h1>
-      <p class="mt-6 text-lg md:text-xl text-cyan-200/60 font-roboto font-thin tracking-[0.3em] uppercase">
-        Real-time telemetry. Live orbital data.
-      </p>
+    <!-- Top-Left: OS Command Line Overlay -->
+    <div class="absolute top-[8%] left-[5%] pointer-events-auto max-w-xs bento-flicker">
+      <div class="font-mono text-[10px] text-cyan-400 opacity-60 flex flex-col gap-1 uppercase tracking-widest whitespace-pre">
+        <div class="flex gap-1.5 mb-2">
+          <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+          <span>System: Active</span>
+        </div>
+        {{ termText }}<span class="inline-block w-1.5 h-3 bg-cyan-400 animate-pulse align-middle ml-1" />
+      </div>
     </div>
 
-    <!-- Dynamic Super-Tech Panels -->
-    <div class="absolute top-[15%] sm:top-[15%] xl:top-[10%] left-2 right-2 sm:left-auto sm:right-[5%] lg:right-[8%] pointer-events-auto h-[70vh] sm:h-auto z-[70]">
-      <!-- XS runs absolute weaving natively. SM runs flex-col cleanly stacked! -->
-      <div class="w-full h-full sm:flex sm:flex-col sm:gap-3 lg:gap-5">
-        <div
-          v-for="(stat, i) in stats"
-          :key="stat.label"
-          class="group bg-[#020b14]/40 backdrop-blur-xl border-y border-white/5 border-r p-2 sm:p-3 md:p-4 lg:p-5 xl:p-6 shadow-[inset_0_0_20px_rgba(0,255,255,0.02),0_10px_30px_rgba(0,0,0,0.5)] animate-floating
-                 w-36 sm:w-40 md:w-48 lg:w-56 xl:w-72 transition-all hover:bg-[#020b14]/60 hover:border-l-cyan-300 overflow-hidden
-                 border-l-cyan-400 border-l-[1px] sm:border-l-2 border-r-white/5 rounded-r-lg"
-          :class="[
-            i === 0 ? 'max-sm:absolute max-sm:top-[8%] max-sm:right-[6%]'
-            : i === 1 ? 'max-sm:absolute max-sm:top-[28%] max-sm:right-[2%]'
-              : i === 2 ? 'max-sm:absolute max-sm:top-[50%] max-sm:right-[15%]'
-                : i === 3 ? 'max-sm:absolute max-sm:top-[2%] max-sm:left-[15%] max-sm:border-r-cyan-400 max-sm:border-r-[1px] max-sm:border-l-white/5 max-sm:rounded-l-lg max-sm:rounded-r-none'
-                  : 'max-sm:absolute max-sm:top-[22%] max-sm:left-[5%] max-sm:border-r-cyan-400 max-sm:border-r-[1px] max-sm:border-l-white/5 max-sm:rounded-l-lg max-sm:rounded-r-none'
-          ]"
-          :style="{ 'animationDelay': `${i * 0.3}s`, '--scatter-x': `${stat.scatter}px` }"
-        >
-          <!-- Sexy sweeping light effect inside the glass -->
-          <div class="absolute inset-0 bg-gradient-to-r from-cyan-400/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20 pointer-events-none" />
+    <!-- Center-Left: Primary CTA Protocol -->
+    <div class="absolute bottom-[25%] left-[5%] md:left-[8%] pointer-events-auto">
+      <div class="panel-card p-8 md:p-10 rounded-2xl bento-flicker max-w-md">
+        <div class="panel-grid-mesh opacity-30" /><div class="panel-scanlines opacity-20" />
+        <!-- Terminal Dots (Mac Style) -->
+        <div class="terminal-dots absolute top-4 left-4">
+          <span class="term-dot-1" /><span class="term-dot-2" /><span class="term-dot-3" />
+        </div>
 
-          <!-- Majestic Custom Hexagon Cluster floating freely inside the glass bounds -->
-          <svg
-            class="absolute w-16 md:w-20 lg:w-28 h-auto text-cyan-400 opacity-60 group-hover:opacity-100 group-hover:drop-shadow-[0_0_12px_rgba(0,255,255,0.6)] transition-all duration-700 z-30 pointer-events-none mix-blend-screen"
-            viewBox="0 0 100 150"
-            :style="{
-              top: `${20 + ((i * 43) % 60)}%`,
-              left: `${-10 + ((i * 37) % 120)}%`,
-              transform: `translate(-50%, -50%) scale(${1 + (i % 2) * 0.4}) rotate(${(i * 55) - 90}deg)`,
-              maskImage: 'radial-gradient(circle at center, black 10%, transparent 72%)',
-              WebkitMaskImage: 'radial-gradient(circle at center, black 10%, transparent 72%)'
-            }"
+        <div class="relative z-10 pt-4">
+          <label class="font-mono text-[9px] text-cyan-400/60 tracking-[0.6em] uppercase block mb-4">HUD_INIT_SEQUENCE</label>
+          <h1
+            class="font-orbitron font-black text-4xl md:text-6xl text-white tracking-[0.2em] uppercase leading-none mb-6 drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]"
           >
-            <!-- Core Structure (2 Large interlocking) -->
-            <polygon
-              points="30,40 50,28 70,40 70,64 50,76 30,64"
-              fill="currentColor"
-              fill-opacity="0.05"
-              stroke="currentColor"
-              stroke-width="1.5"
-            />
-            <polygon
-              points="30,88 50,76 70,88 70,112 50,124 30,112"
-              fill="currentColor"
-              fill-opacity="0.2"
-              stroke="currentColor"
-              stroke-width="2"
-            />
-
-            <!-- Structural Flankers (4 Small Linked Hubs) -->
-            <polygon
-              points="10,28 20,22 30,28 30,40 20,46 10,40"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1"
-            />
-            <polygon
-              points="70,28 80,22 90,28 90,40 80,46 70,40"
-              fill="currentColor"
-              fill-opacity="0.4"
-              stroke="currentColor"
-              stroke-width="1"
-            />
-            <polygon
-              points="10,76 20,70 30,76 30,88 20,94 10,88"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1"
-            />
-            <polygon
-              points="70,76 80,70 90,76 90,88 80,94 70,88"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1"
-            />
-          </svg>
-
-          <!-- Minimal tech scanning line graphic -->
-          <div
-            class="absolute top-0 left-0 w-8 sm:w-12 h-[1px] bg-cyan-400/80"
-            :class="(i === 3 || i === 4) ? 'max-sm:right-0 max-sm:left-auto' : ''"
-          />
-          <div
-            class="absolute bottom-0 right-0 w-4 sm:w-6 h-[1px] bg-cyan-400/40"
-            :class="(i === 3 || i === 4) ? 'max-sm:left-0 max-sm:right-auto' : ''"
-          />
-
-          <p
-            class="text-[5px] sm:text-[8px] md:text-[9px] xl:text-[10px] text-cyan-300/80 font-mono uppercase tracking-[0.2em] sm:tracking-[0.35em] mb-1 sm:mb-1 leading-none"
-            :class="(i === 3 || i === 4) ? 'max-sm:text-right' : ''"
-          >
-            {{ stat.label }}
-          </p>
-          <p
-            class="text-[10px] sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl text-white font-bold tracking-tight drop-shadow-sm leading-none"
-            :class="(i === 3 || i === 4) ? 'max-sm:text-right' : ''"
-          >
-            {{ stat.value }}
+            know thy <span class="text-cyan-400">moon.</span>
+          </h1>
+          <p class="text-[11px] text-cyan-400/50 font-mono tracking-[0.4em] uppercase border-t border-white/5 pt-6">
+            Real-time orbital intelligence.
           </p>
         </div>
       </div>
+    </div>
+
+    <!-- Right: Telemetry AR Overlay -->
+    <div class="absolute top-[12%] right-[5%] pointer-events-auto z-[70]">
+      <div class="flex flex-col gap-4">
+        <div
+          v-for="(stat, i) in stats"
+          :key="stat.label"
+          class="panel-card px-6 py-5 rounded-xl bento-flicker animate-floating shadow-2xl min-w-[200px]"
+          :style="{ 'animationDelay': `${i * 0.4}s`, '--scatter-x': `${stat.scatter}px` }"
+        >
+          <div class="panel-grid-mesh opacity-20" /><div class="panel-scanlines" />
+          <div class="terminal-dots absolute top-3 left-4 scale-75">
+            <span class="term-dot-1" /><span class="term-dot-2" /><span class="term-dot-3" />
+          </div>
+
+          <div class="relative z-10 pt-3 text-right">
+            <p class="text-[8px] text-cyan-400 font-mono uppercase tracking-[0.4em] mb-1 opacity-70">
+              {{ stat.label }}
+            </p>
+            <p class="text-2xl md:text-3xl text-white font-orbitron font-black tracking-widest leading-none">
+              {{ stat.value }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Floating AR Factoid (Annotations on Reality) -->
+    <div class="absolute bottom-[10%] right-[10%] max-w-sm pointer-events-auto hidden lg:block">
+      <div class="relative pl-6 py-4 border-l border-cyan-400/30 bento-flicker">
+        <div class="absolute -left-1 top-0 w-2 h-2 bg-cyan-400" />
+        <div class="absolute -left-1 bottom-0 w-2 h-2 bg-cyan-400" />
+        <p class="font-mono text-[9px] text-cyan-400 tracking-[0.5em] uppercase mb-1">AR_ANNOTATION::THOUGHT</p>
+        <p class="font-orbitron text-xs text-white/50 tracking-wider leading-relaxed">
+          The moon is receding from Earth at a rate of <span class="text-cyan-400">3.8cm per year</span>. Our link monitors exact proximity in real-time.
+        </p>
+      </div>
+    </div>
+
+    <!-- HUD Crosshair (Subtle AR focus) -->
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-10 pointer-events-none hidden md:block">
+      <svg width="200" height="200" viewBox="0 0 200 200" class="text-cyan-400">
+        <circle cx="100" cy="100" r="80" fill="none" stroke="currentColor" stroke-width="0.5" stroke-dasharray="10 200" />
+        <path d="M 100 10 L 100 30 M 100 170 L 100 190 M 10 100 L 30 100 M 170 100 L 190 100" fill="none" stroke="currentColor" stroke-width="1" />
+      </svg>
     </div>
   </div>
 </template>
 
 <style scoped>
 .animate-floating {
-  animation: float 6s ease-in-out infinite;
+  animation: float 10s ease-in-out infinite;
 }
 
 @keyframes float {
   0% { transform: translate(var(--scatter-x, 0px), 0px) rotate(0deg); }
-  50% { transform: translate(calc(var(--scatter-x, 0px) - 6px), -10px) rotate(1deg); }
+  50% { transform: translate(calc(var(--scatter-x, 0px) - 10px), -20px) rotate(0.2deg); }
   100% { transform: translate(var(--scatter-x, 0px), 0px) rotate(0deg); }
 }
 </style>

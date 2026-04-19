@@ -26,24 +26,18 @@ const moonRotation = computed(() => `${apparentRotation.value}deg`)
       <div class="sticky top-0 h-screen w-full overflow-hidden bg-transparent flex flex-col justify-end">
         <!-- ── ENVIRONMENT & HERO HUD LAYER (FADES OUT TOGETHER) ── -->
         <div
-          class="absolute inset-0 pointer-events-none"
+          class="absolute inset-0 pointer-events-none broken-terminal-jitter"
           :style="{ opacity: environmentOpacity }"
         >
+          <!-- Bug Bio-Lens / HUD Overlay -->
+          <div class="absolute inset-0 z-[64] vr-lens mix-blend-overlay opacity-80" />
+
           <img
             src="/images/hero_layers/night_sky.png"
             class="absolute top-0 left-0 w-full h-[55%] object-cover object-bottom z-10"
             :style="{ transform: backgroundTransform }"
             alt="Sky"
           >
-
-          <!-- Background Top-Left Hexagon Overlay -->
-          <div
-            id="hexagon-overlay-bg"
-            class="absolute inset-0 z-15"
-            :style="{ transform: backgroundTransform }"
-          >
-            <PagesLandingHeroHexagons mask-mode="top-left" />
-          </div>
 
           <!-- Moon -->
           <div
