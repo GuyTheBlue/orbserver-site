@@ -12,12 +12,12 @@ const duneTransform = computed(() => `scale(${1 + y.value * 0.0005}) translateY(
 const rockTransform = computed(() => `scale(${1 + y.value * 0.0005}) translateY(-${y.value * 1.0}px)`)
 
 // The overall space transitions to pitch black/void as you sink
-const voidOpacity = computed(() => Math.min(y.value / 600, 1))
+const voidOpacity = computed(() => Math.min(y.value / 400, 1))
 </script>
 
 <template>
   <!-- The track allows for vertical scrolling space -->
-  <div class="relative h-[200vh] w-full">
+  <div class="relative h-[140vh] w-full">
     <!-- ClientOnly wrapper to satisfy our strict Nuxt 4 guard-rail! -->
     <ClientOnly>
       <!-- The camera frame: locks to the screen while you scroll down the track -->
