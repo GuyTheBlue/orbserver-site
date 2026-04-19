@@ -150,7 +150,18 @@ const moonRotation = computed(() => `${apparentRotation.value}deg`)
             :style="{ transform: `translateY(${50 - y * 0.05}px) scale(${0.95 + y * 0.0001})` }"
           >
             <div class="font-orbitron font-black text-4xl md:text-7xl text-center space-y-4 tracking-[-0.05em] uppercase">
-              <div class="text-white/20 blur-[1px]">MOON</div>
+              <div class="text-white/20 blur-[1px] flex items-center justify-center">
+                M
+                <span class="relative inline-flex items-center justify-center mx-2 sm:mx-4">
+                  <!-- Solid Glowing Orb -->
+                  <span class="w-8 h-8 md:w-16 md:h-16 rounded-full bg-white shadow-[0_0_30px_rgba(255,255,255,1)]" />
+                  <!-- Orbit Line -->
+                  <svg class="absolute w-[200%] h-[200%] pointer-events-none opacity-40" viewBox="0 0 100 100">
+                    <ellipse cx="50" cy="50" rx="48" ry="12" fill="none" stroke="white" stroke-width="1.2" transform="rotate(-20 50 50)" />
+                  </svg>
+                </span>
+                ON
+              </div>
               <div class="text-white/40 blur-[2px]">TELEMETRY</div>
               <div class="text-cyan-400/80 drop-shadow-[0_0_15px_rgba(34,211,238,0.5)] animate-focus-pulse">DASHBOARD</div>
             </div>
