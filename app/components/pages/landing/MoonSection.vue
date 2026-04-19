@@ -290,8 +290,25 @@ onMounted(() => {
           </div>
 
           <div class="relative z-10 mt-12 text-center w-full px-2">
-            <h2 class="font-orbitron font-black text-3xl sm:text-5xl xl:text-7xl text-white tracking-[0.1em] sm:tracking-widest uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.4)]">
-              {{ isLoading ? '…' : phaseName }}
+            <h2 class="font-orbitron font-black text-3xl sm:text-5xl xl:text-7xl text-white tracking-[0.1em] sm:tracking-widest uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.4)] flex items-center justify-center gap-x-2">
+              <template v-if="isLoading">…</template>
+              <template v-else>
+                <div v-for="(word, wi) in phaseName.split(' ')" :key="wi" class="flex items-center">
+                  <template v-for="(char, ci) in word.split('')" :key="ci">
+                    <!-- Stylize the second 'O' in 'MOON' -->
+                    <span v-if="word.toUpperCase() === 'MOON' && ci === 2" class="relative inline-flex items-center justify-center mx-1">
+                      <!-- Solid Glow Circle -->
+                      <span class="w-6 h-6 sm:w-10 sm:h-10 xl:w-14 xl:h-14 rounded-full bg-white shadow-[0_0_20px_rgba(255,255,255,0.8)]" />
+                      <!-- Orbit Line -->
+                      <svg class="absolute w-[180%] h-[180%] pointer-events-none opacity-60" viewBox="0 0 100 100">
+                        <ellipse cx="50" cy="50" rx="48" ry="12" fill="none" stroke="white" stroke-width="1.5" transform="rotate(-25 50 50)" />
+                      </svg>
+                    </span>
+                    <span v-else>{{ char }}</span>
+                  </template>
+                  <span v-if="wi < phaseName.split(' ').length - 1">&nbsp;</span>
+                </div>
+              </template>
             </h2>
             <div class="mt-8 flex flex-wrap items-center justify-center gap-y-8">
               <div class="flex flex-col items-center px-6 sm:px-10 border-r border-white/10 last:border-r-0">
