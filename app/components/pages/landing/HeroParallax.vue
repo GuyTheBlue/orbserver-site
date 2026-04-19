@@ -132,6 +132,37 @@ const moonRotation = computed(() => `${apparentRotation.value}deg`)
           </div>
         </div>
 
+        <!-- ── 80s CRT BRIDGE LAYER (REVEALS ON SINK) ── -->
+        <div
+          class="absolute inset-0 z-[5] bg-black flex items-center justify-center pointer-events-none overflow-hidden"
+          :style="{ opacity: voidOpacity }"
+        >
+          <!-- 80s Noise & Scanline Overlay -->
+          <div class="absolute inset-0 opacity-40 scanline-overlay pointer-events-none z-20" />
+          <div class="absolute inset-0 opacity-10 grid-overlay pointer-events-none z-10 scale-[2]" />
+          
+          <!-- Scratches & Glitch Effect -->
+          <div class="absolute inset-0 opacity-20 bg-[url('/images/scratches.png')] animate-pulse pointer-events-none mix-blend-screen" />
+
+          <!-- Title Card -->
+          <div
+            class="relative z-30 transition-transform duration-700"
+            :style="{ transform: `translateY(${50 - y * 0.05}px) scale(${0.95 + y * 0.0001})` }"
+          >
+            <div class="font-orbitron font-black text-4xl md:text-7xl text-center space-y-4 tracking-[-0.05em] uppercase">
+              <div class="text-white/20 blur-[1px]">MOON</div>
+              <div class="text-white/40 blur-[2px]">TELEMETRY</div>
+              <div class="text-cyan-400/80 drop-shadow-[0_0_15px_rgba(34,211,238,0.5)] animate-focus-pulse">DASHBOARD</div>
+            </div>
+            
+            <!-- Technical Underline -->
+            <div class="mt-12 h-0.5 w-64 bg-cyan-400/30 mx-auto relative overflow-hidden">
+              <div class="absolute inset-0 bg-cyan-400 animate-scan" />
+            </div>
+            <div class="mt-4 font-mono text-[9px] text-cyan-400/40 tracking-[0.8em] text-center">INITIALIZING_OS_ENVIRONMENT</div>
+          </div>
+        </div>
+
         <!-- Debug utility -->
         <SharedScreenSizeHelper />
       </div>
@@ -146,3 +177,13 @@ const moonRotation = computed(() => `${apparentRotation.value}deg`)
     </ClientOnly>
   </div>
 </template>
+
+<style scoped>
+@keyframes focus-pulse {
+  0%, 100% { filter: blur(0px); opacity: 0.8; }
+  50% { filter: blur(8px); opacity: 0.4; }
+}
+.animate-focus-pulse {
+  animation: focus-pulse 5s ease-in-out infinite;
+}
+</style>

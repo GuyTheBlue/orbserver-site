@@ -10,8 +10,8 @@ import { landingData } from '~/utils/landingData'
       class="relative z-10"
     />
 
-    <!-- The Moon Observatory (z-0, overlaps the hero sink) -->
-    <PagesLandingMoonSection class="relative z-0 -mt-[40vh]" />
+    <!-- The Moon Observatory (z-0) -->
+    <PagesLandingMoonSection class="relative z-0" />
 
     <!-- Later on, as you build more content, you will put your UPageSection blocks here. -->
   </div>
