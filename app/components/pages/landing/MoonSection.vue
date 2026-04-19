@@ -206,6 +206,12 @@ onMounted(() => {
             <svg class="absolute bottom-6 right-6 w-8 h-8 text-white/5 pointer-events-none" viewBox="0 0 50 43"><path d="M12.5 0L37.5 0L50 21.5L37.5 43L12.5 43L0 21.5Z" fill="none" stroke="currentColor" stroke-width="1.5" /></svg>
             <label class="relative z-10 font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase block mb-6">RADAR::DIST_CAL</label>
             <div class="relative z-10 font-orbitron font-black text-5xl xl:text-7xl text-white tracking-tighter mb-6">{{ distFormatted }}<span class="text-xl text-white/30 ml-4 font-mono">KM</span></div>
+            <!-- Distance progress bar: PERIGEE → APOGEE -->
+            <div class="relative z-10 h-2 bg-white/5 rounded-full mb-3">
+              <div class="absolute inset-y-0 left-0 bg-cyan-400 shadow-[0_0_15px_rgba(0,255,255,1)] rounded-full transition-all duration-1000" :style="{ width: `${distRatio}%` }" />
+              <div class="absolute -top-1.5 w-5 h-5 bg-white rounded-full transition-all duration-1000" :style="{ left: `calc(${distRatio}% - 10px)` }" />
+            </div>
+            <div class="relative z-10 flex justify-between font-mono text-[10px] text-white/30 uppercase tracking-[0.4em] mb-4"><span>[PRG] NEAR</span><span>[APG] FAR</span></div>
             <!-- Orbital Diagram: Earth–Moon system, terminal-style SVG -->
             <svg
               class="relative z-10 w-full mt-2"
