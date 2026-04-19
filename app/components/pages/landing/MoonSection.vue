@@ -13,7 +13,8 @@ const {
   moonrise, moonset,
   apparentDiameter, apparentDiameterRatio, apparentVsMean,
   velocity, lightTravelTime, subLunarPoint,
-  ra, dec, nextPerigee, nextApogee
+  ra, dec, nextPerigee, nextApogee,
+  zodiac, zodiacSymbol
 } = useMoonData()
 
 // ── Intersection ────────────────────────────────────────────────────────────
@@ -180,6 +181,28 @@ onMounted(() => {
       >
         LUNAR_OBS
       </div>
+      <!-- Zodiac Wash -->
+      <div
+        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-orbitron font-black text-cyan-400/[0.015] whitespace-nowrap leading-none transition-all duration-[3s]"
+        style="font-size: clamp(120px, 30vw, 500px); pointer-events: none;"
+      >
+        {{ zodiac.toUpperCase() }}
+      </div>
+    </div>
+
+    <!-- ── 4. RED HEXAGON GLITCHES (Intermittent sharp anomalies) ──────────────── -->
+    <div class="absolute inset-0 z-[80] pointer-events-none overflow-hidden">
+      <div 
+        v-for="i in 6" 
+        :key="i"
+        class="absolute w-32 h-32 bg-red-600/20 hexagon-glitch opacity-0"
+        :style="{
+          top: `${Math.random() * 80 + 10}%`,
+          left: `${Math.random() * 80 + 10}%`,
+          animationDelay: `${Math.random() * 5}s`,
+          animationDuration: `${Math.random() * 4 + 2}s`
+        }"
+      />
     </div>
 
     <!-- ── 4. PANELS (z-10) ──────────────────────────────────────────────── -->
@@ -221,7 +244,10 @@ onMounted(() => {
             stroke-width="1.5"
           /></svg>
 
-          <label class="relative z-10 font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase mb-8 self-start">VISUAL_FEED::PRIMARY</label>
+          <div class="absolute top-8 left-8 flex flex-col gap-1 z-10">
+            <label class="font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase">VISUAL_FEED::PRIMARY</label>
+            <div class="font-mono text-[9px] text-white/20 tracking-widest uppercase">CONSTELLATION // {{ zodiac }} [{{ zodiacSymbol }}]</div>
+          </div>
 
           <div
             class="relative z-10 w-full max-w-[400px] xl:max-w-[480px] transition-all duration-1000"
@@ -346,9 +372,13 @@ onMounted(() => {
                     <span class="font-mono text-[10px] text-white/20">R_ASCENSION</span>
                     <span class="font-orbitron font-black text-white ml-2">{{ ra }}</span>
                   </div>
-                  <div class="flex justify-between">
+                  <div class="flex justify-between border-b border-white/5 pb-2">
                     <span class="font-mono text-[10px] text-white/20">DECLINATION</span>
                     <span class="font-orbitron font-black text-white ml-2">{{ dec }}</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="font-mono text-[10px] text-white/20">ZODIAC_SIGN</span>
+                    <span class="font-orbitron font-black text-cyan-400 ml-2 uppercase">{{ zodiac }} {{ zodiacSymbol }}</span>
                   </div>
                 </div>
               </div>
@@ -928,5 +958,18 @@ onMounted(() => {
 @keyframes moon-orbit {
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
+}
+
+.hexagon-glitch {
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+  animation: glitch-pop linear infinite;
+}
+
+@keyframes glitch-pop {
+  0%, 94%, 100% { opacity: 0; transform: scale(0.8) rotate(0deg); }
+  95% { opacity: 0.6; transform: scale(1.1) rotate(5deg); }
+  96% { opacity: 0.2; transform: scale(0.9) rotate(-3deg); }
+  97% { opacity: 0.7; transform: scale(1.0) rotate(2deg); }
+  98% { opacity: 0; transform: scale(1.2) rotate(0deg); }
 }
 </style>

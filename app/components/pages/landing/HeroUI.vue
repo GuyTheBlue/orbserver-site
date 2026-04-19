@@ -4,7 +4,7 @@ import { computed, ref, onMounted } from 'vue'
 const {
   isLoading, distance, fraction, phaseName, apparentRotation,
   velocity, lightTravelTime, ra, dec, apparentDiameter,
-  altitude, azimuth
+  altitude, azimuth, zodiac, zodiacSymbol
 } = useMoonData()
 
 // ── DYNAMIC MATRIX RAINFALL ──────────────────────────────────────────────────
@@ -88,8 +88,8 @@ const telemetryRows = computed(() => {
   const ltSeconds = (lightTravelTime.value / 1000).toFixed(3)
   
   return [
-    { id: 'DIST', label: 'DISTANCE', val: getGlitchedVal('DISTANCE', distance.value?.toLocaleString('en-GB') + ' KM'), info: 'Kilometres from Earth center to Moon', scale: distance.value ? (distance.value / 406000) * 100 : 0 },
     { id: 'PHA', label: 'PHASE', val: getGlitchedVal('LOC_COORD', phaseName.value?.toUpperCase()), info: 'Current lunar illumination cycle', scale: 75 },
+    { id: 'ZOD', label: 'ZODIAC', val: getGlitchedVal('LOC_COORD', (zodiac.value + ' ' + zodiacSymbol.value).toUpperCase()), info: 'Lunar position in tropical zodiac', scale: 60 },
     { id: 'VEL', label: 'ORB_VEL', val: getGlitchedVal('VELOCITY', Math.round(velocity.value * 3600).toLocaleString('en-GB') + ' KM/H'), info: 'Moon orbital speed around Earth', scale: 75 },
     { id: 'LT', label: 'LT_DELAY', val: getGlitchedVal('LIGHT_SPD', ltSeconds + ' SEC'), info: 'Time for light to reach Earth from Moon', scale: 92 }
   ]
@@ -113,6 +113,21 @@ onMounted(() => {
       <div class="font-mono text-[10px] text-cyan-400/30 whitespace-pre leading-[0.85] p-10">
         {{ dataWash.repeat(10) }}
       </div>
+    </div>
+
+    <!-- 1b. RED HEXAGON GLITCHES (Sharp/Active) -->
+    <div class="absolute inset-0 z-[120] pointer-events-none overflow-hidden">
+      <div 
+        v-for="i in 5" 
+        :key="i"
+        class="absolute w-32 h-32 bg-red-600/20 hexagon-glitch opacity-0"
+        :style="{
+          top: `${Math.random() * 80 + 10}%`,
+          left: `${Math.random() * 80 + 10}%`,
+          animationDelay: `${Math.random() * 2}s`,
+          animationDuration: `${Math.random() * 4 + 2}s`
+        }"
+      />
     </div>
 
     <!-- 2. "KNOW THY MOON" DASHBOARD CTA (Corrected Size + OS Style) -->
@@ -218,5 +233,17 @@ onMounted(() => {
 }
 .animate-scan {
   animation: scan 3s linear infinite;
+}
+
+.hexagon-glitch {
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+  animation: glitch-pop-hero linear infinite;
+}
+
+@keyframes glitch-pop-hero {
+  0%, 96%, 100% { opacity: 0; transform: scale(0.6) rotate(0deg); }
+  97% { opacity: 0.5; transform: scale(1.1) rotate(10deg); }
+  98% { opacity: 0.2; transform: scale(0.9) rotate(-5deg); }
+  99% { opacity: 0.6; transform: scale(1.0) rotate(0deg); }
 }
 </style>

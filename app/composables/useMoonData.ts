@@ -113,6 +113,8 @@ export function useMoonData() {
   const dec = ref('—')
   const nextPerigee = ref('—')
   const nextApogee = ref('—')
+  const zodiac = ref('—')
+  const zodiacSymbol = ref('—')
 
   onMounted(async () => {
     if (!import.meta.client) return
@@ -223,7 +225,21 @@ export function useMoonData() {
         const decAbs = Math.abs(decDeg)
         const decD = Math.floor(decAbs)
         const decM = Math.floor((decAbs - decD) * 60)
-        dec.value = `${decDeg >= 0 ? '+' : '-'}${decD}° ${String(decM).padStart(2, '\'')}m`
+        dec.value = `${decDeg >= 0 ? '+' : '-'}${decD}° ${String(decM).padStart(2, '0')}m`
+
+        // ── Zodiac / Constellation ──────────────────────────────────────────
+        const lDeg = ((l * 180 / Math.PI) % 360 + 360) % 360
+        const zodiacIdx = Math.floor(lDeg / 30)
+        const ZODIAC_DATA = [
+          { name: 'Aries', sym: '[ARI]' }, { name: 'Taurus', sym: '[TAU]' },
+          { name: 'Gemini', sym: '[GEM]' }, { name: 'Cancer', sym: '[CAN]' },
+          { name: 'Leo', sym: '[LEO]' }, { name: 'Virgo', sym: '[VIR]' },
+          { name: 'Libra', sym: '[LIB]' }, { name: 'Scorpio', sym: '[SCO]' },
+          { name: 'Sagittarius', sym: '[SAG]' }, { name: 'Capricorn', sym: '[CAP]' },
+          { name: 'Aquarius', sym: '[AQU]' }, { name: 'Pisces', sym: '[PIS]' }
+        ]
+        zodiac.value = ZODIAC_DATA[zodiacIdx].name
+        zodiacSymbol.value = ZODIAC_DATA[zodiacIdx].sym
       }
 
       // ── Next Perigee / Apogee — ephemeris scan ────────────────────────────
@@ -311,6 +327,7 @@ export function useMoonData() {
     lightTravelTime,
     subLunarPoint,
     ra, dec,
-    nextPerigee, nextApogee
+    nextPerigee, nextApogee,
+    zodiac, zodiacSymbol
   }
 }
