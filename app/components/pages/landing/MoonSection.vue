@@ -375,6 +375,85 @@ onMounted(() => {
                   </div>
                 </div>
               </div>
+
+              <!-- Celestial Orbit Animation (Fills the gap on XL/2XL) -->
+              <div class="hidden xl:flex items-center justify-center relative overflow-hidden min-h-[160px] opacity-40 border border-white/5 rounded-lg bg-white/[0.02]">
+                <div class="absolute inset-0 z-0 panel-grid-mesh opacity-20" />
+                <svg
+                  class="relative z-10 w-full h-full max-w-[280px]"
+                  viewBox="0 0 200 120"
+                >
+                  <!-- The Sun (Center/Glow) -->
+                  <circle
+                    cx="100"
+                    cy="60"
+                    r="8"
+                    fill="none"
+                    stroke="#00ffff"
+                    stroke-width="0.5"
+                    class="animate-pulse"
+                  />
+                  <circle
+                    cx="100"
+                    cy="60"
+                    r="12"
+                    fill="none"
+                    stroke="#00ffff"
+                    stroke-width="0.2"
+                    stroke-dasharray="2 4"
+                  />
+
+                  <!-- Earth Orbit Track (Elliptical) -->
+                  <ellipse
+                    cx="100"
+                    cy="60"
+                    rx="90"
+                    ry="35"
+                    fill="none"
+                    stroke="white"
+                    stroke-width="0.3"
+                    stroke-dasharray="4 8"
+                    opacity="0.1"
+                  />
+
+                  <!-- Earth + Moon System (Animated) -->
+                  <g class="celestial-system-anim">
+                    <!-- Earth -->
+                    <circle
+                      cx="0"
+                      cy="0"
+                      r="4"
+                      fill="none"
+                      stroke="white"
+                      stroke-width="1"
+                    />
+                    <!-- Moon Orbit around Earth -->
+                    <circle
+                      cx="0"
+                      cy="0"
+                      r="12"
+                      fill="none"
+                      stroke="white"
+                      stroke-width="0.3"
+                      stroke-dasharray="2 2"
+                      opacity="0.3"
+                    />
+                    <!-- Moon -->
+                    <g class="moon-orbit-anim">
+                      <circle
+                        cx="12"
+                        cy="0"
+                        r="1.5"
+                        fill="#00ffff"
+                        stroke="none"
+                      />
+                    </g>
+                  </g>
+                </svg>
+                <p class="absolute bottom-2 left-1/2 -translate-x-1/2 font-mono text-[8px] text-white/10 tracking-[0.5em] uppercase pointer-events-none">
+                  simulation::orbital_sync
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -827,4 +906,27 @@ onMounted(() => {
 .ticker-wrap { mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent); }
 .ticker-content { display: inline-block; animation: ticker 40s linear infinite; }
 @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+/* Celestial Orbit Animations */
+.celestial-system-anim {
+  animation: earth-orbit 60s linear infinite;
+}
+.moon-orbit-anim {
+  animation: moon-orbit 10s linear infinite;
+}
+
+/* 
+   We use translate(100px, 60px) as the Sun anchor, 
+   then rotate the whole group to simulate the Earth orbiting.
+   The Earth itself is offset by 90px.
+*/
+@keyframes earth-orbit {
+  from { transform: translate(100px, 60px) rotate(0deg) translateX(90px) scaleY(0.4) rotate(0deg); }
+  to   { transform: translate(100px, 60px) rotate(360deg) translateX(90px) scaleY(0.4) rotate(-360deg); }
+}
+
+@keyframes moon-orbit {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
 </style>
