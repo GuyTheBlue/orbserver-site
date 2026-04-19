@@ -314,12 +314,12 @@ onMounted(() => {
               <div class="panel-grid-mesh" /><div class="panel-scanlines" /><div class="card-brackets" />
               <div class="relative z-10 flex flex-col h-full">
                 <label class="font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase block mb-6">EVENT::RISE_SET</label>
-                <div class="flex justify-between items-end mb-8">
+                <div class="space-y-6 mb-8">
                   <div>
                     <span class="block font-mono text-[9px] text-white/30 uppercase tracking-[0.3em] mb-1">Rise</span>
                     <span class="font-orbitron font-black text-4xl text-white">{{ moonrise }}</span>
                   </div>
-                  <div class="text-right">
+                  <div>
                     <span class="block font-mono text-[9px] text-white/30 uppercase tracking-[0.3em] mb-1">Set</span>
                     <span class="font-orbitron font-black text-4xl text-white">{{ moonset }}</span>
                   </div>
@@ -340,9 +340,9 @@ onMounted(() => {
               <div class="relative z-10 flex flex-col h-full">
                 <label class="font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase block mb-6">TIDAL::HARMONIC</label>
                 <div class="mb-8">
-                  <div class="flex justify-between items-baseline mb-2">
+                  <div class="flex flex-col gap-1 mb-4">
                     <span class="font-orbitron font-black text-4xl text-cyan-400">{{ tideStatus.type }}</span>
-                    <span class="font-mono text-[10px] text-white/30">{{ tideStatus.intensity }}% FORCE</span>
+                    <span class="font-mono text-[10px] text-white/30 uppercase tracking-widest">{{ tideStatus.intensity }}% FORCE</span>
                   </div>
                   <div class="h-1 bg-white/5 rounded-full overflow-hidden">
                     <div class="h-full bg-cyan-400 shadow-[0_0_8px_cyan]" :style="{ width: tideStatus.intensity + '%' }" />
