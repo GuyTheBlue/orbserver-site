@@ -4,7 +4,8 @@ import { ref, onMounted } from 'vue'
 const props = defineProps<{
   zIndex?: number
   density?: number // 0 to 1
-  baseSize?: number // Max size in px
+  minSize?: number
+  maxSize?: number
 }>()
 
 interface GlitchInstance {
@@ -13,6 +14,8 @@ interface GlitchInstance {
   y: number
   size: number
   type: 'solid-pop' | 'wire-pop' | 'sticky'
+  duration: number
+  blur: number
 }
 
 const activeGlitches = ref<GlitchInstance[]>([])
@@ -27,25 +30,33 @@ function spawnGlitch() {
   if (r > 0.95) type = 'sticky'
   else if (r > 0.6) type = 'wire-pop'
 
-  // Random size: minimum 40px, heavily weighted toward larger sizes
-  const min = 40
-  const max = props.baseSize || 64
-  // Using Math.pow(Math.random(), 0.3) for even stronger weighting toward max
-  const size = Math.floor(Math.pow(Math.random(), 0.3) * (max - min) + min)
+  // Size logic: min to max (e.g. 32 to 100)
+  const minS = props.minSize || 32
+  const maxS = props.maxSize || 100
+  const size = Math.floor(Math.random() * (maxS - minS) + minS)
+
+  // Stickiness: 1s to 3s
+  const duration = type === 'sticky' 
+    ? Math.floor(Math.random() * 2000 + 1000) 
+    : 600
+
+  // Random blur for sticky (0px to 4px)
+  const blur = type === 'sticky' ? (Math.random() * 4) : 0
 
   activeGlitches.value.push({
     id,
     x: Math.random() * 92 + 2,
     y: Math.random() * 85 + 5,
     size,
-    type
+    type,
+    duration,
+    blur
   })
 
-  // Sticky for 5s, pops for 0.6s
-  const dur = type === 'sticky' ? 5000 : 600
+  // Auto-remove after unique duration
   setTimeout(() => {
     activeGlitches.value = activeGlitches.value.filter(g => g.id !== id)
-  }, dur)
+  }, duration + 500) // extra padding for animation
 }
 
 onMounted(() => {
@@ -75,7 +86,9 @@ onMounted(() => {
           top: `${g.y}%`,
           left: `${g.x}%`,
           width: `${g.size}px`,
-          height: `${g.size}px`
+          height: `${g.size}px`,
+          animationDuration: `${g.duration}ms`,
+          filter: g.type === 'sticky' ? `blur(${g.blur}px)` : 'none'
         }"
         viewBox="0 0 100 100"
       >
@@ -92,10 +105,10 @@ onMounted(() => {
 
 <style scoped>
 .hex-pop-anim {
-  animation: glitch-instant-pop 0.35s forwards;
+  animation: glitch-instant-pop linear forwards;
 }
 .hex-sticky-anim {
-  animation: glitch-long-stick 5s forwards;
+  animation: glitch-blur-bounce ease-in-out forwards;
 }
 
 @keyframes glitch-instant-pop {
@@ -106,10 +119,13 @@ onMounted(() => {
   100% { opacity: 0; transform: scale(1.2); }
 }
 
-@keyframes glitch-long-stick {
-  0% { opacity: 0; transform: scale(0.9); }
-  2% { opacity: 0.9; transform: scale(1.05); } 
-  5%, 85% { opacity: 0.6; transform: scale(1); }
-  100% { opacity: 0; transform: scale(1.1); }
+@keyframes glitch-blur-bounce {
+  0% { opacity: 0; transform: scale(0.9) translate(0); filter: blur(0); }
+  5% { opacity: 1; transform: scale(1.05) translate(-2px, 1px); filter: blur(0.5px); }
+  10% { opacity: 0.8; transform: scale(1.0) translate(2px, -1px); filter: blur(0); }
+  15%, 80% { opacity: 0.6; transform: scale(1) translate(0); }
+  85% { opacity: 0.9; transform: scale(1.02); filter: blur(2px); }
+  90% { opacity: 0.4; transform: scale(0.98); filter: blur(4px); }
+  100% { opacity: 0; transform: scale(1.1); filter: blur(8px); }
 }
 </style>

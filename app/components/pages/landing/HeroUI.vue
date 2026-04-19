@@ -120,7 +120,7 @@ onMounted(() => {
 
     <!-- 1b. DYNAMIC RED HEXAGON GLITCHES (Centralized Component) ──────── -->
     <ClientOnly>
-      <SharedGlitchSystem :z-index="500" :density="1.5" :base-size="72" />
+      <SharedGlitchSystem :z-index="500" :density="1.5" :min-size="48" :max-size="120" />
     </ClientOnly>
 
     <!-- 2. "KNOW THY MOON" DASHBOARD CTA (Corrected Size + OS Style) -->
