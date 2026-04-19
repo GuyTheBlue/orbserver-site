@@ -3,9 +3,9 @@ import { computed } from 'vue'
 
 const props = defineProps<{
   fraction: number // 0 (new) → 1 (full)
-  phase: number    // 0–1 position across the full lunation cycle
+  phase: number // 0–1 position across the full lunation cycle
   rotation?: number // Degrees of rotation relative to horizon
-  lat?: number     // Latitude for hemisphere-aware phase orientation
+  lat?: number // Latitude for hemisphere-aware phase orientation
 }>()
 
 /**
@@ -45,8 +45,10 @@ const glowSpread = computed(() => `${40 + props.fraction * 60}px`)
 </script>
 
 <template>
-  <div class="relative flex items-center justify-center" style="will-change: transform;">
-
+  <div
+    class="relative flex items-center justify-center"
+    style="will-change: transform;"
+  >
     <!-- Outer ambient atmospheric glow — intensifies toward full moon -->
     <div
       class="absolute rounded-full pointer-events-none"
@@ -81,7 +83,7 @@ const glowSpread = computed(() => `${40 + props.fraction * 60}px`)
         alt="Moon"
         class="block w-full h-full object-cover select-none"
         draggable="false"
-      />
+      >
 
       <!-- SVG shadow overlay — covers the unlit portion of the moon -->
       <svg

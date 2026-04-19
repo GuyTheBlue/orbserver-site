@@ -2,7 +2,7 @@ export function useTitleParser(text: string) {
   if (!text) return []
 
   const parts = text.split(/(#h#.*?#\/h#|#br#)/g)
-  
+
   return parts.map((part, index) => {
     if (part === '#br#') {
       return { type: 'br', id: index }

@@ -6,16 +6,6 @@ export default defineNuxtConfig({
     '@nuxtjs/google-fonts'
   ],
 
-  googleFonts: {
-    families: {
-      Roboto: [400, 500, 700],
-      Orbitron: [400, 700, 900]
-    },
-    display: 'swap',
-    prefetch: true,
-    preconnect: true
-  },
-
   devtools: {
     enabled: false
   },
@@ -35,5 +25,15 @@ export default defineNuxtConfig({
         braceStyle: '1tbs'
       }
     }
+  },
+
+  googleFonts: {
+    families: {
+      Roboto: [400, 500, 700],
+      Orbitron: [400, 700, 900]
+    },
+    display: 'swap',
+    prefetch: true,
+    preconnect: true
   }
 })

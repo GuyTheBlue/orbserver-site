@@ -85,7 +85,7 @@ export function useMoonFactoids() {
         { text: 'near side', highlight: true },
         { text: ' to face us.' }
       ]
-    },
+    }
   ]
 
   // ── Rise/Set Panel Factoid ─────────────────────────────────────────────────

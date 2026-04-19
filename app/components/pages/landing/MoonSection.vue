@@ -22,13 +22,13 @@ useIntersectionObserver(sectionEl, ([e]) => { if (e.isIntersecting) isVisible.va
 
 // ── Calculations ─────────────────────────────────────────────────────────────
 const illuminationPct = computed(() => Math.round(fraction.value * 100))
-const distFormatted   = computed(() => distance.value?.toLocaleString('en-GB') ?? '—')
-const distRatio       = computed(() => {
+const distFormatted = computed(() => distance.value?.toLocaleString('en-GB') ?? '—')
+const distRatio = computed(() => {
   if (!distance.value) return 0
   return Math.min(100, Math.max(0, ((distance.value - 356500) / (406700 - 356500)) * 100))
 })
 const altStr = computed(() => altitude.value !== 0 ? `${altitude.value > 0 ? '+' : ''}${altitude.value}°` : '—')
-const azStr  = computed(() => azimuth.value > 0 ? `${azimuth.value.toFixed(0)}°` : '—')
+const azStr = computed(() => azimuth.value > 0 ? `${azimuth.value.toFixed(0)}°` : '—')
 const latStr = computed(() => `${Math.abs(lat.value).toFixed(4)}° ${lat.value >= 0 ? 'N' : 'S'}`)
 const lngStr = computed(() => `${Math.abs(lng.value).toFixed(4)}° ${lng.value >= 0 ? 'E' : 'W'}`)
 
@@ -40,14 +40,13 @@ const lngStr = computed(() => `${Math.abs(lng.value).toFixed(4)}° ${lng.value >
 // Apogee  (right vertex)= (232, 62) — distRatio = 100%
 const ORB = { cx: 140, cy: 62, rx: 92, ry: 56, ex: 67, ey: 62 } as const
 const moonOrbitAngle = computed(() => Math.PI * (1 - distRatio.value / 100))
-const moonOrbitX     = computed(() => ORB.cx + ORB.rx * Math.cos(moonOrbitAngle.value))
-const moonOrbitY     = computed(() => ORB.cy + ORB.ry * Math.sin(moonOrbitAngle.value))
+const moonOrbitX = computed(() => ORB.cx + ORB.rx * Math.cos(moonOrbitAngle.value))
+const moonOrbitY = computed(() => ORB.cy + ORB.ry * Math.sin(moonOrbitAngle.value))
 // Label sits above moon if in top arc, below if in bottom arc
-const moonLabelY     = computed(() => moonOrbitY.value < ORB.cy ? moonOrbitY.value - 13 : moonOrbitY.value + 16)
-
+const moonLabelY = computed(() => moonOrbitY.value < ORB.cy ? moonOrbitY.value - 13 : moonOrbitY.value + 16)
 
 // ── Background Terminal Typewriter ───────────────────────────────────────────
-const termLines = ref<Array<{ text: string; cls: string }>>([])
+const termLines = ref<Array<{ text: string, cls: string }>>([])
 const termCursor = ref(true)
 let alive = false
 
@@ -67,7 +66,7 @@ async function runSession() {
   termLines.value = []
   const latV = lat.value !== 0 ? lat.value.toFixed(4) : '-33.9249'
   const lngV = lng.value !== 0 ? lng.value.toFixed(4) : '18.4241'
-  const script: Array<{ t: string; cmd?: boolean; blank?: boolean }> = [
+  const script: Array<{ t: string, cmd?: boolean, blank?: boolean }> = [
     { t: `$ ./lunar-obs --connect --host=orbserver.io`, cmd: true },
     { t: `  > AUTH: cape_town_obs_001` },
     { t: `  > LAT=${latV}  LNG=${lngV}` },
@@ -76,7 +75,7 @@ async function runSession() {
     { t: `$ lunar-obs query --payload=telemetry --format=raw`, cmd: true },
     { t: '', blank: true },
     { t: `  PHASE          ${phaseName.value !== '…' ? phaseName.value.toUpperCase() : 'ACQUIRING'}` },
-    { t: `  ILLUMINATION   ${fraction.value > 0 ? `${(fraction.value*100).toFixed(1)}%` : '...'}` },
+    { t: `  ILLUMINATION   ${fraction.value > 0 ? `${(fraction.value * 100).toFixed(1)}%` : '...'}` },
     { t: `  AGE_IN_CYCLE   ${age.value > 0 ? `${age.value} days` : '...'}` },
     { t: `  DISTANCE       ${distance.value > 0 ? `${distFormatted.value} km` : '...'}` },
     { t: `  ALTITUDE       ${altStr.value}` },
@@ -89,7 +88,7 @@ async function runSession() {
     { t: `  > Lunar albedo: 0.12 (reflects only 12% of sunlight)` },
     { t: `  > Surface temp range: -173°C to +127°C` },
     { t: `  > Tidal locking: rotation = revolution (27.32 days)` },
-    { t: `  > Escape velocity: 2.38 km/s` },
+    { t: `  > Escape velocity: 2.38 km/s` }
   ]
   for (let i = 0; i < script.length; i++) {
     if (!alive) return
@@ -112,8 +111,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <section ref="sectionEl" class="relative bg-[#010810] overflow-hidden broken-terminal-jitter" style="min-height: 120vh;">
-
+  <section
+    ref="sectionEl"
+    class="relative bg-[#010810] overflow-hidden broken-terminal-jitter"
+    style="min-height: 120vh;"
+  >
     <!-- ── 1. BACKGROUND TERMINAL (z-0, absolute, full section) ─────────── -->
     <ClientOnly>
       <div class="absolute inset-0 z-0 p-10 lg:p-16 font-mono overflow-hidden select-none pointer-events-none">
@@ -125,12 +127,23 @@ onMounted(() => {
         </div>
         <!-- BIGGER wash for depth -->
         <div class="text-[22px] leading-relaxed opacity-[0.35]">
-          <div v-for="(line, i) in termLines" :key="i">
-            <div v-if="line.cls === 'term-blank'" class="h-6" />
-            <div v-else :class="{
-              'text-cyan-400':    line.cls === 'term-cmd',
-              'text-green-300':   line.cls === 'term-out',
-            }">{{ line.text }}</div>
+          <div
+            v-for="(line, i) in termLines"
+            :key="i"
+          >
+            <div
+              v-if="line.cls === 'term-blank'"
+              class="h-6"
+            />
+            <div
+              v-else
+              :class="{
+                'text-cyan-400': line.cls === 'term-cmd',
+                'text-green-300': line.cls === 'term-out'
+              }"
+            >
+              {{ line.text }}
+            </div>
           </div>
           <span
             class="inline-block w-[12px] h-[1em] bg-cyan-400 align-middle"
@@ -138,7 +151,9 @@ onMounted(() => {
           />
         </div>
       </div>
-      <template #fallback><div class="absolute inset-0 z-0" /></template>
+      <template #fallback>
+        <div class="absolute inset-0 z-0" />
+      </template>
     </ClientOnly>
 
     <!-- ── 2. CRT LAYER STACK (above terminal, below panels) ──────────────── -->
@@ -151,13 +166,19 @@ onMounted(() => {
       <div
         class="absolute -top-[5%] -left-[5%] font-orbitron font-black text-white/[0.035] whitespace-nowrap leading-none"
         style="font-size: clamp(100px, 22vw, 320px); transform: rotate(-5deg);"
-      >{{ latStr }}</div>
-      <div class="absolute bottom-[5%] -right-[5%] font-orbitron font-black text-white/[0.02] whitespace-nowrap leading-none" style="font-size: clamp(80px, 16vw, 240px); transform: rotate(2deg);">LUNAR_OBS</div>
+      >
+        {{ latStr }}
+      </div>
+      <div
+        class="absolute bottom-[5%] -right-[5%] font-orbitron font-black text-white/[0.02] whitespace-nowrap leading-none"
+        style="font-size: clamp(80px, 16vw, 240px); transform: rotate(2deg);"
+      >
+        LUNAR_OBS
+      </div>
     </div>
 
     <!-- ── 4. PANELS (z-10) ──────────────────────────────────────────────── -->
     <div class="relative z-10 max-w-[1600px] mx-auto px-6 pt-24 pb-24 2xl:pt-32">
-
       <!-- STATUS BAR -->
       <div class="flex items-center justify-between font-mono text-[10px] text-cyan-400 uppercase tracking-[0.5em] mb-14 border-b border-white/10 pb-6 bento-flicker">
         <div class="flex items-center gap-6">
@@ -170,13 +191,14 @@ onMounted(() => {
           <span class="opacity-50 hidden md:inline">LOC_DATA: {{ latStr }} / {{ lngStr }}</span>
         </div>
         <div class="overflow-hidden whitespace-nowrap ticker-wrap w-80 opacity-40">
-          <div class="ticker-content font-mono text-[9px]">GEOGRAPHIC_PARALLAX_SYNC // SUNCALC_FEED // SOUTHERN_HEMISPHERE_CALIBRATED // GEOGRAPHIC_PARALLAX_SYNC // SUNCALC_FEED // SOUTHERN_HEMISPHERE_CALIBRATED</div>
+          <div class="ticker-content font-mono text-[9px]">
+            GEOGRAPHIC_PARALLAX_SYNC // SUNCALC_FEED // SOUTHERN_HEMISPHERE_CALIBRATED // GEOGRAPHIC_PARALLAX_SYNC // SUNCALC_FEED // SOUTHERN_HEMISPHERE_CALIBRATED
+          </div>
         </div>
       </div>
 
       <!-- ── ROW 1: MOON + QUICK STATS SIDE ─────────────────────────────── -->
       <div class="grid grid-cols-1 xl:grid-cols-12 gap-8 mb-8">
-
         <!-- MOON PANEL -->
         <div class="xl:col-span-7 panel-card group flex flex-col items-center justify-center min-h-[580px] lg:min-h-[700px] p-12 rounded-2xl bento-flicker">
           <div class="panel-grid-mesh" />
@@ -184,41 +206,114 @@ onMounted(() => {
           <div class="card-brackets" />
           <div class="card-glow" />
           <!-- Logo Watermark -->
-          <svg class="absolute bottom-6 left-6 w-10 h-10 text-cyan-400/10 pointer-events-none" viewBox="0 0 50 43"><path d="M12.5 0L37.5 0L50 21.5L37.5 43L12.5 43L0 21.5Z" fill="none" stroke="currentColor" stroke-width="1.5" /></svg>
-          
+          <svg
+            class="absolute bottom-6 left-6 w-10 h-10 text-cyan-400/10 pointer-events-none"
+            viewBox="0 0 50 43"
+          ><path
+            d="M12.5 0L37.5 0L50 21.5L37.5 43L12.5 43L0 21.5Z"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+          /></svg>
+
           <label class="relative z-10 font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase mb-8 self-start">VISUAL_FEED::PRIMARY</label>
 
-          <div class="relative z-10 w-full max-w-[400px] xl:max-w-[480px] transition-all duration-1000" :class="isVisible ? 'opacity-100 rotate-0' : 'opacity-0 rotate-12'">
-            <SharedMoonPhase :fraction="fraction" :phase="phase" :rotation="apparentRotation" :lat="lat" />
-            <svg class="absolute pointer-events-none text-cyan-400/30 rotate-ring" style="inset:-15%;width:130%;height:130%;">
-              <circle cx="50%" cy="50%" r="44%" stroke="currentColor" fill="none" stroke-dasharray="4 14" stroke-width="1"/><g stroke="currentColor" stroke-width="1"><line x1="50%" y1="0%" x2="50%" y2="8%"/><line x1="50%" y1="92%" x2="50%" y2="100%"/><line x1="0%" y1="50%" x2="8%" y2="50%"/><line x1="92%" y1="50%" x2="100%" y2="50%"/></g>
+          <div
+            class="relative z-10 w-full max-w-[400px] xl:max-w-[480px] transition-all duration-1000"
+            :class="isVisible ? 'opacity-100 rotate-0' : 'opacity-0 rotate-12'"
+          >
+            <SharedMoonPhase
+              :fraction="fraction"
+              :phase="phase"
+              :rotation="apparentRotation"
+              :lat="lat"
+            />
+            <svg
+              class="absolute pointer-events-none text-cyan-400/30 rotate-ring"
+              style="inset:-15%;width:130%;height:130%;"
+            >
+              <circle
+                cx="50%"
+                cy="50%"
+                r="44%"
+                stroke="currentColor"
+                fill="none"
+                stroke-dasharray="4 14"
+                stroke-width="1"
+              /><g
+                stroke="currentColor"
+                stroke-width="1"
+              ><line
+                x1="50%"
+                y1="0%"
+                x2="50%"
+                y2="8%"
+              /><line
+                x1="50%"
+                y1="92%"
+                x2="50%"
+                y2="100%"
+              /><line
+                x1="0%"
+                y1="50%"
+                x2="8%"
+                y2="50%"
+              /><line
+                x1="92%"
+                y1="50%"
+                x2="100%"
+                y2="50%"
+              /></g>
             </svg>
           </div>
 
           <div class="relative z-10 mt-12 text-center w-full">
-            <h2 class="font-orbitron font-black text-6xl xl:text-7xl text-white tracking-widest uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.4)]">{{ isLoading ? '…' : phaseName }}</h2>
+            <h2 class="font-orbitron font-black text-6xl xl:text-7xl text-white tracking-widest uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.4)]">
+              {{ isLoading ? '…' : phaseName }}
+            </h2>
             <div class="mt-8 flex items-stretch justify-center">
-              <div class="flex flex-col items-center px-10 border-r border-white/10"><span class="font-mono text-[10px] text-cyan-400/60 tracking-[0.5em] uppercase mb-3">Age</span><span class="font-orbitron font-black text-5xl text-white">{{ age }}<span class="text-xl text-white/20 ml-1">d</span></span></div>
-              <div class="flex flex-col items-center px-10 border-r border-white/10"><span class="font-mono text-[10px] text-cyan-400/60 tracking-[0.5em] uppercase mb-3">Illum</span><span class="font-orbitron font-black text-5xl text-white">{{ illuminationPct }}<span class="text-xl text-white/20 ml-1">%</span></span></div>
-              <div class="flex flex-col items-center px-10"><span class="font-mono text-[10px] text-cyan-400/60 tracking-[0.5em] uppercase mb-3">Rot</span><span class="font-orbitron font-black text-5xl text-cyan-400">{{ Math.round(apparentRotation) }}<span class="text-xl text-white/20 ml-1">°</span></span></div>
+              <div class="flex flex-col items-center px-10 border-r border-white/10">
+                <span class="font-mono text-[10px] text-cyan-400/60 tracking-[0.5em] uppercase mb-3">Age</span><span class="font-orbitron font-black text-5xl text-white">{{ age }}<span class="text-xl text-white/20 ml-1">d</span></span>
+              </div>
+              <div class="flex flex-col items-center px-10 border-r border-white/10">
+                <span class="font-mono text-[10px] text-cyan-400/60 tracking-[0.5em] uppercase mb-3">Illum</span><span class="font-orbitron font-black text-5xl text-white">{{ illuminationPct }}<span class="text-xl text-white/20 ml-1">%</span></span>
+              </div>
+              <div class="flex flex-col items-center px-10">
+                <span class="font-mono text-[10px] text-cyan-400/60 tracking-[0.5em] uppercase mb-3">Rot</span><span class="font-orbitron font-black text-5xl text-cyan-400">{{ Math.round(apparentRotation) }}<span class="text-xl text-white/20 ml-1">°</span></span>
+              </div>
             </div>
 
             <!-- Technical Briefing: data from useMoonFactoids composable -->
             <div class="mt-12 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-y-12 gap-x-10 border-t border-white/5 pt-10 text-left">
               <!-- Factoid text factoids (Rows 1 & 2) -->
-              <div v-for="f in briefingFactoids" :key="f.label">
-                <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-3">{{ f.label }}</p>
+              <div
+                v-for="f in briefingFactoids"
+                :key="f.label"
+              >
+                <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-3">
+                  {{ f.label }}
+                </p>
                 <p class="font-mono text-[10px] text-cyan-400/60 leading-relaxed uppercase tracking-wider">
-                  <template v-for="(part, pi) in f.parts" :key="pi">
-                    <span v-if="part.highlight" class="text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.4)]">{{ part.text }}</span>
-                    <template v-else>{{ part.text }}</template>
+                  <template
+                    v-for="(part, pi) in f.parts"
+                    :key="pi"
+                  >
+                    <span
+                      v-if="part.highlight"
+                      class="text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.4)]"
+                    >{{ part.text }}</span>
+                    <template v-else>
+                      {{ part.text }}
+                    </template>
                   </template>
                 </p>
               </div>
 
               <!-- Row 3: Live data readouts (not static, so kept here) -->
               <div>
-                <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-3">ORBITAL // VELOCITY</p>
+                <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-3">
+                  ORBITAL // VELOCITY
+                </p>
                 <div class="space-y-4">
                   <div class="flex justify-between border-b border-white/5 pb-2">
                     <span class="font-mono text-[10px] text-white/20">V_ORB</span>
@@ -235,7 +330,9 @@ onMounted(() => {
                 </div>
               </div>
               <div>
-                <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-3">COORDINATES // RA_DEC</p>
+                <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-3">
+                  COORDINATES // RA_DEC
+                </p>
                 <div class="space-y-4">
                   <div class="flex justify-between border-b border-white/5 pb-2">
                     <span class="font-mono text-[10px] text-white/20">R_ASCENSION</span>
@@ -248,7 +345,9 @@ onMounted(() => {
                 </div>
               </div>
               <div>
-                <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-3">ORBITAL // EVENTS</p>
+                <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-3">
+                  ORBITAL // EVENTS
+                </p>
                 <div class="space-y-4">
                   <div class="flex justify-between border-b border-white/5 pb-2">
                     <span class="font-mono text-[10px] text-white/20">NEXT_PERIGEE</span>
@@ -269,7 +368,6 @@ onMounted(() => {
                 </div>
               </div>
             </div>
-
           </div>
         </div>
 
@@ -277,15 +375,33 @@ onMounted(() => {
         <div class="xl:col-span-5 flex flex-col gap-8">
           <div class="panel-card group flex-1 p-10 rounded-2xl bento-flicker">
             <div class="panel-grid-mesh" /><div class="panel-scanlines" /><div class="card-brackets" /><div class="card-glow" /><div class="card-scan" />
-            <svg class="absolute bottom-6 right-6 w-8 h-8 text-white/5 pointer-events-none" viewBox="0 0 50 43"><path d="M12.5 0L37.5 0L50 21.5L37.5 43L12.5 43L0 21.5Z" fill="none" stroke="currentColor" stroke-width="1.5" /></svg>
+            <svg
+              class="absolute bottom-6 right-6 w-8 h-8 text-white/5 pointer-events-none"
+              viewBox="0 0 50 43"
+            ><path
+              d="M12.5 0L37.5 0L50 21.5L37.5 43L12.5 43L0 21.5Z"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+            /></svg>
             <label class="relative z-10 font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase block mb-6">RADAR::DIST_CAL</label>
-            <div class="relative z-10 font-orbitron font-black text-5xl xl:text-7xl text-white tracking-tighter mb-6">{{ distFormatted }}<span class="text-xl text-white/30 ml-4 font-mono">KM</span></div>
+            <div class="relative z-10 font-orbitron font-black text-5xl xl:text-7xl text-white tracking-tighter mb-6">
+              {{ distFormatted }}<span class="text-xl text-white/30 ml-4 font-mono">KM</span>
+            </div>
             <!-- Distance progress bar: PERIGEE → APOGEE -->
             <div class="relative z-10 h-2 bg-white/5 rounded-full mb-3">
-              <div class="absolute inset-y-0 left-0 bg-cyan-400 shadow-[0_0_15px_rgba(0,255,255,1)] rounded-full transition-all duration-1000" :style="{ width: `${distRatio}%` }" />
-              <div class="absolute -top-1.5 w-5 h-5 bg-white rounded-full transition-all duration-1000" :style="{ left: `calc(${distRatio}% - 10px)` }" />
+              <div
+                class="absolute inset-y-0 left-0 bg-cyan-400 shadow-[0_0_15px_rgba(0,255,255,1)] rounded-full transition-all duration-1000"
+                :style="{ width: `${distRatio}%` }"
+              />
+              <div
+                class="absolute -top-1.5 w-5 h-5 bg-white rounded-full transition-all duration-1000"
+                :style="{ left: `calc(${distRatio}% - 10px)` }"
+              />
             </div>
-            <div class="relative z-10 flex justify-between font-mono text-[10px] text-white/30 uppercase tracking-[0.4em] mb-4"><span>[PRG] NEAR</span><span>[APG] FAR</span></div>
+            <div class="relative z-10 flex justify-between font-mono text-[10px] text-white/30 uppercase tracking-[0.4em] mb-4">
+              <span>[PRG] NEAR</span><span>[APG] FAR</span>
+            </div>
             <!-- Orbital Diagram: Earth–Moon system, terminal-style SVG -->
             <svg
               class="relative z-10 w-full mt-2"
@@ -294,62 +410,170 @@ onMounted(() => {
             >
               <!-- Background micro-grid -->
               <defs>
-                <pattern id="orbit-grid" width="14" height="14" patternUnits="userSpaceOnUse">
-                  <path d="M14 0 L0 0 0 14" fill="none" stroke="rgba(0,242,255,0.04)" stroke-width="0.5" />
+                <pattern
+                  id="orbit-grid"
+                  width="14"
+                  height="14"
+                  patternUnits="userSpaceOnUse"
+                >
+                  <path
+                    d="M14 0 L0 0 0 14"
+                    fill="none"
+                    stroke="rgba(0,242,255,0.04)"
+                    stroke-width="0.5"
+                  />
                 </pattern>
               </defs>
-              <rect width="280" height="124" fill="url(#orbit-grid)" />
+              <rect
+                width="280"
+                height="124"
+                fill="url(#orbit-grid)"
+              />
 
               <!-- Orbit ellipse — dashed cyan -->
               <ellipse
-                :cx="ORB.cx" :cy="ORB.cy" :rx="ORB.rx" :ry="ORB.ry"
-                fill="none" stroke="rgba(0,242,255,0.22)" stroke-width="0.8"
+                :cx="ORB.cx"
+                :cy="ORB.cy"
+                :rx="ORB.rx"
+                :ry="ORB.ry"
+                fill="none"
+                stroke="rgba(0,242,255,0.22)"
+                stroke-width="0.8"
                 stroke-dasharray="5 8"
               />
 
               <!-- Perigee tick + label -->
-              <line x1="48" y1="55" x2="48" y2="69" stroke="rgba(0,242,255,0.45)" stroke-width="0.8" />
-              <text x="48" y="48" text-anchor="middle" font-family="monospace" font-size="6.5"
-                    fill="rgba(0,242,255,0.55)" letter-spacing="1">PRG</text>
+              <line
+                x1="48"
+                y1="55"
+                x2="48"
+                y2="69"
+                stroke="rgba(0,242,255,0.45)"
+                stroke-width="0.8"
+              />
+              <text
+                x="48"
+                y="48"
+                text-anchor="middle"
+                font-family="monospace"
+                font-size="6.5"
+                fill="rgba(0,242,255,0.55)"
+                letter-spacing="1"
+              >PRG</text>
 
               <!-- Apogee tick + label -->
-              <line x1="232" y1="55" x2="232" y2="69" stroke="rgba(0,242,255,0.30)" stroke-width="0.8" />
-              <text x="232" y="48" text-anchor="middle" font-family="monospace" font-size="6.5"
-                    fill="rgba(0,242,255,0.35)" letter-spacing="1">APG</text>
+              <line
+                x1="232"
+                y1="55"
+                x2="232"
+                y2="69"
+                stroke="rgba(0,242,255,0.30)"
+                stroke-width="0.8"
+              />
+              <text
+                x="232"
+                y="48"
+                text-anchor="middle"
+                font-family="monospace"
+                font-size="6.5"
+                fill="rgba(0,242,255,0.35)"
+                letter-spacing="1"
+              >APG</text>
 
               <!-- Dashed line: Earth → Moon (current distance) -->
               <line
-                :x1="ORB.ex" :y1="ORB.ey"
-                :x2="moonOrbitX" :y2="moonOrbitY"
-                stroke="rgba(0,242,255,0.12)" stroke-width="0.7" stroke-dasharray="2 4"
+                :x1="ORB.ex"
+                :y1="ORB.ey"
+                :x2="moonOrbitX"
+                :y2="moonOrbitY"
+                stroke="rgba(0,242,255,0.12)"
+                stroke-width="0.7"
+                stroke-dasharray="2 4"
               />
 
               <!-- EARTH: circle + crosshair -->
-              <circle :cx="ORB.ex" :cy="ORB.ey" r="6" fill="rgba(0,60,100,0.7)" stroke="rgba(0,242,255,0.9)" stroke-width="1.2" />
-              <line :x1="ORB.ex - 10" :y1="ORB.ey" :x2="ORB.ex + 10" :y2="ORB.ey" stroke="rgba(0,242,255,0.55)" stroke-width="0.7" />
-              <line :x1="ORB.ex" :y1="ORB.ey - 10" :x2="ORB.ex" :y2="ORB.ey + 10" stroke="rgba(0,242,255,0.55)" stroke-width="0.7" />
-              <text :x="ORB.ex" :y="ORB.ey + 20" text-anchor="middle" font-family="monospace" font-size="7"
-                    fill="rgba(0,242,255,0.8)" letter-spacing="1.5">EARTH</text>
+              <circle
+                :cx="ORB.ex"
+                :cy="ORB.ey"
+                r="6"
+                fill="rgba(0,60,100,0.7)"
+                stroke="rgba(0,242,255,0.9)"
+                stroke-width="1.2"
+              />
+              <line
+                :x1="ORB.ex - 10"
+                :y1="ORB.ey"
+                :x2="ORB.ex + 10"
+                :y2="ORB.ey"
+                stroke="rgba(0,242,255,0.55)"
+                stroke-width="0.7"
+              />
+              <line
+                :x1="ORB.ex"
+                :y1="ORB.ey - 10"
+                :x2="ORB.ex"
+                :y2="ORB.ey + 10"
+                stroke="rgba(0,242,255,0.55)"
+                stroke-width="0.7"
+              />
+              <text
+                :x="ORB.ex"
+                :y="ORB.ey + 20"
+                text-anchor="middle"
+                font-family="monospace"
+                font-size="7"
+                fill="rgba(0,242,255,0.8)"
+                letter-spacing="1.5"
+              >EARTH</text>
 
               <!-- MOON: circle + targeting ring + label -->
-              <circle :cx="moonOrbitX" :cy="moonOrbitY" r="10" fill="none"
-                      stroke="rgba(255,255,255,0.12)" stroke-width="0.6" stroke-dasharray="2 3" />
-              <circle :cx="moonOrbitX" :cy="moonOrbitY" r="4.5" fill="rgba(200,215,255,0.15)"
-                      stroke="rgba(255,255,255,0.85)" stroke-width="1.2"
-                      style="transition: all 1s ease;" />
-              <text :x="moonOrbitX" :y="moonLabelY" text-anchor="middle" font-family="monospace" font-size="7"
-                    fill="rgba(255,255,255,0.9)" letter-spacing="1.5">LUNA</text>
+              <circle
+                :cx="moonOrbitX"
+                :cy="moonOrbitY"
+                r="10"
+                fill="none"
+                stroke="rgba(255,255,255,0.12)"
+                stroke-width="0.6"
+                stroke-dasharray="2 3"
+              />
+              <circle
+                :cx="moonOrbitX"
+                :cy="moonOrbitY"
+                r="4.5"
+                fill="rgba(200,215,255,0.15)"
+                stroke="rgba(255,255,255,0.85)"
+                stroke-width="1.2"
+                style="transition: all 1s ease;"
+              />
+              <text
+                :x="moonOrbitX"
+                :y="moonLabelY"
+                text-anchor="middle"
+                font-family="monospace"
+                font-size="7"
+                fill="rgba(255,255,255,0.9)"
+                letter-spacing="1.5"
+              >LUNA</text>
 
               <!-- Orbital path label -->
-              <text x="140" y="116" text-anchor="middle" font-family="monospace" font-size="6"
-                    fill="rgba(0,242,255,0.25)" letter-spacing="3">ORBITAL PATH — SUNCALC LIVE</text>
+              <text
+                x="140"
+                y="116"
+                text-anchor="middle"
+                font-family="monospace"
+                font-size="6"
+                fill="rgba(0,242,255,0.25)"
+                letter-spacing="3"
+              >ORBITAL PATH — SUNCALC LIVE</text>
             </svg>
 
             <!-- Etymology & Facts — enabled for all screens -->
             <div class="relative z-10 mt-6 border-t border-cyan-400/10 pt-6 space-y-4">
               <!-- Perigee -->
               <div>
-                <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-2">ETYMOLOGY // PERIGEE</p>
+                <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-2">
+                  ETYMOLOGY // PERIGEE
+                </p>
                 <p class="font-mono text-[11px] text-cyan-400/70 leading-relaxed">
                   From Greek <span class="text-white font-semibold drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]">περίγειον</span> — <span class="text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.4)]">peri</span> ("near") +
                   <span class="text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.4)]">gē</span> ("Earth"). The point in the lunar orbit of
@@ -360,7 +584,9 @@ onMounted(() => {
               </div>
               <!-- Apogee -->
               <div>
-                <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-2">ETYMOLOGY // APOGEE</p>
+                <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-2">
+                  ETYMOLOGY // APOGEE
+                </p>
                 <p class="font-mono text-[11px] text-cyan-400/70 leading-relaxed">
                   From Greek <span class="text-white font-semibold drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]">ἀπόγειον</span> — <span class="text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.4)]">apo</span> ("away from") +
                   <span class="text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.4)]">gē</span> ("Earth"). The point of
@@ -378,7 +604,6 @@ onMounted(() => {
                 </span>
               </div>
             </div>
-
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -399,7 +624,9 @@ onMounted(() => {
                 </div>
                 <!-- Factoid -->
                 <div class="mt-auto pt-6 border-t border-white/5">
-                  <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-2">REFRACTION // ERR_CAL</p>
+                  <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-2">
+                    REFRACTION // ERR_CAL
+                  </p>
                   <p class="font-mono text-[10px] text-cyan-400/60 leading-relaxed">
                     Light bends through the <span class="text-white shadow-sm">atmosphere</span> causing the Moon to appear <span class="text-white">flattened</span> and larger near the horizon.
                   </p>
@@ -408,7 +635,10 @@ onMounted(() => {
             </div>
 
             <!-- Panel: Tidal Status -->
-            <div class="panel-card group p-10 rounded-2xl bento-flicker" style="animation-delay:0.4s">
+            <div
+              class="panel-card group p-10 rounded-2xl bento-flicker"
+              style="animation-delay:0.4s"
+            >
               <div class="panel-grid-mesh" /><div class="panel-scanlines" /><div class="card-brackets" />
               <div class="relative z-10 flex flex-col h-full">
                 <label class="font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase block mb-6">TIDAL::HARMONIC</label>
@@ -418,13 +648,20 @@ onMounted(() => {
                     <span class="font-mono text-[10px] text-white/30 uppercase tracking-widest">{{ tideStatus.intensity }}% FORCE</span>
                   </div>
                   <div class="h-1 bg-white/5 rounded-full overflow-hidden">
-                    <div class="h-full bg-cyan-400 shadow-[0_0_8px_cyan]" :style="{ width: tideStatus.intensity + '%' }" />
+                    <div
+                      class="h-full bg-cyan-400 shadow-[0_0_8px_cyan]"
+                      :style="{ width: tideStatus.intensity + '%' }"
+                    />
                   </div>
-                  <p class="font-mono text-[10px] text-white/40 mt-3 uppercase tracking-[0.2em]">Next High: <span class="text-white">{{ tideStatus.nextHigh }}</span></p>
+                  <p class="font-mono text-[10px] text-white/40 mt-3 uppercase tracking-[0.2em]">
+                    Next High: <span class="text-white">{{ tideStatus.nextHigh }}</span>
+                  </p>
                 </div>
                 <!-- Factoid -->
                 <div class="mt-auto pt-6 border-t border-white/5">
-                  <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-2">SYZYGY // FORCES</p>
+                  <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-2">
+                    SYZYGY // FORCES
+                  </p>
                   <p class="font-mono text-[10px] text-cyan-400/60 leading-relaxed">
                     When Sun, Moon, and Earth <span class="text-white">align</span> (Full/New), gravitational pull combines to create <span class="text-white">maximum</span> tidal range.
                   </p>
@@ -433,15 +670,24 @@ onMounted(() => {
             </div>
 
             <!-- Panel: Next Full -->
-            <div class="panel-card group p-10 rounded-2xl bento-flicker" style="animation-delay:0.8s">
+            <div
+              class="panel-card group p-10 rounded-2xl bento-flicker"
+              style="animation-delay:0.8s"
+            >
               <div class="panel-grid-mesh" /><div class="panel-scanlines" /><div class="card-brackets" />
               <div class="relative z-10 h-full flex flex-col">
                 <label class="font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase block mb-6">NEXT_FULL</label>
-                <div class="font-orbitron font-black text-5xl xl:text-6xl text-white mb-2">{{ daysToFullMoon }}<span class="text-2xl text-white/20 ml-2">d</span></div>
-                <p class="font-mono text-[10px] text-white/20 uppercase tracking-[0.3em] mb-6 truncate">{{ nextFullMoon }}</p>
+                <div class="font-orbitron font-black text-5xl xl:text-6xl text-white mb-2">
+                  {{ daysToFullMoon }}<span class="text-2xl text-white/20 ml-2">d</span>
+                </div>
+                <p class="font-mono text-[10px] text-white/20 uppercase tracking-[0.3em] mb-6 truncate">
+                  {{ nextFullMoon }}
+                </p>
                 <!-- Factoid -->
                 <div class="mt-auto pt-6 border-t border-white/5">
-                  <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-2">OPPOSITION // LUM</p>
+                  <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-2">
+                    OPPOSITION // LUM
+                  </p>
                   <p class="font-mono text-[10px] text-cyan-400/60 leading-relaxed">
                     The Moon reaches <span class="text-white">opposition</span> when it is on the opposite side of Earth from the Sun, appearing <span class="text-white">100% lit</span>.
                   </p>
@@ -450,15 +696,24 @@ onMounted(() => {
             </div>
 
             <!-- Panel: Next New -->
-            <div class="panel-card group p-10 rounded-2xl bento-flicker" style="animation-delay:1.4s">
+            <div
+              class="panel-card group p-10 rounded-2xl bento-flicker"
+              style="animation-delay:1.4s"
+            >
               <div class="panel-grid-mesh" /><div class="panel-scanlines" /><div class="card-brackets" />
               <div class="relative z-10 h-full flex flex-col">
                 <label class="font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase block mb-6">NEXT_NEW</label>
-                <div class="font-orbitron font-black text-5xl xl:text-6xl text-cyan-400 mb-2">{{ daysToNewMoon }}<span class="text-2xl text-white/20 ml-2">d</span></div>
-                <p class="font-mono text-[10px] text-white/20 uppercase tracking-[0.3em] mb-6 truncate">{{ nextNewMoon }}</p>
+                <div class="font-orbitron font-black text-5xl xl:text-6xl text-cyan-400 mb-2">
+                  {{ daysToNewMoon }}<span class="text-2xl text-white/20 ml-2">d</span>
+                </div>
+                <p class="font-mono text-[10px] text-white/20 uppercase tracking-[0.3em] mb-6 truncate">
+                  {{ nextNewMoon }}
+                </p>
                 <!-- Factoid -->
                 <div class="mt-auto pt-6 border-t border-white/5">
-                  <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-2">CONJUNCTION // DARK</p>
+                  <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-2">
+                    CONJUNCTION // DARK
+                  </p>
                   <p class="font-mono text-[10px] text-cyan-400/60 leading-relaxed">
                     Occurs at <span class="text-white">conjunction</span> — Moon and Sun share the same ecliptic longitude, making the near-side <span class="text-white">invisible</span>.
                   </p>
@@ -471,9 +726,20 @@ onMounted(() => {
 
       <!-- ── ROW 2: OBSERVER COORDS + ALT/AZ ──────────────────────────────── -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div class="lg:col-span-2 panel-card group p-10 rounded-2xl bento-flicker" style="animation-delay:2s">
+        <div
+          class="lg:col-span-2 panel-card group p-10 rounded-2xl bento-flicker"
+          style="animation-delay:2s"
+        >
           <div class="panel-grid-mesh" /><div class="panel-scanlines" /><div class="card-brackets" />
-          <svg class="absolute top-6 right-8 w-10 h-10 text-cyan-400/5 pointer-events-none" viewBox="0 0 50 43"><path d="M12.5 0L37.5 0L50 21.5L37.5 43L12.5 43L0 21.5Z" fill="none" stroke="currentColor" stroke-width="1" /></svg>
+          <svg
+            class="absolute top-6 right-8 w-10 h-10 text-cyan-400/5 pointer-events-none"
+            viewBox="0 0 50 43"
+          ><path
+            d="M12.5 0L37.5 0L50 21.5L37.5 43L12.5 43L0 21.5Z"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1"
+          /></svg>
           <label class="relative z-10 font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase block mb-10">LOC_SYSLOG::COORDS</label>
           <div class="relative z-10 grid grid-cols-2 gap-8">
             <div><span class="font-mono text-[11px] text-white/20 uppercase tracking-[0.4em] block mb-4">LATITUDE</span><span class="font-orbitron font-black text-4xl xl:text-6xl text-white">{{ latStr }}</span></div>
@@ -485,12 +751,25 @@ onMounted(() => {
           </div>
         </div>
 
-        <div class="panel-card group p-10 rounded-2xl flex flex-col justify-between bento-flicker" style="animation-delay:2.8s">
+        <div
+          class="panel-card group p-10 rounded-2xl flex flex-col justify-between bento-flicker"
+          style="animation-delay:2.8s"
+        >
           <div class="panel-grid-mesh" /><div class="panel-scanlines" /><div class="card-brackets" />
-          <svg class="absolute bottom-6 right-6 w-8 h-8 text-white/5 pointer-events-none" viewBox="0 0 50 43"><path d="M12.5 0L37.5 0L50 21.5L37.5 43L12.5 43L0 21.5Z" fill="none" stroke="currentColor" stroke-width="1.5" /></svg>
+          <svg
+            class="absolute bottom-6 right-6 w-8 h-8 text-white/5 pointer-events-none"
+            viewBox="0 0 50 43"
+          ><path
+            d="M12.5 0L37.5 0L50 21.5L37.5 43L12.5 43L0 21.5Z"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+          /></svg>
           <label class="relative z-10 font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase block mb-10">POSITION_DATA</label>
           <div class="relative z-10 flex flex-col gap-8">
-            <div class="border-b border-white/10 pb-8"><span class="font-mono text-[11px] text-white/20 uppercase tracking-widest block mb-4">ALTITUDE</span><span class="font-orbitron font-black text-5xl xl:text-6xl text-white">{{ altStr }}</span></div>
+            <div class="border-b border-white/10 pb-8">
+              <span class="font-mono text-[11px] text-white/20 uppercase tracking-widest block mb-4">ALTITUDE</span><span class="font-orbitron font-black text-5xl xl:text-6xl text-white">{{ altStr }}</span>
+            </div>
             <div><span class="font-mono text-[11px] text-white/20 uppercase tracking-widest block mb-4">AZIMUTH</span><span class="font-orbitron font-black text-5xl xl:text-6xl text-white">{{ azStr }}</span></div>
           </div>
         </div>
@@ -529,7 +808,7 @@ onMounted(() => {
 /* PERMANENT INTERNAL GRID */
 .panel-grid-mesh {
   position: absolute; inset: 0;
-  background-image: 
+  background-image:
     linear-gradient(rgba(0, 242, 255, 0.04) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 242, 255, 0.04) 1px, transparent 1px);
   background-size: 20px 20px;
@@ -538,10 +817,10 @@ onMounted(() => {
 
 /* Red Alert / Glitch Theme (INTERNAL ONLY) */
 @keyframes red-glitch-alert {
-  0%, 88%, 100% { 
+  0%, 88%, 100% {
     background: rgba(4, 12, 18, 0.25); border-color: rgba(0, 242, 255, 0.15);
   }
-  89%, 91% { 
+  89%, 91% {
     background: rgba(180, 10, 10, 0.15); border-color: rgba(255, 0, 50, 0.6);
   }
 }
