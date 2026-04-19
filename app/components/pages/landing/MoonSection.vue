@@ -26,6 +26,20 @@ const azStr  = computed(() => azimuth.value > 0 ? `${azimuth.value.toFixed(0)}°
 const latStr = computed(() => `${Math.abs(lat.value).toFixed(4)}° ${lat.value >= 0 ? 'N' : 'S'}`)
 const lngStr = computed(() => `${Math.abs(lng.value).toFixed(4)}° ${lng.value >= 0 ? 'E' : 'W'}`)
 
+// ── Orbital Diagram ──────────────────────────────────────────────────────────────────────────
+// Ellipse: cx=140 cy=62 rx=92 ry=56. Earth at left focus.
+// f = sqrt(92² - 56²) = sqrt(8464-3136) = sqrt(5328) ≈ 73
+// → Earth at (140-73, 62) = (67, 62)
+// Perigee (left vertex) = (48, 62) — distRatio = 0%
+// Apogee  (right vertex)= (232, 62) — distRatio = 100%
+const ORB = { cx: 140, cy: 62, rx: 92, ry: 56, ex: 67, ey: 62 } as const
+const moonOrbitAngle = computed(() => Math.PI * (1 - distRatio.value / 100))
+const moonOrbitX     = computed(() => ORB.cx + ORB.rx * Math.cos(moonOrbitAngle.value))
+const moonOrbitY     = computed(() => ORB.cy + ORB.ry * Math.sin(moonOrbitAngle.value))
+// Label sits above moon if in top arc, below if in bottom arc
+const moonLabelY     = computed(() => moonOrbitY.value < ORB.cy ? moonOrbitY.value - 13 : moonOrbitY.value + 16)
+
+
 // ── Background Terminal Typewriter ───────────────────────────────────────────
 const termLines = ref<Array<{ text: string; cls: string }>>([])
 const termCursor = ref(true)
@@ -192,11 +206,65 @@ onMounted(() => {
             <svg class="absolute bottom-6 right-6 w-8 h-8 text-white/5 pointer-events-none" viewBox="0 0 50 43"><path d="M12.5 0L37.5 0L50 21.5L37.5 43L12.5 43L0 21.5Z" fill="none" stroke="currentColor" stroke-width="1.5" /></svg>
             <label class="relative z-10 font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase block mb-6">RADAR::DIST_CAL</label>
             <div class="relative z-10 font-orbitron font-black text-5xl xl:text-7xl text-white tracking-tighter mb-6">{{ distFormatted }}<span class="text-xl text-white/30 ml-4 font-mono">KM</span></div>
-            <div class="relative z-10 h-2 bg-white/5 rounded-full mb-4">
-              <div class="absolute inset-y-0 left-0 bg-cyan-400 shadow-[0_0_15px_rgba(0,255,255,1)] rounded-full transition-all duration-1000" :style="{ width: `${distRatio}%` }" />
-              <div class="absolute -top-1.5 w-5 h-5 bg-white rounded-full transition-all duration-1000" :style="{ left: `calc(${distRatio}% - 10px)` }" />
-            </div>
-            <div class="relative z-10 flex justify-between font-mono text-[10px] text-white/30 uppercase tracking-[0.4em]"><span>[PRG] NEAR</span><span>[APG] FAR</span></div>
+            <!-- Orbital Diagram: Earth–Moon system, terminal-style SVG -->
+            <svg
+              class="relative z-10 w-full mt-2"
+              viewBox="0 0 280 124"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <!-- Background micro-grid -->
+              <defs>
+                <pattern id="orbit-grid" width="14" height="14" patternUnits="userSpaceOnUse">
+                  <path d="M14 0 L0 0 0 14" fill="none" stroke="rgba(0,242,255,0.04)" stroke-width="0.5" />
+                </pattern>
+              </defs>
+              <rect width="280" height="124" fill="url(#orbit-grid)" />
+
+              <!-- Orbit ellipse — dashed cyan -->
+              <ellipse
+                :cx="ORB.cx" :cy="ORB.cy" :rx="ORB.rx" :ry="ORB.ry"
+                fill="none" stroke="rgba(0,242,255,0.22)" stroke-width="0.8"
+                stroke-dasharray="5 8"
+              />
+
+              <!-- Perigee tick + label -->
+              <line x1="48" y1="55" x2="48" y2="69" stroke="rgba(0,242,255,0.45)" stroke-width="0.8" />
+              <text x="48" y="48" text-anchor="middle" font-family="monospace" font-size="6.5"
+                    fill="rgba(0,242,255,0.55)" letter-spacing="1">PRG</text>
+
+              <!-- Apogee tick + label -->
+              <line x1="232" y1="55" x2="232" y2="69" stroke="rgba(0,242,255,0.30)" stroke-width="0.8" />
+              <text x="232" y="48" text-anchor="middle" font-family="monospace" font-size="6.5"
+                    fill="rgba(0,242,255,0.35)" letter-spacing="1">APG</text>
+
+              <!-- Dashed line: Earth → Moon (current distance) -->
+              <line
+                :x1="ORB.ex" :y1="ORB.ey"
+                :x2="moonOrbitX" :y2="moonOrbitY"
+                stroke="rgba(0,242,255,0.12)" stroke-width="0.7" stroke-dasharray="2 4"
+              />
+
+              <!-- EARTH: circle + crosshair -->
+              <circle :cx="ORB.ex" :cy="ORB.ey" r="6" fill="rgba(0,60,100,0.7)" stroke="rgba(0,242,255,0.9)" stroke-width="1.2" />
+              <line :x1="ORB.ex - 10" :y1="ORB.ey" :x2="ORB.ex + 10" :y2="ORB.ey" stroke="rgba(0,242,255,0.55)" stroke-width="0.7" />
+              <line :x1="ORB.ex" :y1="ORB.ey - 10" :x2="ORB.ex" :y2="ORB.ey + 10" stroke="rgba(0,242,255,0.55)" stroke-width="0.7" />
+              <text :x="ORB.ex" :y="ORB.ey + 20" text-anchor="middle" font-family="monospace" font-size="7"
+                    fill="rgba(0,242,255,0.8)" letter-spacing="1.5">EARTH</text>
+
+              <!-- MOON: circle + targeting ring + label -->
+              <circle :cx="moonOrbitX" :cy="moonOrbitY" r="10" fill="none"
+                      stroke="rgba(255,255,255,0.12)" stroke-width="0.6" stroke-dasharray="2 3" />
+              <circle :cx="moonOrbitX" :cy="moonOrbitY" r="4.5" fill="rgba(200,215,255,0.15)"
+                      stroke="rgba(255,255,255,0.85)" stroke-width="1.2"
+                      style="transition: all 1s ease;" />
+              <text :x="moonOrbitX" :y="moonLabelY" text-anchor="middle" font-family="monospace" font-size="7"
+                    fill="rgba(255,255,255,0.9)" letter-spacing="1.5">LUNA</text>
+
+              <!-- Orbital path label -->
+              <text x="140" y="116" text-anchor="middle" font-family="monospace" font-size="6"
+                    fill="rgba(0,242,255,0.25)" letter-spacing="3">ORBITAL PATH — SUNCALC LIVE</text>
+            </svg>
+
           </div>
 
           <div class="grid grid-cols-2 gap-8">
