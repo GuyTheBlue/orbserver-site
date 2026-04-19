@@ -10,14 +10,19 @@ const {
   distance, altitude, azimuth,
   nextFullMoon, nextNewMoon, daysToFullMoon, daysToNewMoon,
   apparentRotation, lat, lng, movingTowardPerigee,
-  moonrise, moonset, tideStatus,
+  moonrise, moonset,
+  apparentDiameter, apparentDiameterRatio, apparentVsMean,
   velocity, lightTravelTime, subLunarPoint,
   ra, dec, nextPerigee, nextApogee
 } = useMoonData()
 
 // ── Intersection ────────────────────────────────────────────────────────────
 const sectionEl = ref<HTMLElement | null>(null)
-const isVisible = ref(false)
+const isVisible = ref(false)// Supermoon: apparent diameter > 33.0' AND near Full or New Moon
+const isSupermoon = computed(() =>
+  apparentDiameter.value >= 33.0 && (fraction.value > 0.85 || fraction.value < 0.15)
+)
+
 useIntersectionObserver(sectionEl, ([e]) => { if (e.isIntersecting) isVisible.value = true }, { threshold: 0.05 })
 
 // ── Calculations ─────────────────────────────────────────────────────────────
@@ -634,36 +639,69 @@ onMounted(() => {
               </div>
             </div>
 
-            <!-- Panel: Tidal Status -->
+            <!-- Panel: Apparent Angular Diameter -->
             <div
               class="panel-card group p-10 rounded-2xl bento-flicker"
               style="animation-delay:0.4s"
             >
               <div class="panel-grid-mesh" /><div class="panel-scanlines" /><div class="card-brackets" />
               <div class="relative z-10 flex flex-col h-full">
-                <label class="font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase block mb-6">TIDAL::HARMONIC</label>
-                <div class="mb-8">
-                  <div class="flex flex-col gap-1 mb-4">
-                    <span class="font-orbitron font-black text-4xl text-cyan-400">{{ tideStatus.type }}</span>
-                    <span class="font-mono text-[10px] text-white/30 uppercase tracking-widest">{{ tideStatus.intensity }}% FORCE</span>
+                <label class="font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase block mb-6">APPARENT_Ø::ARC</label>
+
+                <!-- Main Value -->
+                <div class="mb-6">
+                  <div class="flex items-baseline gap-3 mb-1">
+                    <span class="font-orbitron font-black text-5xl text-white">{{ apparentDiameter }}′</span>
+                    <span
+                      v-if="isSupermoon"
+                      class="font-mono text-[9px] text-cyan-400 border border-cyan-400/50 px-2 py-0.5 rounded tracking-widest animate-pulse"
+                    >SUPERMOON</span>
                   </div>
-                  <div class="h-1 bg-white/5 rounded-full overflow-hidden">
-                    <div
-                      class="h-full bg-cyan-400 shadow-[0_0_8px_cyan]"
-                      :style="{ width: tideStatus.intensity + '%' }"
-                    />
-                  </div>
-                  <p class="font-mono text-[10px] text-white/40 mt-3 uppercase tracking-[0.2em]">
-                    Next High: <span class="text-white">{{ tideStatus.nextHigh }}</span>
+                  <p class="font-mono text-[10px] text-white/30 uppercase tracking-wider">
+                    <span :class="apparentVsMean >= 0 ? 'text-cyan-400' : 'text-white/40'">{{ apparentVsMean >= 0 ? '+' : '' }}{{ apparentVsMean }}%</span>
+                    vs mean diameter
                   </p>
                 </div>
+
+                <!-- Gauge: Apogee → Perigee -->
+                <div class="mb-6">
+                  <div class="flex justify-between font-mono text-[9px] text-white/20 uppercase tracking-widest mb-2">
+                    <span>APG 29.4′</span>
+                    <span>PRG 33.5′</span>
+                  </div>
+                  <div class="h-2 bg-white/5 rounded-full overflow-hidden relative">
+                    <div
+                      class="h-full bg-cyan-400 shadow-[0_0_10px_rgba(0,242,255,0.8)] rounded-full transition-all duration-1000"
+                      :style="{ width: apparentDiameterRatio + '%' }"
+                    />
+                  </div>
+                  <div class="flex justify-between font-mono text-[9px] text-white/15 mt-1.5">
+                    <span>SMALLEST</span>
+                    <span>LARGEST</span>
+                  </div>
+                </div>
+
+                <!-- Key Stats -->
+                <div class="space-y-3 mb-5">
+                  <div class="flex justify-between border-b border-white/5 pb-2">
+                    <span class="font-mono text-[10px] text-white/30 uppercase tracking-widest">In degrees</span>
+                    <span class="font-orbitron font-black text-white text-sm">{{ (apparentDiameter / 60).toFixed(4) }}°</span>
+                  </div>
+                  <div class="flex justify-between border-b border-white/5 pb-2">
+                    <span class="font-mono text-[10px] text-white/30 uppercase tracking-widest">Size rank</span>
+                    <span class="font-orbitron font-black text-cyan-400 text-sm">{{ apparentDiameterRatio }}%</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="font-mono text-[10px] text-white/30 uppercase tracking-widest">Supermoon ≥</span>
+                    <span class="font-mono text-[10px] text-white/40">33.0′ at Full/New</span>
+                  </div>
+                </div>
+
                 <!-- Factoid -->
                 <div class="mt-auto pt-6 border-t border-white/5">
-                  <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-2">
-                    SYZYGY // FORCES
-                  </p>
-                  <p class="font-mono text-[10px] text-cyan-400/60 leading-relaxed">
-                    When Sun, Moon, and Earth <span class="text-white">align</span> (Full/New), gravitational pull combines to create <span class="text-white">maximum</span> tidal range.
+                  <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-2">MOON ILLUSION</p>
+                  <p class="font-mono text-[11px] text-cyan-400/60 leading-relaxed">
+                    The Moon appears <span class="text-white">larger near the horizon</span> but its angular diameter is <span class="text-white">identical</span> at zenith. A purely psychological phenomenon caused by ground-reference comparison.
                   </p>
                 </div>
               </div>

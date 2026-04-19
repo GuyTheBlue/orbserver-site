@@ -101,12 +101,11 @@ export function useMoonData() {
   const apparentRotation = ref(0) // Rotation relative to observer zenith
   const movingTowardPerigee = ref(false) // true = distance shrinking (toward perigee)
   const moonrise = ref<string>('—')
-  const moonset = ref<string>('—')
-  const tideStatus = ref({
-    type: 'Normal', // Spring, Neap, Normal
-    intensity: 50, // 0-100%
-    nextHigh: '—'
-  })
+  const moonset  = ref<string>('—')
+  // Apparent Angular Diameter
+  const apparentDiameter      = ref(0)   // arcminutes
+  const apparentDiameterRatio = ref(0)   // 0-100: position between apogee (29.4') → perigee (33.5')
+  const apparentVsMean        = ref(0)   // % vs mean distance (positive = larger)
   const velocity = ref(0) // km/s
   const lightTravelTime = ref(0) // ms
   const subLunarPoint = ref({ lat: 0, lng: 0 })
@@ -228,18 +227,15 @@ export function useMoonData() {
       }
 
       // ── Next Perigee / Apogee — ephemeris scan ────────────────────────────
-      // Scan forward in 6h steps using Meeus getGeocentricDistance().
-      // A local minimum in the distance curve = perigee.
-      // A local maximum = apogee.
-      // The anomalistic period is ~27.55 days so 35 days covers the full cycle.
+      // Scan forward in 6h steps; local min = perigee, local max = apogee.
       {
-        const STEP_MS = 6 * 60 * 60 * 1000 // 6 hours
-        const MAX_STEPS = Math.ceil(35 * 24 / 6) // 35 days in 6h steps
+        const STEP_MS = 6 * 60 * 60 * 1000
+        const MAX_STEPS = Math.ceil(35 * 24 / 6)
         let foundPerigee = false
-        let foundApogee = false
+        let foundApogee  = false
         for (let i = 1; i < MAX_STEPS - 1 && (!foundPerigee || !foundApogee); i++) {
           const ta = new Date(now.getTime() + (i - 1) * STEP_MS)
-          const tb = new Date(now.getTime() + i * STEP_MS)
+          const tb = new Date(now.getTime() +  i      * STEP_MS)
           const tc = new Date(now.getTime() + (i + 1) * STEP_MS)
           const da = getGeocentricDistance(ta)
           const db = getGeocentricDistance(tb)
@@ -255,39 +251,30 @@ export function useMoonData() {
         }
       }
 
+      // ── Apparent Angular Diameter ─────────────────────────────────────────
+      // θ = 2 × arcsin(R_moon / distance), R_moon = 1737.4 km
+      {
+        const R_MOON    = 1737.4
+        const APOGEE_D  = 29.38
+        const PERIGEE_D = 33.53
+        const MEAN_D    = 31.08
+        const thetaRad  = 2 * Math.asin(R_MOON / distance.value)
+        const arcmin    = thetaRad * (180 / Math.PI) * 60
+        apparentDiameter.value      = parseFloat(arcmin.toFixed(2))
+        apparentDiameterRatio.value = Math.round(Math.min(100, Math.max(0, (arcmin - APOGEE_D) / (PERIGEE_D - APOGEE_D) * 100)))
+        apparentVsMean.value        = parseFloat(((arcmin / MEAN_D - 1) * 100).toFixed(1))
+      }
+
       // ── Moonrise / Moonset ────────────────────────────────────────────────
       const times = SunCalc.getMoonTimes(now, loc.lat, loc.lng)
       moonrise.value = times.rise ? times.rise.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) : 'N/A'
-      moonset.value = times.set ? times.set.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) : 'N/A'
+      moonset.value  = times.set  ? times.set.toLocaleTimeString('en-GB',  { hour: '2-digit', minute: '2-digit' }) : 'N/A'
 
-      // ── Tidal Approximation (Harmonic Syzygy Model) ──────────────────────
-      // Spring tides at New (0) and Full (0.5), Neap at Quarters (0.25, 0.75)
-      const phaseVal = fraction.value // 0 to 1
-      const distFromSyzygy = Math.min(Math.abs(phaseVal - 0), Math.abs(phaseVal - 0.5), Math.abs(phaseVal - 1))
-      if (distFromSyzygy < 0.1) tideStatus.value.type = 'Spring'
-      else if (Math.abs(distFromSyzygy - 0.25) < 0.1) tideStatus.value.type = 'Neap'
-      else tideStatus.value.type = 'Normal'
-      tideStatus.value.intensity = Math.round((1 - (distFromSyzygy / 0.25)) * 100)
-
-      // Next High Tide Approx: Moon's transit + average lunitidal interval (~0-12h depending on port)
-      // Here we use the Moon's altitude peak (transit) as the base reference for the tidal bulge.
-      // We estimate high tide occurs ~45 mins after transit for an open coastal approximation.
-      const transitOffset = 45 * 60 * 1000
-      // We find the transit time by looking for when altitude was/is max today
-      const nextHighDate = new Date(now.getTime() + (12.42 / 2) * 60 * 60 * 1000) // Rough M2 cycle offset
-      tideStatus.value.nextHigh = nextHighDate.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
-
-      // ── Apparent Rotation (Orientation relative to observer's sky) ────
-      // phi = latitude in radians
+      // ── Apparent Rotation ─────────────────────────────────────────────────
       const phi = loc.lat * (Math.PI / 180)
-      // h = parallactic angle approximation from lat, moon alt, and moon az
-      const h = Math.atan2(Math.sin(pos.azimuth), Math.tan(phi) * Math.cos(pos.altitude) - Math.sin(pos.altitude) * Math.cos(pos.azimuth))
-
-      // Calculate final rotation in degrees (PA - q).
-      // +90° offset corrects the image asset orientation — the moon.png is referenced
-      // to the zenith, not the celestial north pole, requiring a 90° shift to align
-      // the terminator correctly with the horizon for both hemispheres.
+      const h   = Math.atan2(Math.sin(pos.azimuth), Math.tan(phi) * Math.cos(pos.altitude) - Math.sin(pos.altitude) * Math.cos(pos.azimuth))
       apparentRotation.value = (illum.angle - h) * (180 / Math.PI) + 90
+
     } catch {
       hasError.value = true
     } finally {
@@ -317,7 +304,9 @@ export function useMoonData() {
     movingTowardPerigee,
     moonrise,
     moonset,
-    tideStatus,
+    apparentDiameter,
+    apparentDiameterRatio,
+    apparentVsMean,
     velocity,
     lightTravelTime,
     subLunarPoint,
