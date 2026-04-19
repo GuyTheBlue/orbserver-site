@@ -88,11 +88,10 @@ const telemetryRows = computed(() => {
   const ltSeconds = (lightTravelTime.value / 1000).toFixed(3)
   
   return [
-    { id: 'DIST', label: 'DISTANCE', val: getGlitchedVal('DISTANCE', distance.value?.toLocaleString('en-GB') + ' KM'), scale: distance.value ? (distance.value / 406000) * 100 : 0 },
-    { id: 'PHA', label: 'PHASE', val: getGlitchedVal('LOC_COORD', phaseName.value?.toUpperCase()), unit: 'HUD', scale: 75 },
-    { id: 'VEL', label: 'ORB_VEL', val: getGlitchedVal('VELOCITY', Math.round(velocity.value * 3600).toLocaleString('en-GB')), unit: 'KMH', scale: 75 },
-    { id: 'COORD', label: 'LOC_AZI', val: getGlitchedVal('LOC_COORD', `${azimuth.value}°`), unit: 'TRUE', scale: 40 },
-    { id: 'LT', label: 'LT_DELAY', val: getGlitchedVal('LIGHT_SPD', ltSeconds), unit: 'SEC', scale: 92 }
+    { id: 'DIST', label: 'DISTANCE', val: getGlitchedVal('DISTANCE', distance.value?.toLocaleString('en-GB') + ' KM'), info: 'Kilometres from Earth center to Moon', scale: distance.value ? (distance.value / 406000) * 100 : 0 },
+    { id: 'PHA', label: 'PHASE', val: getGlitchedVal('LOC_COORD', phaseName.value?.toUpperCase()), info: 'Current lunar illumination cycle', scale: 75 },
+    { id: 'VEL', label: 'ORB_VEL', val: getGlitchedVal('VELOCITY', Math.round(velocity.value * 3600).toLocaleString('en-GB') + ' KM/H'), info: 'Moon orbital speed around Earth', scale: 75 },
+    { id: 'LT', label: 'LT_DELAY', val: getGlitchedVal('LIGHT_SPD', ltSeconds + ' SEC'), info: 'Time for light to reach Earth from Moon', scale: 92 }
   ]
 })
 
@@ -157,13 +156,14 @@ onMounted(() => {
         <div 
           v-for="(row, i) in telemetryRows" 
           :key="row.label"
-          class="flex flex-col items-end gap-2 group transition-colors duration-150"
+          class="flex flex-col items-end group transition-colors duration-150 mb-4"
           :style="{ animationDelay: `${i * 0.2}s` }"
         >
+          <div class="font-mono text-[10px] text-cyan-400/60 uppercase tracking-widest mb-1">{{ row.info }}</div>
           <div class="flex items-baseline gap-4">
-            <span class="font-mono text-[9px] uppercase tracking-[0.5em] transition-colors" :class="glitchMap[row.label] ? 'text-red-500' : 'text-cyan-400/40'">{{ row.label }}</span>
+            <span class="font-mono text-[11px] uppercase tracking-[0.5em] transition-colors" :class="glitchMap[row.label] ? 'text-red-500' : 'text-cyan-400/50'">{{ row.label }}</span>
             <span 
-              class="font-orbitron text-2xl lg:text-4xl font-black tracking-widest tabular-nums transition-all"
+              class="font-orbitron text-3xl lg:text-5xl font-black tracking-widest tabular-nums transition-all"
               :class="glitchMap[row.label] ? 'text-red-600 animate-pulse scale-105' : 'text-white'"
             >
               {{ isLoading ? 'SCAN...' : row.val }}
