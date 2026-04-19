@@ -10,12 +10,16 @@ const props = defineProps<{
 
 /**
  * Computes an SVG path for the dark shadow overlay.
- * Northern Hemisphere convention (default):
- *   Waxing (0→0.5): shadow LEFT, lit RIGHT
- *   Waning (0.5→1): shadow RIGHT, lit LEFT
  *
- * For Southern Hemisphere: the shadow SVG is mirrored with scaleX(-1)
- * at the usage site, placing the lit limb on the opposing side.
+ * The shadow path draws the correct crescent/gibbous SHAPE only.
+ * Which side is lit is handled entirely by `apparentRotation` from
+ * useMoonData.ts — which uses (illum.angle - parallacticAngle) to
+ * orient the bright limb correctly for the observer's latitude.
+ * No hemisphere correction needed here.
+ *
+ * NH convention used as the base:
+ *   phase 0–0.5 (waxing): shadow on LEFT side of path
+ *   phase 0.5–1 (waning): shadow on RIGHT side of path
  */
 function getMoonShadowPath(phase: number): string {
   const R = 50
@@ -32,9 +36,8 @@ function getMoonShadowPath(phase: number): string {
   }
 }
 
+// Shape only — rotation (which encodes lit-limb direction) is in apparentRotation
 const shadowPath = computed(() => getMoonShadowPath(props.phase))
-// Mirror logic: Southern Hemisphere (lat < 0) shows lit limb on the opposite side
-const shadowTransform = computed(() => (props.lat ?? 0) < 0 ? 'scaleX(-1)' : 'none')
 
 // Ambient glow intensity scales with illumination
 const glowOpacity = computed(() => 0.15 + props.fraction * 0.45)
@@ -66,10 +69,11 @@ const glowSpread = computed(() => `${40 + props.fraction * 60}px`)
     />
 
     <!-- The moon disc: image + shadow overlay, clipped to circle -->
-    <div 
-      class="relative rounded-full overflow-hidden moon-disc-element" 
+    <!-- Shadow path handles SH via effectivePhase; disc just rotates by parallactic angle -->
+    <div
+      class="relative rounded-full overflow-hidden moon-disc-element"
       style="width: 100%; aspect-ratio: 1; transition: transform 2s cubic-bezier(0.16, 1, 0.3, 1);"
-      :style="{ transform: `rotate(${rotation || 0}deg)` }"
+      :style="{ transform: `rotate(${props.rotation ?? 0}deg)` }"
     >
       <!-- The full-disc moon photograph -->
       <img
@@ -86,7 +90,6 @@ const glowSpread = computed(() => `${40 + props.fraction * 60}px`)
         viewBox="0 0 100 100"
         xmlns="http://www.w3.org/2000/svg"
         preserveAspectRatio="none"
-        :style="{ transform: shadowTransform }"
       >
         <!-- Soft terminator edge: a blurred ellipse sitting on the boundary -->
         <defs>
