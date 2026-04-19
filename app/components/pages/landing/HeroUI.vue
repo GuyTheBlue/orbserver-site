@@ -84,12 +84,17 @@ function typeFactoid() {
 }
 
 // Telemetry Rows (High Visibility HUD)
-const telemetryRows = computed(() => [
-  { label: 'DISTANCE', val: getGlitchedVal('DISTANCE', distance.value?.toLocaleString('en-GB') + ' KM'), scale: distance.value ? (distance.value / 406000) * 100 : 0 },
-  { label: 'VELOCITY', val: getGlitchedVal('VELOCITY', Math.round(velocity.value).toLocaleString('en-GB')), unit: 'KMH', scale: 75 },
-  { label: 'LOC_COORD', val: getGlitchedVal('LOC_COORD', `${altitude.value}° / ${azimuth.value}°`), unit: 'ALT', scale: 40 },
-  { label: 'LIGHT_SPD', val: getGlitchedVal('LIGHT_SPD', lightTravelTime.value?.toFixed(3)), unit: 'SEC', scale: 92 }
-])
+const telemetryRows = computed(() => {
+  const ltSeconds = (lightTravelTime.value / 1000).toFixed(3)
+  
+  return [
+    { id: 'DIST', label: 'DISTANCE', val: getGlitchedVal('DISTANCE', distance.value?.toLocaleString('en-GB') + ' KM'), scale: distance.value ? (distance.value / 406000) * 100 : 0 },
+    { id: 'PHA', label: 'PHASE', val: getGlitchedVal('LOC_COORD', phaseName.value?.toUpperCase()), unit: 'HUD', scale: 75 },
+    { id: 'VEL', label: 'ORB_VEL', val: getGlitchedVal('VELOCITY', Math.round(velocity.value * 3600).toLocaleString('en-GB')), unit: 'KMH', scale: 75 },
+    { id: 'COORD', label: 'LOC_AZI', val: getGlitchedVal('LOC_COORD', `${azimuth.value}°`), unit: 'TRUE', scale: 40 },
+    { id: 'LT', label: 'LT_DELAY', val: getGlitchedVal('LIGHT_SPD', ltSeconds), unit: 'SEC', scale: 92 }
+  ]
+})
 
 onMounted(() => {
   if (!import.meta.client) return
