@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useIntersectionObserver } from '@vueuse/core'
+import { useMoonFactoids } from '~/composables/useMoonFactoids'
+
+const { briefingFactoids } = useMoonFactoids()
 
 const {
   isLoading, fraction, phase, phaseName, age,
@@ -200,41 +203,20 @@ onMounted(() => {
               <div class="flex flex-col items-center px-10"><span class="font-mono text-[10px] text-cyan-400/60 tracking-[0.5em] uppercase mb-3">Rot</span><span class="font-orbitron font-black text-5xl text-cyan-400">{{ Math.round(apparentRotation) }}<span class="text-xl text-white/20 ml-1">°</span></span></div>
             </div>
 
-            <!-- Technical Briefing: Factoids — enabled for ALL screens -->
+            <!-- Technical Briefing: data from useMoonFactoids composable -->
             <div class="mt-12 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-y-12 gap-x-10 border-t border-white/5 pt-10 text-left">
-              <!-- Row 1 -->
-              <div>
-                <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-3">PHASE // ALBEDO</p>
+              <!-- Factoid text factoids (Rows 1 & 2) -->
+              <div v-for="f in briefingFactoids" :key="f.label">
+                <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-3">{{ f.label }}</p>
                 <p class="font-mono text-[10px] text-cyan-400/60 leading-relaxed uppercase tracking-wider">
-                  Analysis detects <span class="text-white">fragmented albedo</span>. The Moon's reflectivity is approx <span class="text-white">0.11</span> — nearly identical to worn <span class="text-white">asphalt</span>. High luminosity is purely a function of <span class="text-white">solar opposition</span>.
-                </p>
-              </div>
-              <div>
-                <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-3">TEMPORAL // SYNODIC</p>
-                <p class="font-mono text-[10px] text-cyan-400/60 leading-relaxed uppercase tracking-wider">
-                  The <span class="text-white">synodic cycle</span> averages <span class="text-white">29.53 days</span>. Every lunation tracks the return to precise <span class="text-white">Sun-Earth alignment</span>, distinct from the sidereal period.
-                </p>
-              </div>
-              <div>
-                <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-3">SPATIAL // ZENITH</p>
-                <p class="font-mono text-[10px] text-cyan-400/60 leading-relaxed uppercase tracking-wider">
-                  Rotation is relative to your <span class="text-white">local zenith</span>. The apparent "tilt" accounts for <span class="text-white">parallactic rotation</span> — a visual shift caused by the observer's motion through Earth's <span class="text-white">polar axis</span>.
+                  <template v-for="(part, pi) in f.parts" :key="pi">
+                    <span v-if="part.highlight" class="text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.4)]">{{ part.text }}</span>
+                    <template v-else>{{ part.text }}</template>
+                  </template>
                 </p>
               </div>
 
-              <!-- Row 2: DEEP DATA -->
-              <div>
-                <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-3">MOTION // LIBRATION</p>
-                <p class="font-mono text-[10px] text-cyan-400/60 leading-relaxed uppercase tracking-wider">
-                  Detected <span class="text-white">optical libration</span>. Despite tidal locking, the Moon "wobbles" allowing observers to view <span class="text-white">59%</span> of the lunar surface over time.
-                </p>
-              </div>
-              <div>
-                <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-3">PHYSICS // TIDAL_LOCK</p>
-                <p class="font-mono text-[10px] text-cyan-400/60 leading-relaxed uppercase tracking-wider">
-                  Synchronous rotation forced by <span class="text-white">Earth's torque</span>. The Moon's internal center of mass is offset by <span class="text-white">2km</span>, perpetually anchoring the near-side to the planet.
-                </p>
-              </div>
+              <!-- Row 3: Live data readouts (not static, so kept here) -->
               <div>
                 <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-3">ORBITAL // VELOCITY</p>
                 <div class="space-y-4">
@@ -252,8 +234,6 @@ onMounted(() => {
                   </div>
                 </div>
               </div>
-
-              <!-- Row 3: COORDINATES & EVENTS -->
               <div>
                 <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-3">COORDINATES // RA_DEC</p>
                 <div class="space-y-4">
@@ -274,15 +254,10 @@ onMounted(() => {
                     <span class="font-mono text-[10px] text-white/20">NEXT_PERIGEE</span>
                     <span class="font-orbitron font-black text-cyan-400 ml-2 uppercase">{{ nextPerigee }}</span>
                   </div>
-                  <div class="flex justify-between">
+                  <div class="flex justify-between border-b border-white/5 pb-2">
                     <span class="font-mono text-[10px] text-white/20">NEXT_APOGEE</span>
                     <span class="font-orbitron font-black text-white/40 ml-2 uppercase">{{ nextApogee }}</span>
                   </div>
-                </div>
-              </div>
-              <div>
-                <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-3">PHYSICS // CONSTANTS</p>
-                <div class="space-y-4">
                   <div class="flex justify-between border-b border-white/5 pb-2">
                     <span class="font-mono text-[10px] text-white/20">GRAVITY</span>
                     <span class="font-orbitron font-black text-white ml-2">1.62 <small class="text-[8px] opacity-30">M/S²</small></span>
@@ -293,7 +268,6 @@ onMounted(() => {
                   </div>
                 </div>
               </div>
-
             </div>
 
           </div>

@@ -173,19 +173,61 @@ export function useMoonData() {
         lng: parseFloat(((loc.lng - (now.getUTCHours() + now.getUTCMinutes()/60) * 15 + 360) % 360 - 180).toFixed(2))
       }
 
-      // ── RA / DEC ────────────────────────────────────────────────────────
-      // We'll use the position data to get RA/Dec (geocentric approx)
-      ra.value  = `${Math.floor(now.getUTCHours() + fraction.value * 2)}h ${Math.floor(Math.random() * 60)}m`
-      dec.value = `${(loc.lat * 0.4 + Math.sin(now.getDate()) * 5).toFixed(1)}°`
+      // ── RA / DEC — proper ecliptic → equatorial conversion ────────────────
+      // Uses the same simplified Moon coordinates as getGeocentricDistance().
+      // l = ecliptic longitude, b = ecliptic latitude, ε = obliquity
+      {
+        const d2 = (now.getTime() / 1000 - 946728000) / 86400 // J2000 days
+        const rad = Math.PI / 180
+        const Mprime = (134.963 + 13.064993 * d2) * rad
+        const F      = (93.272  + 13.229350 * d2) * rad
+        const L      = (218.316 + 13.176396 * d2) * rad
+        const l = L + 6.289 * rad * Math.sin(Mprime) // ecliptic longitude
+        const b = 5.128 * rad * Math.sin(F)           // ecliptic latitude
+        const eps = (23.439 - 0.0000004 * d2) * rad   // obliquity of ecliptic
+        // Equatorial coordinates
+        const raRad  = Math.atan2(Math.sin(l) * Math.cos(eps) - Math.tan(b) * Math.sin(eps), Math.cos(l))
+        const decRad = Math.asin(Math.sin(b) * Math.cos(eps) + Math.cos(b) * Math.sin(eps) * Math.sin(l))
+        // Format RA as HH h MM m
+        const raHours = ((raRad * 180 / Math.PI) / 15 + 24) % 24
+        const raH = Math.floor(raHours)
+        const raM = Math.floor((raHours - raH) * 60)
+        ra.value  = `${raH}h ${String(raM).padStart(2,'0')}m`
+        // Format Dec as ±DD° MM'
+        const decDeg = decRad * 180 / Math.PI
+        const decAbs = Math.abs(decDeg)
+        const decD = Math.floor(decAbs)
+        const decM = Math.floor((decAbs - decD) * 60)
+        dec.value = `${decDeg >= 0 ? '+' : '-'}${decD}° ${String(decM).padStart(2,"'")}m`
+      }
 
-      // ── Next Orbital Events (Approx) ────────────────────────────────────
-      const pDate = new Date(now)
-      pDate.setDate(now.getDate() + (movingTowardPerigee.value ? 2 : 25))
-      nextPerigee.value = pDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })
-      
-      const aDate = new Date(now)
-      aDate.setDate(now.getDate() + (movingTowardPerigee.value ? 14 : 10))
-      nextApogee.value = aDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })
+      // ── Next Perigee / Apogee — ephemeris scan ────────────────────────────
+      // Scan forward in 6h steps using Meeus getGeocentricDistance().
+      // A local minimum in the distance curve = perigee.
+      // A local maximum = apogee.
+      // The anomalistic period is ~27.55 days so 35 days covers the full cycle.
+      {
+        const STEP_MS = 6 * 60 * 60 * 1000 // 6 hours
+        const MAX_STEPS = Math.ceil(35 * 24 / 6) // 35 days in 6h steps
+        let foundPerigee = false
+        let foundApogee  = false
+        for (let i = 1; i < MAX_STEPS - 1 && (!foundPerigee || !foundApogee); i++) {
+          const ta = new Date(now.getTime() + (i - 1) * STEP_MS)
+          const tb = new Date(now.getTime() +  i      * STEP_MS)
+          const tc = new Date(now.getTime() + (i + 1) * STEP_MS)
+          const da = getGeocentricDistance(ta)
+          const db = getGeocentricDistance(tb)
+          const dc = getGeocentricDistance(tc)
+          if (!foundPerigee && db < da && db < dc) {
+            nextPerigee.value = tb.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })
+            foundPerigee = true
+          }
+          if (!foundApogee && db > da && db > dc) {
+            nextApogee.value = tb.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })
+            foundApogee = true
+          }
+        }
+      }
 
       // ── Moonrise / Moonset ────────────────────────────────────────────────
       const times = SunCalc.getMoonTimes(now, loc.lat, loc.lng)
