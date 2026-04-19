@@ -109,31 +109,6 @@ async function runSession() {
   if (alive) runSession()
 }
 
-// ── GLITCH SPAWNER (Dynamic random glitches) ───────────────────────────────
-interface GlitchInstance {
-  id: number
-  x: number
-  y: number
-  type: 'solid-pop' | 'wire-pop' | 'sticky'
-}
-const activeGlitches = ref<GlitchInstance[]>([])
-let glitchId = 0
-
-function spawnGlitch(type: 'solid-pop' | 'wire-pop' | 'sticky') {
-  if (!import.meta.client) return
-  const id = glitchId++
-  activeGlitches.value.push({
-    id,
-    x: Math.random() * 80 + 10,
-    y: Math.random() * 80 + 10,
-    type
-  })
-  // Auto-remove after animation duration
-  const dur = type === 'sticky' ? 10000 : 1000
-  setTimeout(() => {
-    activeGlitches.value = activeGlitches.value.filter(g => g.id !== id)
-  }, dur)
-}
 
 onMounted(() => {
   if (!import.meta.client) return
@@ -226,30 +201,8 @@ onMounted(() => {
       </div>
     </div>
 
-    <!-- ── 4. DYNAMIC RED HEXAGON GLITCHES (SVG Spawner driven) ────────────── -->
-    <div class="absolute inset-0 z-[400] pointer-events-none overflow-hidden">
-      <svg 
-        v-for="g in activeGlitches" 
-        :key="g.id"
-        class="absolute w-32 h-32 opacity-0"
-        :class="{
-          'hex-sticky-anim': g.type === 'sticky',
-          'hex-pop-anim': g.type !== 'sticky'
-        }"
-        :style="{
-          top: `${g.y}%`,
-          left: `${g.x}%`
-        }"
-        viewBox="0 0 100 100"
-      >
-        <polygon
-          points="50,5 95,25 95,75 50,95 5,75 5,25"
-          :fill="g.type === 'solid-pop' ? 'rgba(239,68,68,0.7)' : 'none'"
-          :stroke="'rgba(239,68,68,0.9)'"
-          :stroke-width="g.type === 'solid-pop' ? '0' : '3'"
-        />
-      </svg>
-    </div>
+    <!-- ── 4. DYNAMIC RED HEXAGON GLITCHES (Centralized Component) ──────── -->
+    <SharedGlitchSystem :z-index="400" :density="4" :base-size="48" />
 
     <!-- ── 4. PANELS (z-10) ──────────────────────────────────────────────── -->
     <div class="relative z-10 max-w-[1600px] mx-auto px-6 pt-24 pb-24 2xl:pt-32">
@@ -1036,26 +989,11 @@ onMounted(() => {
   animation: glitch-stick linear infinite;
 }
 
-/* New v2 Hexagon Glitches (SVG Spawner optimized) */
-.hex-pop-anim {
-  animation: glitch-instant-pop 0.35s forwards;
-}
-.hex-sticky-anim {
-  animation: glitch-long-stick 8s forwards;
+  to   { transform: translate(100px, 60px) rotate(360deg) translateX(90px) scaleY(0.4) rotate(-360deg); }
 }
 
-@keyframes glitch-instant-pop {
-  0% { opacity: 0; transform: scale(0.6); }
-  10% { opacity: 0.8; transform: scale(1.1); }
-  20% { opacity: 0.2; transform: scale(0.9); }
-  30% { opacity: 0.6; transform: scale(1.0); }
-  100% { opacity: 0; transform: scale(1.2); }
-}
-
-@keyframes glitch-long-stick {
-  0% { opacity: 0; transform: scale(0.9); }
-  2% { opacity: 0.9; transform: scale(1.05); } /* Flash in */
-  5%, 85% { opacity: 0.5; transform: scale(1); } /* Stick */
-  100% { opacity: 0; transform: scale(1.1); }
+@keyframes moon-orbit {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
 }
 </style>

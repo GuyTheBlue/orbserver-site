@@ -95,31 +95,6 @@ const telemetryRows = computed(() => {
   ]
 })
 
-// ── GLITCH SPAWNER (Dynamic random glitches) ───────────────────────────────
-interface GlitchInstance {
-  id: number
-  x: number
-  y: number
-  type: 'solid-pop' | 'wire-pop' | 'sticky'
-}
-const activeGlitches = ref<GlitchInstance[]>([])
-let glitchId = 0
-
-function spawnGlitch(type: 'solid-pop' | 'wire-pop' | 'sticky') {
-  if (!import.meta.client) return
-  const id = glitchId++
-  activeGlitches.value.push({
-    id,
-    x: Math.random() * 80 + 10,
-    y: Math.random() * 80 + 10,
-    type
-  })
-  const dur = type === 'sticky' ? 10000 : 1000
-  setTimeout(() => {
-    activeGlitches.value = activeGlitches.value.filter(g => g.id !== id)
-  }, dur)
-}
-
 onMounted(() => {
   if (!import.meta.client) return
   generateDeepWash()
@@ -129,12 +104,7 @@ onMounted(() => {
   typeFactoid()
 
   // Rhythmic Spawner (HIGH DENSITY // RAPID)
-  setInterval(() => {
-    const r = Math.random()
-    if (r > 0.96) spawnGlitch('sticky')
-    else if (r > 0.4) spawnGlitch('solid-pop')
-    else if (r > 0.1) spawnGlitch('wire-pop')
-  }, 250)
+  // Logic refactored into SharedGlitchSystem component
 })
 </script>
 
@@ -148,30 +118,8 @@ onMounted(() => {
       </div>
     </div>
 
-    <!-- 1b. DYNAMIC RED HEXAGON GLITCHES (SVG Spawner driven) ────────────── -->
-    <div class="absolute inset-0 z-[500] pointer-events-none overflow-hidden">
-      <svg 
-        v-for="g in activeGlitches" 
-        :key="g.id"
-        class="absolute w-40 h-40 opacity-0"
-        :class="{
-          'hex-sticky-anim': g.type === 'sticky',
-          'hex-pop-anim': g.type !== 'sticky'
-        }"
-        :style="{
-          top: `${g.y}%`,
-          left: `${g.x}%`
-        }"
-        viewBox="0 0 100 100"
-      >
-        <polygon
-          points="50,5 95,25 95,75 50,95 5,75 5,25"
-          :fill="g.type === 'solid-pop' ? 'rgba(239,68,68,0.7)' : 'none'"
-          :stroke="'rgba(239,68,68,0.9)'"
-          :stroke-width="g.type === 'solid-pop' ? '0' : '4'"
-        />
-      </svg>
-    </div>
+    <!-- 1b. DYNAMIC RED HEXAGON GLITCHES (Centralized Component) ──────── -->
+    <SharedGlitchSystem :z-index="500" :density="4" :base-size="48" />
 
     <!-- 2. "KNOW THY MOON" DASHBOARD CTA (Corrected Size + OS Style) -->
     <div class="absolute bottom-[20%] left-[5%] md:left-[8%] pointer-events-auto">
@@ -278,32 +226,10 @@ onMounted(() => {
   animation: scan 3s linear infinite;
 }
 
-.hexagon-glitch {
-  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
-  animation: glitch-pop-hero linear infinite;
-}
-
-.hexagon-glitch:nth-child(even) {
-  background: transparent !important;
-  border: 1px solid rgba(239, 68, 68, 0.4);
-}
-.hexagon-glitch:nth-child(3n) {
-  background: rgba(239, 68, 68, 0.05) !important;
-  border: 2px solid rgba(239, 68, 68, 0.3);
-}
-
-@keyframes glitch-pop-hero {
-  0%, 96%, 100% { opacity: 0; transform: scale(0.6) rotate(0deg); }
-  97% { opacity: 0.5; transform: scale(1.1) rotate(10deg); }
-  98% { opacity: 0.2; transform: scale(0.9) rotate(-5deg); }
-  99% { opacity: 0.6; transform: scale(1.0) rotate(0deg); }
-}
-
 .hexagon-sticky {
   clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
   background: transparent;
   border: 1px solid rgba(239, 68, 68, 0.4);
-  animation: glitch-stick-hero linear infinite;
 }
 
 /* New v2 Hexagon Glitches (SVG Spawner optimized) */
