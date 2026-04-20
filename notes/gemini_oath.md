@@ -15,6 +15,7 @@ Where `rawDegrees = (illumAngle - parallacticAngle) * (180 / Math.PI)`.
 
 ### 3. Verification
 - **Test Suite:** `app/utils/lunarRotation.test.ts`
+- **Execution:** Any modification to this logic MUST be verified by running `pnpm test`. A failing test is an automatic reason for immediate reversion.
 - **Logic Isolation:** `app/utils/lunarRotation.ts`
 - **No Couplings:** Never embed this logic directly into a component. Always use the decoupled utility.
 
