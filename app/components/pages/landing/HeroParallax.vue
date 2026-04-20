@@ -15,8 +15,9 @@ const voidOpacity = computed(() => Math.min(y.value / 400, 1))
 const environmentOpacity = computed(() => 1 - voidOpacity.value)
 
 // Real-time geographic rotation
-const { apparentRotation } = useMoonData()
+const { apparentRotation, fraction, phase } = useMoonData()
 const moonRotation = computed(() => `${apparentRotation.value}deg`)
+
 </script>
 
 <template>
@@ -39,15 +40,15 @@ const moonRotation = computed(() => `${apparentRotation.value}deg`)
             alt="Sky"
           >
 
-          <!-- Moon -->
+          <!-- Moon Layer (Full Disc - No Shadow) -->
           <div
-            class="absolute left-1/2 w-[18rem] md:w-[24rem] top-[15%] sm:top-[10%] md:top-[5%] lg:top-[5%] xl:top-[5%] -translate-x-1/2 z-20 transition-transform duration-[2s] cubic-bezier(0.16, 1, 0.3, 1)"
+            class="absolute left-1/2 w-[22rem] md:w-[32rem] top-[5%] sm:top-[2%] md:top-[0%] lg:top-[0%] xl:top-[0%] -translate-x-1/2 z-20 transition-all duration-[2s] cubic-bezier(0.16, 1, 0.3, 1)"
             :style="{ transform: `${backgroundTransform} rotate(${moonRotation})` }"
           >
             <!-- The spherical ambient glow behind the moon -->
             <div class="absolute -inset-12 md:-inset-16 rounded-full bg-cyan-100/40 blur-[70px] md:blur-[90px]" />
-            <div class="absolute inset-0 rounded-full bg-white/60 blur-3xl" />
-
+            <div class="absolute inset-0 rounded-full bg-white/60 blur-3xl opacity-50" />
+            
             <img
               src="/images/hero_layers/moon.png"
               class="relative w-full block z-10"

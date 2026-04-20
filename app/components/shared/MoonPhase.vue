@@ -13,11 +13,10 @@ function getMoonShadowPath(phase: number, lat: number = 0): string {
   if (phase <= 0.01) return 'M 0 0 H 100 V 100 H 0 Z'
   if (phase >= 0.99) return ''
   
-  // The 'Immutable Law': In the Southern Hemisphere, the shadow direction is flipped.
-  // NH waxing (0-0.5): Shadow on LEFT (right lit)
-  // SH waxing (0-0.5): Shadow on RIGHT (left lit)
-  const isSH = lat < 0
-  const adjustedPhase = isSH ? (1 - phase) : phase
+  // The 'Immutable Law': Rotation handles hemisphere flip. 
+  // Shadow shape uses raw phase.
+  const adjustedPhase = phase
+
   
   const xRadius = Math.abs(R * Math.cos(adjustedPhase * 2 * Math.PI))
   const xr = xRadius.toFixed(3)
@@ -33,7 +32,7 @@ function getMoonShadowPath(phase: number, lat: number = 0): string {
 }
 
 // Shape only — rotation (which encodes lit-limb direction) is in apparentRotation
-const shadowPath = computed(() => getMoonShadowPath(props.phase, props.lat))
+const shadowPath = computed(() => getMoonShadowPath(props.phase))
 
 // Ambient glow intensity scales with illumination
 const glowOpacity = computed(() => 0.15 + props.fraction * 0.45)

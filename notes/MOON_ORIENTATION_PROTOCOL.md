@@ -1,47 +1,30 @@
 # 🌑 LUNAR ORIENTATION PROTOCOL (THE IMMUTABLE LAW)
 
 **DO NOT MODIFY THIS CALCULATION UNDER ANY CIRCUMSTANCES.** 
-THIS IS THE RESULT OF MULTIPLE CALIBRATIONS FOR SOUTHERN HEMISPHERE ACCURACY (CAPE TOWN).
 
 ## 1. THE GROUND TRUTH
-The base asset (`/images/hero_layers/moon.png`) is a standard **Northern Hemisphere** photograph. 
-- **North Pole**: Top of image.
-- **Tycho Crater**: Bottom of image.
+The base asset (`/images/hero_layers/moon.png`) is a standard photograph. 
+Reference Image: `notes/origin.png` (Tycho crater should be at roughly 10 o'clock position for a Southern Hemisphere observer in Cape Town).
 
-## 2. THE MATHEMATICAL MODEL
-We use `SunCalc` to derive the observer's relative perspective.
+## 2. THE MATHEMATICAL MODEL (+15 CALIBRATION)
+We use the transformation from **Celestial North** to the **Observer's Zenith**, with custom calibration for the Southern Hemisphere.
 
-### Step A: The Astronomical Delta
 ```ts
-const rawRotation = (illum.angle - pos.parallacticAngle) * (180 / Math.PI)
+apparentRotation = (illum.angle - pos.parallacticAngle) * (180 / Math.PI) + (lat < 0 ? 180 : 0) + 15
 ```
-1. **`illum.angle`**: The position angle of the Moon's bright limb (measured clockwise from Celestial North).
-2. **`pos.parallacticAngle`**: The angle between Celestial North and the Observer's Zenith.
-3. **`rawRotation`**: The resulting angle from the Observer's Zenith to the Moon's bright limb. This aligns the moon so the "top" of the image points to the Zenith.
 
-### Step B: The Hemispheric Correction (THE IMMUTABLE LAW)
-Because the observer in the **Southern Hemisphere (SH)** is physically inverted relative to the Earth's axis compared to a **Northern Hemisphere (NH)** observer:
-1. The entire celestial sphere appears upside down.
-2. The Moon's features (craters) are inverted.
-3. The direction of the Sun (and thus the bright limb) relative to the horizon is flipped.
+1. **`illum.angle`**: Angle of the bright limb from North (Radians).
+2. **`pos.parallacticAngle`**: Angle of the Zenith from North (Radians).
+3. **+ 180 (IF lat < 0)**: THE IMMUTABLE LAW. This flips the Northern Hemisphere image to look correct from the Southern Hemisphere (Cape Town).
+4. **+ 15**: Visual calibration offset to match asset landmarks (Tycho) to real-world observer standards in Cape Town.
 
-**REQUIRED LOGIC:**
-```ts
-apparentRotation = (lat < 0) ? (rawRotation + 180) : rawRotation
-```
-- **NH (lat >= 0)**: No correction. The math correctly aligns the NH-native image.
-- **SH (lat < 0)**: **ADDS 180 DEGREES.** This flips the image to match the Southern perspective.
+### CRITICAL: DO NOT REMOVE THE CALIBRATION
+This +15 offset was empirically determined by the user in Cape Town to align the `moon.png` asset with the actual sky.
 
 ## 3. FAILSAFE COORDINATES
-If Geolocation fails, the system **MUST** default to Cape Town, South Africa to preserve Southern Hemisphere testing fidelity:
+If Geolocation fails, the system **MUST** default to Cape Town, South Africa:
 - **Lat**: `-33.9249`
 - **Lng**: `18.4241`
-
-## 4. IMPACT
-Changing this math will:
-1. Rotate the moon 180° off-axis for SH users (making it look like London).
-2. Misalign the phase shadow (lit side will be on the wrong side of the craters).
-3. Break the "Manual Telemetry" guide logic.
 
 ---
 **END OF PROTOCOL**

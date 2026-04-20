@@ -290,11 +290,15 @@ export function useMoonData() {
       // ⚠️ IMPORTANT: THE IMMUTABLE LAW OF MOON ORIENTATION
       // SEE: notes/MOON_ORIENTATION_PROTOCOL.md for full technical details.
       //
-      // 1. (illum.angle - pos.parallacticAngle) = Rotation from local Zenith to Bright Limb.
-      // 2. lat < 0 ? +180 : 0 = Hemispheric flip because moon.png is NH-standard texture.
-      // DO NOT REMOVE THE +180 FOR SOUTHERN HEMISPHERE (lat < 0).
-      const rawRotation = (illum.angle - pos.parallacticAngle) * (180 / Math.PI)
-      apparentRotation.value = loc.lat < 0 ? (rawRotation + 180) % 360 : rawRotation
+      // 1. illum.angle: Angle of the bright limb from North (Radians).
+      // 2. pos.parallacticAngle: Angle of the Zenith from North (Radians).
+      // 3. + 180 (IF lat < 0): THE IMMUTABLE LAW for Southern Hemisphere inversion.
+      // 4. + 15: Visual calibration offset to match asset landmarks (Tycho) to real-world observer standards in Cape Town.
+      const raw = (illum.angle - pos.parallacticAngle) * (180 / Math.PI)
+      apparentRotation.value = (raw + (lat.value < 0 ? 180 : 0) + 15) % 360
+
+
+
 
     } catch {
       hasError.value = true
