@@ -30,8 +30,6 @@ function getPhaseGlyph(phase: number): string {
   return '🌘'
 }
 
-
-
 // Attempts to resolve the user's geolocation, falls back to Cape Town, ZA (SH Priority)
 async function resolveLatLng(): Promise<{ lat: number, lng: number }> {
   if (typeof navigator === 'undefined' || !navigator.geolocation) {

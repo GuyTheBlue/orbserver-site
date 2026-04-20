@@ -1,4 +1,4 @@
-import { ref, watch, onMounted } from 'vue'
+import { watch, onMounted } from 'vue'
 import { useLocalStorage } from '@vueuse/core'
 
 export type TerminalTheme = 'cyan' | 'amber' | 'pink' | 'green'
