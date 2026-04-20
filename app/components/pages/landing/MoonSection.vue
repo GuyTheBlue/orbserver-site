@@ -13,9 +13,11 @@ const {
   moonrise, moonset,
   apparentDiameter, apparentDiameterRatio, apparentVsMean,
   velocity, lightTravelTime, subLunarPoint,
-  ra, dec, nextPerigee, nextApogee,
-  zodiac, zodiacSymbol
+  ra, dec, nextPerigee, nextApogee, zodiac, zodiacSymbol
 } = useMoonData()
+
+const showHandRule = ref(false)
+const handRuleImg = '/_antigravity/hand_rule_lunar_altitude_1776644395843.png'
 
 // ── Intersection ────────────────────────────────────────────────────────────
 const sectionEl = ref<HTMLElement | null>(null)
@@ -216,7 +218,9 @@ onMounted(() => {
             </div>
           </div>
           <!-- Terminal Theme Selector -->
-          <SharedThemeSelector />
+          <ClientOnly>
+            <SharedThemeSelector />
+          </ClientOnly>
         </div>
       </div>
 
@@ -293,8 +297,8 @@ onMounted(() => {
             </svg>
           </div>
 
-          <div class="relative z-10 mt-12 text-center w-full px-2">
-            <h2 class="font-orbitron font-black text-3xl sm:text-4xl lg:text-5xl xl:text-7xl text-white tracking-[0.1em] sm:tracking-widest uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.4)] flex flex-wrap justify-center items-center gap-x-4 gap-y-2">
+          <div class="relative z-10 mt-12 text-center w-full px-2 max-w-full overflow-hidden">
+            <h2 class="font-orbitron font-black text-2xl sm:text-4xl lg:text-5xl xl:text-6xl text-white tracking-[0.1em] sm:tracking-widest uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.4)] flex flex-wrap justify-center items-center gap-x-4 gap-y-2 break-words leading-tight">
               {{ isLoading ? '…' : phaseName }}
             </h2>
             <div class="mt-8 flex flex-wrap items-center justify-center gap-y-8">
@@ -897,33 +901,154 @@ onMounted(() => {
         </div>
 
         <div
-          class="panel-card group p-10 rounded-2xl flex flex-col justify-between bento-flicker"
+          class="panel-card group p-10 rounded-2xl flex flex-col justify-between bento-flicker relative"
           style="animation-delay:2.8s"
         >
           <div class="panel-grid-mesh" /><div class="panel-scanlines" /><div class="card-brackets" />
-          <svg
-            class="absolute bottom-6 right-6 w-8 h-8 text-white/5 pointer-events-none"
-            viewBox="0 0 50 43"
-          ><path
-            d="M12.5 0L37.5 0L50 21.5L37.5 43L12.5 43L0 21.5Z"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.5"
-          /></svg>
-          <label class="relative z-10 font-mono text-[11px] text-hud-accent tracking-[0.5em] uppercase block mb-10">POSITION_DATA</label>
+          <label class="relative z-10 font-mono text-[11px] text-hud-accent tracking-[0.5em] uppercase block mb-10">
+            POSITION_DATA
+          </label>
           <div class="relative z-10 flex flex-col gap-8">
             <div class="border-b border-white/10 pb-8">
               <span class="font-mono text-[11px] text-white/20 uppercase tracking-widest block mb-4">ALTITUDE</span><span class="font-orbitron font-black text-5xl xl:text-6xl text-white">{{ altStr }}</span>
             </div>
-            <div><span class="font-mono text-[11px] text-white/20 uppercase tracking-widest block mb-4">AZIMUTH</span><span class="font-orbitron font-black text-5xl xl:text-6xl text-white">{{ azStr }}</span></div>
+            <div>
+              <span class="font-mono text-[11px] text-white/20 uppercase tracking-widest block mb-4">AZIMUTH</span><span class="font-orbitron font-black text-5xl xl:text-6xl text-white">{{ azStr }}</span>
+            </div>
           </div>
+          
+          <!-- Large Info Button: Bottom Right -->
+          <button 
+            @click.stop="() => { console.log('OPENING_HAND_RULE_GUIDE'); showHandRule = true }"
+            class="absolute bottom-6 right-6 z-[100] w-12 h-12 rounded-sm border border-hud-accent/40 bg-black/80 backdrop-blur-md flex items-center justify-center text-2xl font-orbitron font-black text-hud-accent hover:bg-hud-accent hover:text-black transition-all cursor-pointer bento-flicker shadow-[0_0_20px_rgba(var(--hud-accent-rgb),0.3)] pointer-events-auto"
+            title="Open Hand Rule Guide"
+          >
+            ?
+          </button>
         </div>
       </div>
     </div>
+    
+    <!-- ── 5. OVERLAYS (TELEPORTED TO BODY FOR GUARANTEED OVERLAY) ── -->
+    <Teleport to="body">
+      <Transition
+        enter-active-class="transition-all duration-300 ease-out"
+        enter-from-class="opacity-0 scale-95"
+        enter-to-class="opacity-100 scale-100"
+        leave-active-class="transition-all duration-200 ease-in"
+        leave-from-class="opacity-100 scale-100"
+        leave-to-class="opacity-0 scale-95"
+      >
+        <div v-if="showHandRule" class="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6" style="pointer-events: auto;">
+          <!-- Backdrop -->
+          <div class="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity" @click="showHandRule = false" />
+          
+          <!-- Modal Container -->
+          <div class="relative w-full max-w-2xl max-h-[85vh] bg-[#020a14] border border-hud-accent/30 rounded-lg overflow-hidden flex flex-col font-mono shadow-[0_0_80px_rgba(0,0,0,1)] ring-1 ring-hud-accent/20">
+            
+            <!-- Header -->
+            <div class="flex-none p-4 md:p-6 border-b border-hud-accent/20 bg-hud-accent/5 flex items-center justify-between z-20">
+              <h3 class="font-orbitron font-black text-hud-accent tracking-[0.2em] uppercase text-xs md:text-sm">
+                LOCATING THE MOON // MANUAL TELEMETRY
+              </h3>
+              <button
+                @click="showHandRule = false"
+                class="w-8 h-8 flex items-center justify-center rounded bg-black/40 border border-hud-accent/20 text-hud-accent/60 hover:text-hud-accent hover:border-hud-accent/60 hover:bg-hud-accent/10 transition-colors"
+                title="Close"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+              </button>
+            </div>
+
+            <!-- Body -->
+            <div class="relative flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar bento-flicker">
+              <div class="panel-grid-mesh opacity-10 absolute inset-0 pointer-events-none" />
+              <div class="panel-scanlines opacity-40 absolute inset-0 pointer-events-none" />
+              
+              <div class="relative z-10 p-6 md:p-10 space-y-12 pb-12">
+                <p class="text-sm text-hud-accent/80 leading-relaxed italic border-b border-hud-accent/10 pb-8">
+                  When you have no tools, your body becomes the measuring device. This guide explains how to find the Moon's position using cardinal orientation and the "Hand Rule" method.
+                </p>
+
+                <section>
+                  <h4 class="font-orbitron font-black text-white text-md tracking-wider mb-6 border-l-2 border-hud-accent pl-4 uppercase">
+                    1. Establish Heading (Azimuth)
+                  </h4>
+                  <div class="text-[11px] text-white/50 leading-relaxed space-y-6">
+                    <p>To measure the Moon's position, you must first orient yourself toward the correct sector of the sky.</p>
+                    
+                    <!-- Dynamic Hemisphere Guidance -->
+                    <div v-if="lat >= 0" class="p-6 border border-hud-accent/20 bg-hud-accent/5 rounded space-y-4">
+                      <p class="text-hud-accent font-bold tracking-widest uppercase">NORTHERN HEMISPHERE DETECTED [{{ lat.toFixed(2) }}°N]</p>
+                      <p>The Moon generally traverses the <strong class="text-white">Southern</strong> sky. To find South (180°) without a compass:</p>
+                      <ul class="space-y-3 list-disc pl-4">
+                        <li>Locate where the sun set today (West).</li>
+                        <li>Stand with the sunset point on your <strong class="text-white uppercase">Right</strong> shoulder.</li>
+                        <li>You are now facing directly <strong class="text-hud-accent uppercase">South</strong>.</li>
+                      </ul>
+                    </div>
+                    
+                    <div v-else class="p-6 border border-hud-accent/20 bg-hud-accent/5 rounded space-y-4">
+                      <p class="text-hud-accent font-bold tracking-widest uppercase">SOUTHERN HEMISPHERE DETECTED [{{ lat.toFixed(2) }}°S]</p>
+                      <p>The Moon generally traverses the <strong class="text-white">Northern</strong> sky. To find North (0°) without a compass:</p>
+                      <ul class="space-y-3 list-disc pl-4">
+                        <li>Locate where the sun set today (West).</li>
+                        <li>Stand with the sunset point on your <strong class="text-white uppercase">Left</strong> shoulder.</li>
+                        <li>You are now facing directly <strong class="text-hud-accent uppercase">North</strong>.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </section>
+
+                <section>
+                  <h4 class="font-orbitron font-black text-white text-md tracking-wider mb-6 border-l-2 border-hud-accent pl-4 uppercase">
+                    2. Measure Altitude (Hand Rule)
+                  </h4>
+                  <p class="text-[11px] text-white/50 leading-relaxed mb-6">
+                    Once facing the correct quadrant, use your arm at full extension to measure degrees above the horizon.
+                  </p>
+                </section>
+
+                <section class="bg-hud-accent/5 p-6 border border-hud-accent/20 rounded-lg space-y-8">
+                  <h5 class="text-[10px] text-hud-accent tracking-[0.4em] uppercase">EXECUTION_PROTOCOL</h5>
+                  <div class="space-y-6">
+                    <div v-for="(step, i) in [
+                      ['Fully Extend Your Arm', 'Your arm must be straight out. The Hand Rule fails if your elbow is bent.'],
+                      ['The Horizon Line', 'Align the bottom of your first fist with the visible horizon.'],
+                      ['The Ladder', 'Stack your second hand directly on top of the first (20° Altitude).'],
+                      ['The Target', 'The Moon should appear at the top knuckle of the third fist (30° Altitude).']
+                    ]" :key="i" class="flex gap-4">
+                      <span class="font-orbitron font-black text-hud-accent/40 text-lg leading-none mt-0.5">{{ (i+1).toString().padStart(2, '0') }}</span>
+                      <div>
+                        <span class="block text-[11px] text-white uppercase tracking-widest mb-1">{{ step[0] }}</span>
+                        <span class="block text-[10px] text-white/40 leading-relaxed">{{ step[1] }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
   </section>
 </template>
 
 <style scoped>
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(var(--hud-accent-rgb), 0.05);
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(var(--hud-accent-rgb), 0.3);
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(var(--hud-accent-rgb), 0.5);
+}
 /* ── COMPONENT-SPECIFIC ANIMATIONS ── */
 .rotate-ring { animation: rotate-slow 90s linear infinite; }
 @keyframes rotate-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }

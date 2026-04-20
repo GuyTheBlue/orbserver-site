@@ -8,36 +8,32 @@ const props = defineProps<{
   lat?: number // Latitude for hemisphere-aware phase orientation
 }>()
 
-/**
- * Computes an SVG path for the dark shadow overlay.
- *
- * The shadow path draws the correct crescent/gibbous SHAPE only.
- * Which side is lit is handled entirely by `apparentRotation` from
- * useMoonData.ts — which uses (illum.angle - parallacticAngle) to
- * orient the bright limb correctly for the observer's latitude.
- * No hemisphere correction needed here.
- *
- * NH convention used as the base:
- *   phase 0–0.5 (waxing): shadow on LEFT side of path
- *   phase 0.5–1 (waning): shadow on RIGHT side of path
- */
-function getMoonShadowPath(phase: number): string {
+function getMoonShadowPath(phase: number, lat: number = 0): string {
   const R = 50
   if (phase <= 0.01) return 'M 0 0 H 100 V 100 H 0 Z'
   if (phase >= 0.99) return ''
-  const xRadius = Math.abs(R * Math.cos(phase * 2 * Math.PI))
+  
+  // The 'Immutable Law': In the Southern Hemisphere, the shadow direction is flipped.
+  // NH waxing (0-0.5): Shadow on LEFT (right lit)
+  // SH waxing (0-0.5): Shadow on RIGHT (left lit)
+  const isSH = lat < 0
+  const adjustedPhase = isSH ? (1 - phase) : phase
+  
+  const xRadius = Math.abs(R * Math.cos(adjustedPhase * 2 * Math.PI))
   const xr = xRadius.toFixed(3)
-  if (phase < 0.5) {
-    const sweepTerminator = phase < 0.25 ? 0 : 1
+  
+  // Draw path based on adjusted phase to handle hemisphere flip
+  if (adjustedPhase < 0.5) {
+    const sweepTerminator = adjustedPhase < 0.25 ? 0 : 1
     return `M 50 0 A 50 50 0 0 0 50 100 A ${xr} 50 0 0 ${sweepTerminator} 50 0 Z`
   } else {
-    const sweepTerminator = phase < 0.75 ? 0 : 1
+    const sweepTerminator = adjustedPhase < 0.75 ? 0 : 1
     return `M 50 0 A 50 50 0 0 1 50 100 A ${xr} 50 0 0 ${sweepTerminator} 50 0 Z`
   }
 }
 
 // Shape only — rotation (which encodes lit-limb direction) is in apparentRotation
-const shadowPath = computed(() => getMoonShadowPath(props.phase))
+const shadowPath = computed(() => getMoonShadowPath(props.phase, props.lat))
 
 // Ambient glow intensity scales with illumination
 const glowOpacity = computed(() => 0.15 + props.fraction * 0.45)

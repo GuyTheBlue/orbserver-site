@@ -36,15 +36,15 @@ function formatFutureDate(daysFromNow: number): string {
   return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
 }
 
-// Attempts to resolve the user's geolocation, falls back to Greenwich, London
+// Attempts to resolve the user's geolocation, falls back to Cape Town, ZA (SH Priority)
 async function resolveLatLng(): Promise<{ lat: number, lng: number }> {
   if (typeof navigator === 'undefined' || !navigator.geolocation) {
-    return { lat: 51.4779, lng: -0.0015 }
+    return { lat: -33.9249, lng: 18.4241 }
   }
   return new Promise((resolve) => {
     navigator.geolocation.getCurrentPosition(
       pos => resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
-      () => resolve({ lat: 51.4779, lng: -0.0015 }), // silent fallback to Greenwich
+      () => resolve({ lat: -33.9249, lng: 18.4241 }), // fallback to Cape Town
       { timeout: 3000 }
     )
   })
@@ -287,9 +287,14 @@ export function useMoonData() {
       moonset.value  = times.set  ? times.set.toLocaleTimeString('en-GB',  { hour: '2-digit', minute: '2-digit' }) : 'N/A'
 
       // ── Apparent Rotation (Orientation relative to observer's sky) ────
-      // Corrected to use SunCalc's native parallacticAngle for absolute accuracy.
-      // This properly handles being 'upside down' in the Southern Hemisphere.
-      apparentRotation.value = (illum.angle - pos.parallacticAngle) * (180 / Math.PI) + 90
+      // ⚠️ IMPORTANT: THE IMMUTABLE LAW OF MOON ORIENTATION
+      // SEE: notes/MOON_ORIENTATION_PROTOCOL.md for full technical details.
+      //
+      // 1. (illum.angle - pos.parallacticAngle) = Rotation from local Zenith to Bright Limb.
+      // 2. lat < 0 ? +180 : 0 = Hemispheric flip because moon.png is NH-standard texture.
+      // DO NOT REMOVE THE +180 FOR SOUTHERN HEMISPHERE (lat < 0).
+      const rawRotation = (illum.angle - pos.parallacticAngle) * (180 / Math.PI)
+      apparentRotation.value = loc.lat < 0 ? (rawRotation + 180) % 360 : rawRotation
 
     } catch {
       hasError.value = true
