@@ -280,7 +280,6 @@ onMounted(() => {
               :fraction="fraction"
               :phase="phase"
               :rotation="apparentRotation"
-              :lat="lat"
             />
             <svg
               class="absolute pointer-events-none text-cyan-400/30 rotate-ring"

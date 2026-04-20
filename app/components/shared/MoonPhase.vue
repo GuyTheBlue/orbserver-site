@@ -5,10 +5,9 @@ const props = defineProps<{
   fraction: number // 0 (new) → 1 (full)
   phase: number // 0–1 position across the full lunation cycle
   rotation?: number // Degrees of rotation relative to horizon
-  lat?: number // Latitude for hemisphere-aware phase orientation
 }>()
 
-function getMoonShadowPath(phase: number, lat: number = 0): string {
+function getMoonShadowPath(phase: number): string {
   const R = 50
   if (phase <= 0.01) return 'M 0 0 H 100 V 100 H 0 Z'
   if (phase >= 0.99) return ''
