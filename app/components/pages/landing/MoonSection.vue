@@ -948,7 +948,7 @@ onMounted(() => {
             
             <!-- Header -->
             <div class="flex-none p-4 md:p-6 border-b border-hud-accent/20 bg-hud-accent/5 flex items-center justify-between z-20">
-              <h3 class="font-orbitron font-black text-hud-accent tracking-[0.2em] uppercase text-sm md:text-xl">
+              <h3 class="font-orbitron font-black text-hud-accent tracking-[0.2em] uppercase text-xl md:text-3xl">
                 LOCATING THE MOON // MANUAL TELEMETRY
               </h3>
               <button
@@ -965,35 +965,35 @@ onMounted(() => {
               <div class="panel-grid-mesh opacity-10 absolute inset-0 pointer-events-none" />
               <div class="panel-scanlines opacity-40 absolute inset-0 pointer-events-none" />
               
-              <div class="relative z-10 p-6 md:p-10 space-y-12 pb-12">
-                <p class="text-lg text-hud-accent/80 leading-relaxed italic border-b border-hud-accent/10 pb-8">
+              <div class="relative z-10 p-6 md:p-14 space-y-16 pb-20">
+                <p class="text-2xl text-hud-accent/80 leading-relaxed italic border-b border-hud-accent/10 pb-12">
                   When you have no tools, your body becomes the measuring device. This guide explains how to find the Moon's position using cardinal orientation and the "Hand Rule" method.
                 </p>
 
                 <section>
-                  <h4 class="font-orbitron font-black text-white text-xl tracking-wider mb-6 border-l-2 border-hud-accent pl-4 uppercase">
+                  <h4 class="font-orbitron font-black text-white text-3xl tracking-wider mb-8 border-l-4 border-hud-accent pl-6 uppercase">
                     1. Establish Heading (Azimuth)
                   </h4>
-                  <div class="text-[14px] text-white/50 leading-relaxed space-y-6">
+                  <div class="text-xl text-white/50 leading-loose space-y-10">
                     <p>To measure the Moon's position, you must first orient yourself toward the correct sector of the sky.</p>
                     
                     <!-- Dynamic Hemisphere Guidance -->
-                    <div v-if="lat >= 0" class="p-6 border border-hud-accent/20 bg-hud-accent/5 rounded space-y-4">
-                      <p class="text-hud-accent font-bold tracking-widest uppercase text-base">NORTHERN HEMISPHERE DETECTED [{{ lat.toFixed(2) }}°N]</p>
-                      <p>The Moon generally traverses the <strong class="text-white text-lg">Southern</strong> sky. To find South (180°) without a compass:</p>
-                      <ul class="space-y-3 list-disc pl-4 text-base">
+                    <div v-if="lat >= 0" class="p-10 border border-hud-accent/30 bg-hud-accent/5 rounded-xl space-y-8">
+                      <p class="text-hud-accent font-bold tracking-[0.3em] uppercase text-xl">NORTHERN HEMISPHERE DETECTED [{{ lat.toFixed(2) }}°N]</p>
+                      <p class="text-2xl">The Moon generally traverses the <strong class="text-white">Southern</strong> sky. To find South (180°) without a compass:</p>
+                      <ul class="space-y-6 list-disc pl-10 text-xl text-white/70">
                         <li>Locate where the sun set today (West).</li>
-                        <li>Stand with the sunset point on your <strong class="text-white uppercase font-black">Right</strong> shoulder.</li>
+                        <li>Stand with the sunset point on your <strong class="text-white uppercase font-black underline decoration-hud-accent">Right</strong> shoulder.</li>
                         <li>You are now facing directly <strong class="text-hud-accent uppercase font-black">South</strong>.</li>
                       </ul>
                     </div>
                     
-                    <div v-else class="p-6 border border-hud-accent/20 bg-hud-accent/5 rounded space-y-4">
-                      <p class="text-hud-accent font-bold tracking-widest uppercase text-base">SOUTHERN HEMISPHERE DETECTED [{{ lat.toFixed(2) }}°S]</p>
-                      <p>The Moon generally traverses the <strong class="text-white text-lg">Northern</strong> sky. To find North (0°) without a compass:</p>
-                      <ul class="space-y-3 list-disc pl-4 text-base">
+                    <div v-else class="p-10 border border-hud-accent/30 bg-hud-accent/5 rounded-xl space-y-8">
+                      <p class="text-hud-accent font-bold tracking-[0.3em] uppercase text-xl">SOUTHERN HEMISPHERE DETECTED [{{ lat.toFixed(2) }}°S]</p>
+                      <p class="text-2xl">The Moon generally traverses the <strong class="text-white">Northern</strong> sky. To find North (0°) without a compass:</p>
+                      <ul class="space-y-6 list-disc pl-10 text-xl text-white/70">
                         <li>Locate where the sun set today (West).</li>
-                        <li>Stand with the sunset point on your <strong class="text-white uppercase font-black">Left</strong> shoulder.</li>
+                        <li>Stand with the sunset point on your <strong class="text-white uppercase font-black underline decoration-hud-accent">Left</strong> shoulder.</li>
                         <li>You are now facing directly <strong class="text-hud-accent uppercase font-black">North</strong>.</li>
                       </ul>
                     </div>
@@ -1001,27 +1001,27 @@ onMounted(() => {
                 </section>
 
                 <section>
-                  <h4 class="font-orbitron font-black text-white text-xl tracking-wider mb-6 border-l-2 border-hud-accent pl-4 uppercase">
+                  <h4 class="font-orbitron font-black text-white text-3xl tracking-wider mb-8 border-l-4 border-hud-accent pl-6 uppercase">
                     2. Measure Altitude (Hand Rule)
                   </h4>
-                  <p class="text-base text-white/50 leading-relaxed mb-6">
+                  <p class="text-xl text-white/50 leading-loose mb-10">
                     Once facing the correct quadrant, use your arm at full extension to measure degrees above the horizon.
                   </p>
                 </section>
 
-                <section class="bg-hud-accent/5 p-6 border border-hud-accent/20 rounded-lg space-y-8">
-                  <h5 class="text-[10px] text-hud-accent tracking-[0.4em] uppercase">EXECUTION_PROTOCOL</h5>
-                  <div class="space-y-6">
+                <section class="bg-hud-accent/5 p-10 border border-hud-accent/30 rounded-xl space-y-12">
+                  <h5 class="text-base text-hud-accent tracking-[0.5em] uppercase font-bold">EXECUTION_PROTOCOL</h5>
+                  <div class="space-y-10">
                     <div v-for="(step, i) in [
                       ['Fully Extend Your Arm', 'Your arm must be straight out. The Hand Rule fails if your elbow is bent.'],
                       ['The Horizon Line', 'Align the bottom of your first fist with the visible horizon.'],
                       ['The Ladder', 'Stack your second hand directly on top of the first (20° Altitude).'],
                       ['The Target', 'The Moon should appear at the top knuckle of the third fist (30° Altitude).']
-                    ]" :key="i" class="flex gap-4">
-                      <span class="font-orbitron font-black text-hud-accent/40 text-lg leading-none mt-0.5">{{ (i+1).toString().padStart(2, '0') }}</span>
+                    ]" :key="i" class="flex gap-8">
+                      <span class="font-orbitron font-black text-hud-accent/40 text-3xl leading-none mt-1">{{ (i+1).toString().padStart(2, '0') }}</span>
                       <div>
-                        <span class="block text-[11px] text-white uppercase tracking-widest mb-1">{{ step[0] }}</span>
-                        <span class="block text-[10px] text-white/40 leading-relaxed">{{ step[1] }}</span>
+                        <span class="block text-xl text-white uppercase tracking-widest mb-3 font-bold">{{ step[0] }}</span>
+                        <span class="block text-lg text-white/50 leading-relaxed">{{ step[1] }}</span>
                       </div>
                     </div>
                   </div>

@@ -27,17 +27,17 @@ function spawnGlitch() {
   const r = Math.random()
   
   let type: GlitchInstance['type'] = 'solid-pop'
-  if (r > 0.95) type = 'sticky'
-  else if (r > 0.6) type = 'wire-pop'
+  if (r > 0.5) type = 'sticky' // Increased chance to 50%
+  else if (r > 0.2) type = 'wire-pop'
 
   // Size logic: min to max (e.g. 32 to 100)
   const minS = props.minSize || 32
   const maxS = props.maxSize || 100
   const size = Math.floor(Math.random() * (maxS - minS) + minS)
 
-  // Stickiness: 1s to 3s
+  // Stickiness: 8s to 12s
   const duration = type === 'sticky' 
-    ? Math.floor(Math.random() * 2000 + 1000) 
+    ? Math.floor(Math.random() * 4000 + 8000) 
     : 600
 
   // Random blur for sticky (0px to 4px)
@@ -108,7 +108,7 @@ onMounted(() => {
   animation: glitch-instant-pop linear forwards;
 }
 .hex-sticky-anim {
-  animation: glitch-blur-bounce ease-in-out forwards;
+  animation: glitch-long-stick linear forwards;
 }
 
 @keyframes glitch-instant-pop {
@@ -119,13 +119,13 @@ onMounted(() => {
   100% { opacity: 0; transform: scale(1.2); }
 }
 
-@keyframes glitch-blur-bounce {
+@keyframes glitch-long-stick {
   0% { opacity: 0; transform: scale(0.9) translate(0); filter: blur(0); }
-  5% { opacity: 1; transform: scale(1.05) translate(-2px, 1px); filter: blur(0.5px); }
-  10% { opacity: 0.8; transform: scale(1.0) translate(2px, -1px); filter: blur(0); }
-  15%, 80% { opacity: 0.6; transform: scale(1) translate(0); }
-  85% { opacity: 0.9; transform: scale(1.02); filter: blur(2px); }
-  90% { opacity: 0.4; transform: scale(0.98); filter: blur(4px); }
+  2% { opacity: 1; transform: scale(1.05) translate(-2px, 1px); filter: blur(0.5px); }
+  5% { opacity: 0.8; transform: scale(1.0) translate(2px, -1px); filter: blur(0); }
+  8%, 92% { opacity: 0.5; transform: scale(1) translate(0); }
+  95% { opacity: 0.9; transform: scale(1.02); filter: blur(2px); }
+  98% { opacity: 0.4; transform: scale(0.98); filter: blur(4px); }
   100% { opacity: 0; transform: scale(1.1); filter: blur(8px); }
 }
 </style>

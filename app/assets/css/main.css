@@ -70,7 +70,7 @@
 }
 
 .broken-terminal-jitter { animation: glitch-jitter 12s infinite alternate; }
-.bento-flicker { animation: signal-flicker 11s infinite, red-glitch-alert 15s infinite; }
+.bento-flicker { animation: signal-flicker 4s infinite, red-glitch-alert 6s infinite; }
 
 /* ── OS THEME: CRT & HUD UTILITIES ── */
 .grid-overlay {
