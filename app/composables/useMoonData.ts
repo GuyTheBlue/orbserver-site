@@ -30,11 +30,7 @@ function getPhaseGlyph(phase: number): string {
   return '🌘'
 }
 
-// Formats a future date offset (in days) from now as "14 April 2026"
-function formatFutureDate(daysFromNow: number): string {
-  const d = new Date(Date.now() + daysFromNow * 24 * 60 * 60 * 1000)
-  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
-}
+
 
 // Attempts to resolve the user's geolocation, falls back to Cape Town, ZA (SH Priority)
 async function resolveLatLng(): Promise<{ lat: number, lng: number }> {
@@ -54,11 +50,9 @@ async function resolveLatLng(): Promise<{ lat: number, lng: number }> {
 // This bypasses SunCalc's topocentric inaccuracies to match world standards.
 function getGeocentricDistance(date: Date): number {
   const T = (date.getTime() / 1000 - 946728000) / 3155760000 // Centuries since J2000
-  const Lprime = (218.316 + 481267.881 * T) * (Math.PI / 180) // Mean longitude
   const D = (297.85 + 445267.111 * T) * (Math.PI / 180) // Mean elongation
   const M = (357.529 + 35999.05 * T) * (Math.PI / 180) // Sun mean anomaly
   const Mprime = (134.963 + 477198.867 * T) * (Math.PI / 180) // Moon mean anomaly
-  const F = (93.272 + 483202.018 * T) * (Math.PI / 180) // Mean distance from node
 
   // Major periodic terms for distance (km)
   let sum = -20905 * Math.cos(Mprime)
@@ -238,8 +232,11 @@ export function useMoonData() {
           { name: 'Sagittarius', sym: '[SAG]' }, { name: 'Capricorn', sym: '[CAP]' },
           { name: 'Aquarius', sym: '[AQU]' }, { name: 'Pisces', sym: '[PIS]' }
         ]
-        zodiac.value = ZODIAC_DATA[zodiacIdx].name
-        zodiacSymbol.value = ZODIAC_DATA[zodiacIdx].sym
+        const zodiacEntry = ZODIAC_DATA[zodiacIdx]
+        if (zodiacEntry) {
+          zodiac.value = zodiacEntry.name
+          zodiacSymbol.value = zodiacEntry.sym
+        }
       }
 
       // ── Next Perigee / Apogee — ephemeris scan ────────────────────────────
