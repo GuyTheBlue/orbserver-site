@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useTitleParser } from '#imports'
 
-const props = defineProps<{
+defineProps<{
   data: {
     title: string
     description: string

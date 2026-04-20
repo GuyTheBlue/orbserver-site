@@ -17,7 +17,7 @@ const {
 } = useMoonData()
 
 const showHandRule = ref(false)
-const handRuleImg = '/_antigravity/hand_rule_lunar_altitude_1776644395843.png'
+
 
 // ── Intersection ────────────────────────────────────────────────────────────
 const sectionEl = ref<HTMLElement | null>(null)
@@ -26,7 +26,9 @@ const isSupermoon = computed(() =>
   apparentDiameter.value >= 33.0 && (fraction.value > 0.85 || fraction.value < 0.15)
 )
 
-useIntersectionObserver(sectionEl, ([e]) => { if (e.isIntersecting) isVisible.value = true }, { threshold: 0.05 })
+useIntersectionObserver(sectionEl, ([e]) => {
+  if (e?.isIntersecting) isVisible.value = true
+}, { threshold: 0.05 })
 
 // ── Calculations ─────────────────────────────────────────────────────────────
 const illuminationPct = computed(() => Math.round(fraction.value * 100))
@@ -98,10 +100,13 @@ async function runSession() {
     { t: `  > Tidal locking: rotation = revolution (27.32 days)` },
     { t: `  > Escape velocity: 2.38 km/s` }
   ]
-  for (let i = 0; i < script.length; i++) {
+  for (const e of script) {
     if (!alive) return
-    const e = script[i]
-    if (e.blank) { termLines.value.push({ text: '', cls: 'term-blank' }); await sleep(160); continue }
+    if (e.blank) {
+      termLines.value.push({ text: '', cls: 'term-blank' })
+      await sleep(160)
+      continue
+    }
     termLines.value.push({ text: '', cls: e.cmd ? 'term-cmd' : 'term-out' })
     await typeChar(termLines.value.length - 1, e.t, !!e.cmd)
   }
@@ -111,10 +116,11 @@ async function runSession() {
   if (alive) runSession()
 }
 
-
 onMounted(() => {
   if (!import.meta.client) return
-  setInterval(() => { termCursor.value = !termCursor.value }, 530)
+  setInterval(() => {
+    termCursor.value = !termCursor.value
+  }, 530)
   setTimeout(runSession, 1400)
 })
 </script>
@@ -129,10 +135,22 @@ onMounted(() => {
     <ClientOnly>
       <div class="absolute inset-0 z-0 p-10 lg:p-16 font-mono overflow-hidden select-none pointer-events-none">
         <div class="flex items-center gap-2.5 mb-10 opacity-60">
-          <span class="w-3 h-3 rounded-full" :style="{ backgroundColor: 'var(--hud-accent)', boxShadow: 'var(--hud-accent-glow)' }" />
-          <span class="w-3 h-3 rounded-full" :style="{ backgroundColor: 'rgba(var(--hud-accent-rgb), 0.7)' }" />
-          <span class="w-3 h-3 rounded-full" :style="{ backgroundColor: 'rgba(var(--hud-accent-rgb), 0.4)' }" />
-          <span class="ml-6 text-[13px] tracking-[0.4em] uppercase" :style="{ color: 'rgba(var(--hud-accent-rgb), 0.4)' }">terminal_bg::process_feed</span>
+          <span
+            class="w-3 h-3 rounded-full"
+            :style="{ backgroundColor: 'var(--hud-accent)', boxShadow: 'var(--hud-accent-glow)' }"
+          />
+          <span
+            class="w-3 h-3 rounded-full"
+            :style="{ backgroundColor: 'rgba(var(--hud-accent-rgb), 0.7)' }"
+          />
+          <span
+            class="w-3 h-3 rounded-full"
+            :style="{ backgroundColor: 'rgba(var(--hud-accent-rgb), 0.4)' }"
+          />
+          <span
+            class="ml-6 text-[13px] tracking-[0.4em] uppercase"
+            :style="{ color: 'rgba(var(--hud-accent-rgb), 0.4)' }"
+          >terminal_bg::process_feed</span>
         </div>
         <!-- BIGGER wash for depth -->
         <div class="text-[22px] leading-relaxed opacity-[0.35]">
@@ -195,7 +213,12 @@ onMounted(() => {
 
     <!-- ── 4. DYNAMIC RED HEXAGON GLITCHES (Centralized Component) ──────── -->
     <ClientOnly>
-      <SharedGlitchSystem :z-index="400" :density="1.8" :min-size="40" :max-size="90" />
+      <SharedGlitchSystem
+        :z-index="400"
+        :density="1.8"
+        :min-size="40"
+        :max-size="90"
+      />
     </ClientOnly>
 
     <!-- ── 4. PANELS (z-10) ──────────────────────────────────────────────── -->
@@ -245,7 +268,9 @@ onMounted(() => {
 
           <div class="absolute top-8 left-8 flex flex-col gap-1 z-10">
             <label class="font-mono text-[14px] text-hud-accent tracking-[0.5em] uppercase">VISUAL_FEED::PRIMARY</label>
-            <div class="font-mono text-[12px] text-white/20 tracking-widest uppercase">CONSTELLATION // {{ zodiac }} [{{ zodiacSymbol }}]</div>
+            <div class="font-mono text-[12px] text-white/20 tracking-widest uppercase">
+              CONSTELLATION // {{ zodiac }} [{{ zodiacSymbol }}]
+            </div>
           </div>
 
           <div
@@ -412,7 +437,7 @@ onMounted(() => {
                   class="relative z-10 w-full h-full max-w-[280px]"
                   viewBox="0 0 200 120"
                 >
-                  <!-- The Sun (Center/Glow) -->
+                  <!-- The Sun (Centre/Glow) -->
                   <circle
                     cx="100"
                     cy="60"
@@ -810,7 +835,9 @@ onMounted(() => {
 
                 <!-- Factoid -->
                 <div class="mt-auto pt-6 border-t border-white/5">
-                  <p class="font-mono text-[9px] text-hud-accent/50 tracking-[0.5em] uppercase mb-2">MOON ILLUSION</p>
+                  <p class="font-mono text-[9px] text-hud-accent/50 tracking-[0.5em] uppercase mb-2">
+                    MOON ILLUSION
+                  </p>
                   <p class="font-mono text-[11px] text-hud-accent/60 leading-relaxed">
                     The Moon appears <span class="text-white">larger near the horizon</span> but its angular diameter is <span class="text-white">identical</span> at zenith. A purely psychological phenomenon caused by ground-reference comparison.
                   </p>
@@ -916,19 +943,19 @@ onMounted(() => {
               <span class="font-mono text-[14px] text-white/20 uppercase tracking-widest block mb-4">AZIMUTH</span><span class="font-orbitron font-black text-5xl xl:text-6xl text-white">{{ azStr }}</span>
             </div>
           </div>
-          
+
           <!-- Large Info Button: Bottom Right -->
-          <button 
-            @click.stop="() => { console.log('OPENING_HAND_RULE_GUIDE'); showHandRule = true }"
+          <button
             class="absolute bottom-6 right-6 z-[100] w-12 h-12 rounded-sm border border-hud-accent/40 bg-black/80 backdrop-blur-md flex items-center justify-center text-2xl font-orbitron font-black text-hud-accent hover:bg-hud-accent hover:text-black transition-all cursor-pointer bento-flicker shadow-[0_0_20px_rgba(var(--hud-accent-rgb),0.3)] pointer-events-auto"
             title="Open Hand Rule Guide"
+            @click.stop="() => { console.log('OPENING_HAND_RULE_GUIDE'); showHandRule = true }"
           >
             ?
           </button>
         </div>
       </div>
     </div>
-    
+
     <!-- ── 5. OVERLAYS (TELEPORTED TO BODY FOR GUARANTEED OVERLAY) ── -->
     <Teleport to="body">
       <Transition
@@ -939,24 +966,39 @@ onMounted(() => {
         leave-from-class="opacity-100 scale-100"
         leave-to-class="opacity-0 scale-95"
       >
-        <div v-if="showHandRule" class="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6" style="pointer-events: auto;">
+        <div
+          v-if="showHandRule"
+          class="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6"
+          style="pointer-events: auto;"
+        >
           <!-- Backdrop -->
-          <div class="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity" @click="showHandRule = false" />
-          
+          <div
+            class="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity"
+            @click="showHandRule = false"
+          />
+
           <!-- Modal Container -->
           <div class="relative w-full max-w-2xl max-h-[85vh] bg-[#020a14] border border-hud-accent/30 rounded-lg overflow-hidden flex flex-col font-mono shadow-[0_0_80px_rgba(0,0,0,1)] ring-1 ring-hud-accent/20">
-            
             <!-- Header -->
             <div class="flex-none p-4 md:p-6 border-b border-hud-accent/20 bg-hud-accent/5 flex items-center justify-between z-20">
               <h3 class="font-orbitron font-black text-hud-accent tracking-[0.2em] uppercase text-xl md:text-3xl">
                 LOCATING THE MOON // MANUAL TELEMETRY
               </h3>
               <button
-                @click="showHandRule = false"
                 class="w-8 h-8 flex items-center justify-center rounded bg-black/40 border border-hud-accent/20 text-hud-accent/60 hover:text-hud-accent hover:border-hud-accent/60 hover:bg-hud-accent/10 transition-colors"
                 title="Close"
+                @click="showHandRule = false"
               >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
               </button>
             </div>
 
@@ -964,7 +1006,7 @@ onMounted(() => {
             <div class="relative flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar bento-flicker">
               <div class="panel-grid-mesh opacity-10 absolute inset-0 pointer-events-none" />
               <div class="panel-scanlines opacity-40 absolute inset-0 pointer-events-none" />
-              
+
               <div class="relative z-10 p-6 md:p-14 space-y-16 pb-20">
                 <p class="text-2xl text-hud-accent/80 leading-relaxed italic border-b border-hud-accent/10 pb-12">
                   When you have no tools, your body becomes the measuring device. This guide explains how to find the Moon's position using cardinal orientation and the "Hand Rule" method.
@@ -976,21 +1018,35 @@ onMounted(() => {
                   </h4>
                   <div class="text-xl text-white/50 leading-loose space-y-10">
                     <p>To measure the Moon's position, you must first orient yourself toward the correct sector of the sky.</p>
-                    
+
                     <!-- Dynamic Hemisphere Guidance -->
-                    <div v-if="lat >= 0" class="p-10 border border-hud-accent/30 bg-hud-accent/5 rounded-xl space-y-8">
-                      <p class="text-hud-accent font-bold tracking-[0.3em] uppercase text-xl">NORTHERN HEMISPHERE DETECTED [{{ lat.toFixed(2) }}°N]</p>
-                      <p class="text-2xl">The Moon generally traverses the <strong class="text-white">Southern</strong> sky. To find South (180°) without a compass:</p>
+                    <div
+                      v-if="lat >= 0"
+                      class="p-10 border border-hud-accent/30 bg-hud-accent/5 rounded-xl space-y-8"
+                    >
+                      <p class="text-hud-accent font-bold tracking-[0.3em] uppercase text-xl">
+                        NORTHERN HEMISPHERE DETECTED [{{ lat.toFixed(2) }}°N]
+                      </p>
+                      <p class="text-2xl">
+                        The Moon generally traverses the <strong class="text-white">Southern</strong> sky. To find South (180°) without a compass:
+                      </p>
                       <ul class="space-y-6 list-disc pl-10 text-xl text-white/70">
                         <li>Locate where the sun set today (West).</li>
                         <li>Stand with the sunset point on your <strong class="text-white uppercase font-black underline decoration-hud-accent">Right</strong> shoulder.</li>
                         <li>You are now facing directly <strong class="text-hud-accent uppercase font-black">South</strong>.</li>
                       </ul>
                     </div>
-                    
-                    <div v-else class="p-10 border border-hud-accent/30 bg-hud-accent/5 rounded-xl space-y-8">
-                      <p class="text-hud-accent font-bold tracking-[0.3em] uppercase text-xl">SOUTHERN HEMISPHERE DETECTED [{{ lat.toFixed(2) }}°S]</p>
-                      <p class="text-2xl">The Moon generally traverses the <strong class="text-white">Northern</strong> sky. To find North (0°) without a compass:</p>
+
+                    <div
+                      v-else
+                      class="p-10 border border-hud-accent/30 bg-hud-accent/5 rounded-xl space-y-8"
+                    >
+                      <p class="text-hud-accent font-bold tracking-[0.3em] uppercase text-xl">
+                        SOUTHERN HEMISPHERE DETECTED [{{ lat.toFixed(2) }}°S]
+                      </p>
+                      <p class="text-2xl">
+                        The Moon generally traverses the <strong class="text-white">Northern</strong> sky. To find North (0°) without a compass:
+                      </p>
                       <ul class="space-y-6 list-disc pl-10 text-xl text-white/70">
                         <li>Locate where the sun set today (West).</li>
                         <li>Stand with the sunset point on your <strong class="text-white uppercase font-black underline decoration-hud-accent">Left</strong> shoulder.</li>
@@ -1010,15 +1066,21 @@ onMounted(() => {
                 </section>
 
                 <section class="bg-hud-accent/5 p-10 border border-hud-accent/30 rounded-xl space-y-12">
-                  <h5 class="text-base text-hud-accent tracking-[0.5em] uppercase font-bold">EXECUTION_PROTOCOL</h5>
+                  <h5 class="text-base text-hud-accent tracking-[0.5em] uppercase font-bold">
+                    EXECUTION_PROTOCOL
+                  </h5>
                   <div class="space-y-10">
-                    <div v-for="(step, i) in [
-                      ['Fully Extend Your Arm', 'Your arm must be straight out. The Hand Rule fails if your elbow is bent.'],
-                      ['The Horizon Line', 'Align the bottom of your first fist with the visible horizon.'],
-                      ['The Ladder', 'Stack your second hand directly on top of the first (20° Altitude).'],
-                      ['The Target', 'The Moon should appear at the top knuckle of the third fist (30° Altitude).']
-                    ]" :key="i" class="flex gap-8">
-                      <span class="font-orbitron font-black text-hud-accent/40 text-3xl leading-none mt-1">{{ (i+1).toString().padStart(2, '0') }}</span>
+                    <div
+                      v-for="(step, i) in [
+                        ['Fully Extend Your Arm', 'Your arm must be straight out. The Hand Rule fails if your elbow is bent.'],
+                        ['The Horizon Line', 'Align the bottom of your first fist with the visible horizon.'],
+                        ['The Ladder', 'Stack your second hand directly on top of the first (20° Altitude).'],
+                        ['The Target', 'The Moon should appear at the top knuckle of the third fist (30° Altitude).']
+                      ]"
+                      :key="i"
+                      class="flex gap-8"
+                    >
+                      <span class="font-orbitron font-black text-hud-accent/40 text-3xl leading-none mt-1">{{ (i + 1).toString().padStart(2, '0') }}</span>
                       <div>
                         <span class="block text-xl text-white uppercase tracking-widest mb-3 font-bold">{{ step[0] }}</span>
                         <span class="block text-lg text-white/50 leading-relaxed">{{ step[1] }}</span>
@@ -1039,45 +1101,86 @@ onMounted(() => {
 .custom-scrollbar::-webkit-scrollbar {
   width: 4px;
 }
+
 .custom-scrollbar::-webkit-scrollbar-track {
   background: rgba(var(--hud-accent-rgb), 0.05);
 }
+
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background: rgba(var(--hud-accent-rgb), 0.3);
   border-radius: 10px;
 }
+
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: rgba(var(--hud-accent-rgb), 0.5);
 }
-/* ── COMPONENT-SPECIFIC ANIMATIONS ── */
-.rotate-ring { animation: rotate-slow 90s linear infinite; }
-@keyframes rotate-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-.ticker-wrap { mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent); }
-.ticker-content { display: inline-block; animation: ticker 40s linear infinite; }
-@keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+/* ── COMPONENT-SPECIFIC ANIMATIONS ── */
+.rotate-ring {
+  animation: rotate-slow 90s linear infinite;
+}
+
+@keyframes rotate-slow {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.ticker-wrap {
+  mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+}
+
+.ticker-content {
+  display: inline-block;
+  animation: ticker 40s linear infinite;
+}
+
+@keyframes ticker {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
 
 /* Celestial Orbit Animations */
 .celestial-system-anim {
   animation: earth-orbit 60s linear infinite;
 }
+
 .moon-orbit-anim {
   animation: moon-orbit 10s linear infinite;
 }
 
-/* 
-   We use translate(100px, 60px) as the Sun anchor, 
+/*
+   We use translate(100px, 60px) as the Sun anchor,
    then rotate the whole group to simulate the Earth orbiting.
    The Earth itself is offset by 90px.
 */
 @keyframes earth-orbit {
-  from { transform: translate(100px, 60px) rotate(0deg) translateX(90px) scaleY(0.4) rotate(0deg); }
-  to   { transform: translate(100px, 60px) rotate(360deg) translateX(90px) scaleY(0.4) rotate(-360deg); }
+  from {
+    transform: translate(100px, 60px) rotate(0deg) translateX(90px) scaleY(0.4) rotate(0deg);
+  }
+
+  to {
+    transform: translate(100px, 60px) rotate(360deg) translateX(90px) scaleY(0.4) rotate(-360deg);
+  }
 }
 
 @keyframes moon-orbit {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .hexagon-glitch {
@@ -1090,17 +1193,40 @@ onMounted(() => {
   background: transparent !important;
   border: 1px solid rgba(239, 68, 68, 0.4);
 }
+
 .hexagon-glitch:nth-child(3n) {
   background: rgba(239, 68, 68, 0.05) !important;
   border: 4px solid rgba(239, 68, 68, 0.2);
 }
 
 @keyframes glitch-pop {
-  0%, 94%, 100% { opacity: 0; transform: scale(0.8) rotate(0deg); }
-  95% { opacity: 0.6; transform: scale(1.1) rotate(5deg); }
-  96% { opacity: 0.2; transform: scale(0.9) rotate(-3deg); }
-  97% { opacity: 0.7; transform: scale(1.0) rotate(2deg); }
-  98% { opacity: 0; transform: scale(1.2) rotate(0deg); }
+
+  0%,
+  94%,
+  100% {
+    opacity: 0;
+    transform: scale(0.8) rotate(0deg);
+  }
+
+  95% {
+    opacity: 0.6;
+    transform: scale(1.1) rotate(5deg);
+  }
+
+  96% {
+    opacity: 0.2;
+    transform: scale(0.9) rotate(-3deg);
+  }
+
+  97% {
+    opacity: 0.7;
+    transform: scale(1.0) rotate(2deg);
+  }
+
+  98% {
+    opacity: 0;
+    transform: scale(1.2) rotate(0deg);
+  }
 }
 
 .hexagon-sticky {

@@ -12,15 +12,14 @@ function getMoonShadowPath(phase: number, lat: number = 0): string {
   const R = 50
   if (phase <= 0.01) return 'M 0 0 H 100 V 100 H 0 Z'
   if (phase >= 0.99) return ''
-  
-  // The 'Immutable Law': Rotation handles hemisphere flip. 
+
+  // The 'Immutable Law': Rotation handles hemisphere flip.
   // Shadow shape uses raw phase.
   const adjustedPhase = phase
 
-  
   const xRadius = Math.abs(R * Math.cos(adjustedPhase * 2 * Math.PI))
   const xr = xRadius.toFixed(3)
-  
+
   // Draw path based on adjusted phase to handle hemisphere flip
   if (adjustedPhase < 0.5) {
     const sweepTerminator = adjustedPhase < 0.25 ? 0 : 1

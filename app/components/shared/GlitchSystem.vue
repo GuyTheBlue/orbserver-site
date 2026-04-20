@@ -25,7 +25,7 @@ function spawnGlitch() {
   if (!import.meta.client) return
   const id = glitchId++
   const r = Math.random()
-  
+
   let type: GlitchInstance['type'] = 'solid-pop'
   if (r > 0.5) type = 'sticky' // Increased chance to 50%
   else if (r > 0.2) type = 'wire-pop'
@@ -36,8 +36,8 @@ function spawnGlitch() {
   const size = Math.floor(Math.random() * (maxS - minS) + minS)
 
   // Stickiness: 8s to 12s
-  const duration = type === 'sticky' 
-    ? Math.floor(Math.random() * 4000 + 8000) 
+  const duration = type === 'sticky'
+    ? Math.floor(Math.random() * 4000 + 8000)
     : 600
 
   // Random blur for sticky (0px to 4px)
@@ -61,7 +61,7 @@ function spawnGlitch() {
 
 onMounted(() => {
   if (!import.meta.client) return
-  // Interval based on density: density 1 = 1s, density 4 = 1.2s? 
+  // Interval based on density: density 1 = 1s, density 4 = 1.2s?
   // Let's just make it slower: 800ms - 1500ms
   const interval = props.density ? (2000 / props.density) : 1200
   setInterval(spawnGlitch, interval)
@@ -70,12 +70,12 @@ onMounted(() => {
 
 <template>
   <ClientOnly>
-    <div 
+    <div
       class="absolute inset-0 pointer-events-none overflow-hidden"
       :style="{ zIndex: zIndex || 500 }"
     >
-      <svg 
-        v-for="g in activeGlitches" 
+      <svg
+        v-for="g in activeGlitches"
         :key="g.id"
         class="absolute opacity-0"
         :class="{

@@ -101,11 +101,11 @@ export function useMoonData() {
   const apparentRotation = ref(0) // Rotation relative to observer zenith
   const movingTowardPerigee = ref(false) // true = distance shrinking (toward perigee)
   const moonrise = ref<string>('—')
-  const moonset  = ref<string>('—')
+  const moonset = ref<string>('—')
   // Apparent Angular Diameter
-  const apparentDiameter      = ref(0)   // arcminutes
-  const apparentDiameterRatio = ref(0)   // 0-100: position between apogee (29.4') → perigee (33.5')
-  const apparentVsMean        = ref(0)   // % vs mean distance (positive = larger)
+  const apparentDiameter = ref(0) // arcminutes
+  const apparentDiameterRatio = ref(0) // 0-100: position between apogee (29.4') → perigee (33.5')
+  const apparentVsMean = ref(0) // % vs mean distance (positive = larger)
   const velocity = ref(0) // km/s
   const lightTravelTime = ref(0) // ms
   const subLunarPoint = ref({ lat: 0, lng: 0 })
@@ -159,17 +159,17 @@ export function useMoonData() {
       }
 
       const fullMoonDate = nextPhaseJDE(0.5)
-      const newMoonDate  = nextPhaseJDE(0)
+      const newMoonDate = nextPhaseJDE(0)
 
       const rawDaysToFull = (fullMoonDate.getTime() - now.getTime()) / 86400000
-      const rawDaysToNew  = (newMoonDate.getTime()  - now.getTime()) / 86400000
+      const rawDaysToNew = (newMoonDate.getTime() - now.getTime()) / 86400000
 
       daysToFullMoon.value = Math.round(rawDaysToFull)
-      daysToNewMoon.value  = Math.round(rawDaysToNew)
+      daysToNewMoon.value = Math.round(rawDaysToNew)
 
       // Format in the user's LOCAL timezone so SA gets 1 May not 2 May
       nextFullMoon.value = fullMoonDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
-      nextNewMoon.value  = newMoonDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+      nextNewMoon.value = newMoonDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
 
       // ── Position ──────────────────────────────────────────────────────
       const loc = await resolveLatLng()
@@ -248,10 +248,10 @@ export function useMoonData() {
         const STEP_MS = 6 * 60 * 60 * 1000
         const MAX_STEPS = Math.ceil(35 * 24 / 6)
         let foundPerigee = false
-        let foundApogee  = false
+        let foundApogee = false
         for (let i = 1; i < MAX_STEPS - 1 && (!foundPerigee || !foundApogee); i++) {
           const ta = new Date(now.getTime() + (i - 1) * STEP_MS)
-          const tb = new Date(now.getTime() +  i      * STEP_MS)
+          const tb = new Date(now.getTime() + i * STEP_MS)
           const tc = new Date(now.getTime() + (i + 1) * STEP_MS)
           const da = getGeocentricDistance(ta)
           const db = getGeocentricDistance(tb)
@@ -270,21 +270,21 @@ export function useMoonData() {
       // ── Apparent Angular Diameter ─────────────────────────────────────────
       // θ = 2 × arcsin(R_moon / distance), R_moon = 1737.4 km
       {
-        const R_MOON    = 1737.4
-        const APOGEE_D  = 29.38
+        const R_MOON = 1737.4
+        const APOGEE_D = 29.38
         const PERIGEE_D = 33.53
-        const MEAN_D    = 31.08
-        const thetaRad  = 2 * Math.asin(R_MOON / distance.value)
-        const arcmin    = thetaRad * (180 / Math.PI) * 60
-        apparentDiameter.value      = parseFloat(arcmin.toFixed(2))
+        const MEAN_D = 31.08
+        const thetaRad = 2 * Math.asin(R_MOON / distance.value)
+        const arcmin = thetaRad * (180 / Math.PI) * 60
+        apparentDiameter.value = parseFloat(arcmin.toFixed(2))
         apparentDiameterRatio.value = Math.round(Math.min(100, Math.max(0, (arcmin - APOGEE_D) / (PERIGEE_D - APOGEE_D) * 100)))
-        apparentVsMean.value        = parseFloat(((arcmin / MEAN_D - 1) * 100).toFixed(1))
+        apparentVsMean.value = parseFloat(((arcmin / MEAN_D - 1) * 100).toFixed(1))
       }
 
       // ── Moonrise / Moonset ────────────────────────────────────────────────
       const times = SunCalc.getMoonTimes(now, loc.lat, loc.lng)
       moonrise.value = times.rise ? times.rise.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) : 'N/A'
-      moonset.value  = times.set  ? times.set.toLocaleTimeString('en-GB',  { hour: '2-digit', minute: '2-digit' }) : 'N/A'
+      moonset.value = times.set ? times.set.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) : 'N/A'
 
       // ── Apparent Rotation (Orientation relative to observer's sky) ────
       // ⚠️ IMPORTANT: THE IMMUTABLE LAW OF MOON ORIENTATION
@@ -296,10 +296,6 @@ export function useMoonData() {
       // 4. + 15: Visual calibration offset to match asset landmarks (Tycho) to real-world observer standards in Cape Town.
       const raw = (illum.angle - pos.parallacticAngle) * (180 / Math.PI)
       apparentRotation.value = (raw + (lat.value < 0 ? 180 : 0) + 15) % 360
-
-
-
-
     } catch {
       hasError.value = true
     } finally {

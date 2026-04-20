@@ -15,9 +15,8 @@ const voidOpacity = computed(() => Math.min(y.value / 400, 1))
 const environmentOpacity = computed(() => 1 - voidOpacity.value)
 
 // Real-time geographic rotation
-const { apparentRotation, fraction, phase } = useMoonData()
+const { apparentRotation } = useMoonData()
 const moonRotation = computed(() => `${apparentRotation.value}deg`)
-
 </script>
 
 <template>
@@ -48,7 +47,7 @@ const moonRotation = computed(() => `${apparentRotation.value}deg`)
             <!-- The spherical ambient glow behind the moon -->
             <div class="absolute -inset-12 md:-inset-16 rounded-full bg-cyan-100/40 blur-[70px] md:blur-[90px]" />
             <div class="absolute inset-0 rounded-full bg-white/60 blur-3xl opacity-50" />
-            
+
             <img
               src="/images/hero_layers/moon.png"
               class="relative w-full block z-10"
@@ -141,7 +140,7 @@ const moonRotation = computed(() => `${apparentRotation.value}deg`)
           <!-- 80s Noise & Scanline Overlay -->
           <div class="absolute inset-0 opacity-40 scanline-overlay pointer-events-none z-20" />
           <div class="absolute inset-0 opacity-10 grid-overlay pointer-events-none z-10 scale-[2]" />
-          
+
           <!-- Title Card -->
           <div
             class="relative z-30 transition-transform duration-700"
@@ -154,21 +153,39 @@ const moonRotation = computed(() => `${apparentRotation.value}deg`)
                   <!-- Solid Glowing Orb -->
                   <span class="w-8 h-8 md:w-16 md:h-16 rounded-full bg-white shadow-[0_0_30px_rgba(255,255,255,1)]" />
                   <!-- Orbit Line -->
-                  <svg class="absolute w-[200%] h-[200%] pointer-events-none opacity-40" viewBox="0 0 100 100">
-                    <ellipse cx="50" cy="50" rx="48" ry="12" fill="none" stroke="white" stroke-width="1.2" transform="rotate(-20 50 50)" />
+                  <svg
+                    class="absolute w-[200%] h-[200%] pointer-events-none opacity-40"
+                    viewBox="0 0 100 100"
+                  >
+                    <ellipse
+                      cx="50"
+                      cy="50"
+                      rx="48"
+                      ry="12"
+                      fill="none"
+                      stroke="white"
+                      stroke-width="1.2"
+                      transform="rotate(-20 50 50)"
+                    />
                   </svg>
                 </span>
                 ON
               </div>
-              <div class="text-white/40 blur-[2px]">TELEMETRY</div>
-              <div class="text-hud-accent/80 drop-shadow-[var(--hud-accent-glow)] animate-focus-pulse">DASHBOARD</div>
+              <div class="text-white/40 blur-[2px]">
+                TELEMETRY
+              </div>
+              <div class="text-hud-accent/80 drop-shadow-[var(--hud-accent-glow)] animate-focus-pulse">
+                DASHBOARD
+              </div>
             </div>
-            
+
             <!-- Technical Underline -->
             <div class="mt-12 h-0.5 w-64 bg-hud-accent/30 mx-auto relative overflow-hidden">
               <div class="absolute inset-0 bg-hud-accent animate-scan" />
             </div>
-            <div class="mt-4 font-mono text-[9px] text-hud-accent/40 tracking-[0.8em] text-center">INITIALIZING_OS_ENVIRONMENT</div>
+            <div class="mt-4 font-mono text-[9px] text-hud-accent/40 tracking-[0.8em] text-center">
+              INITIALIZING_OS_ENVIRONMENT
+            </div>
           </div>
         </div>
 
