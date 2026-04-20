@@ -1,7 +1,7 @@
 import { ref, watch, onMounted } from 'vue'
 import { useLocalStorage } from '@vueuse/core'
 
-export type TerminalTheme = 'cyan' | 'amber' | 'yellow' | 'green'
+export type TerminalTheme = 'cyan' | 'amber' | 'pink' | 'green'
 
 const currentTheme = useLocalStorage<TerminalTheme>('orbserver-terminal-theme', 'cyan')
 

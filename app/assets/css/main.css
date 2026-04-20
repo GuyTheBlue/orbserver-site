@@ -28,13 +28,13 @@
 }
 
 /* Theme Definitions */
+:root[data-theme="pink"] {
+  --hud-accent: #ec4899;
+  --hud-accent-rgb: 236, 72, 153;
+}
 :root[data-theme="amber"] {
   --hud-accent: #ffb000;
   --hud-accent-rgb: 255, 176, 0;
-}
-:root[data-theme="yellow"] {
-  --hud-accent: #fcd34d;
-  --hud-accent-rgb: 252, 211, 77;
 }
 :root[data-theme="green"] {
   --hud-accent: #00dc82;

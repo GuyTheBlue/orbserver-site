@@ -299,16 +299,16 @@ onMounted(() => {
             </h2>
             <div class="mt-8 flex flex-wrap items-center justify-center gap-y-8">
               <div class="flex flex-col items-center px-6 sm:px-10 border-r border-white/10 last:border-r-0">
-                <span class="font-mono text-[10px] text-cyan-400/60 tracking-[0.5em] uppercase mb-2">Age</span>
+                <span class="font-mono text-[10px] text-hud-accent/60 tracking-[0.5em] uppercase mb-2">Age</span>
                 <span class="font-orbitron font-black text-3xl sm:text-5xl text-white">{{ age }}<span class="text-lg text-white/20 ml-1">d</span></span>
               </div>
               <div class="flex flex-col items-center px-6 sm:px-10 border-r border-white/10 last:border-r-0">
-                <span class="font-mono text-[10px] text-cyan-400/60 tracking-[0.5em] uppercase mb-2">Illum</span>
+                <span class="font-mono text-[10px] text-hud-accent/60 tracking-[0.5em] uppercase mb-2">Illum</span>
                 <span class="font-orbitron font-black text-3xl sm:text-5xl text-white">{{ illuminationPct }}<span class="text-lg text-white/20 ml-1">%</span></span>
               </div>
               <div class="flex flex-col items-center px-6 sm:px-10 border-r-0 sm:border-r last:border-r-0">
-                <span class="font-mono text-[10px] text-cyan-400/60 tracking-[0.5em] uppercase mb-2">Rot</span>
-                <span class="font-orbitron font-black text-3xl sm:text-5xl text-cyan-400">{{ Math.round(apparentRotation) }}<span class="text-lg text-white/20 ml-1">°</span></span>
+                <span class="font-mono text-[10px] text-hud-accent/60 tracking-[0.5em] uppercase mb-2">Rot</span>
+                <span class="font-orbitron font-black text-3xl sm:text-5xl text-hud-accent">{{ Math.round(apparentRotation) }}<span class="text-lg text-white/20 ml-1">°</span></span>
               </div>
             </div>
 
@@ -414,7 +414,7 @@ onMounted(() => {
                     cy="60"
                     r="8"
                     fill="none"
-                    stroke="#00ffff"
+                    stroke="var(--hud-accent)"
                     stroke-width="0.5"
                     class="animate-pulse"
                   />
@@ -423,7 +423,7 @@ onMounted(() => {
                     cy="60"
                     r="12"
                     fill="none"
-                    stroke="#00ffff"
+                    stroke="var(--hud-accent)"
                     stroke-width="0.2"
                     stroke-dasharray="2 4"
                   />
@@ -469,7 +469,7 @@ onMounted(() => {
                         cx="12"
                         cy="0"
                         r="1.5"
-                        fill="#00ffff"
+                        fill="var(--hud-accent)"
                         stroke="none"
                       />
                     </g>
@@ -496,14 +496,14 @@ onMounted(() => {
               stroke="currentColor"
               stroke-width="1.5"
             /></svg>
-            <label class="relative z-10 font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase block mb-6">RADAR::DIST_CAL</label>
+            <label class="relative z-10 font-mono text-[11px] text-hud-accent tracking-[0.5em] uppercase block mb-6">RADAR::DIST_CAL</label>
             <div class="relative z-10 font-orbitron font-black text-5xl xl:text-7xl text-white tracking-tighter mb-6">
               {{ distFormatted }}<span class="text-xl text-white/30 ml-4 font-mono">KM</span>
             </div>
             <!-- Distance progress bar: PERIGEE → APOGEE -->
             <div class="relative z-10 h-2 bg-white/5 rounded-full mb-3">
               <div
-                class="absolute inset-y-0 left-0 bg-cyan-400 shadow-[0_0_15px_rgba(0,255,255,1)] rounded-full transition-all duration-1000"
+                class="absolute inset-y-0 left-0 bg-hud-accent shadow-[var(--hud-accent-glow)] rounded-full transition-all duration-1000"
                 :style="{ width: `${distRatio}%` }"
               />
               <div
@@ -531,7 +531,7 @@ onMounted(() => {
                   <path
                     d="M14 0 L0 0 0 14"
                     fill="none"
-                    stroke="rgba(0,242,255,0.04)"
+                    stroke="rgba(var(--hud-accent-rgb), 0.04)"
                     stroke-width="0.5"
                   />
                 </pattern>
@@ -542,14 +542,14 @@ onMounted(() => {
                 fill="url(#orbit-grid)"
               />
 
-              <!-- Orbit ellipse — dashed cyan -->
+              <!-- Orbit ellipse — dashed hud-accent -->
               <ellipse
                 :cx="ORB.cx"
                 :cy="ORB.cy"
                 :rx="ORB.rx"
                 :ry="ORB.ry"
                 fill="none"
-                stroke="rgba(0,242,255,0.22)"
+                stroke="rgba(var(--hud-accent-rgb), 0.22)"
                 stroke-width="0.8"
                 stroke-dasharray="5 8"
               />
@@ -560,7 +560,7 @@ onMounted(() => {
                 y1="55"
                 x2="48"
                 y2="69"
-                stroke="rgba(0,242,255,0.45)"
+                stroke="rgba(var(--hud-accent-rgb), 0.45)"
                 stroke-width="0.8"
               />
               <text
@@ -569,7 +569,7 @@ onMounted(() => {
                 text-anchor="middle"
                 font-family="monospace"
                 font-size="6.5"
-                fill="rgba(0,242,255,0.55)"
+                fill="rgba(var(--hud-accent-rgb), 0.55)"
                 letter-spacing="1"
               >PRG</text>
 
@@ -579,7 +579,7 @@ onMounted(() => {
                 y1="55"
                 x2="232"
                 y2="69"
-                stroke="rgba(0,242,255,0.30)"
+                stroke="rgba(var(--hud-accent-rgb), 0.30)"
                 stroke-width="0.8"
               />
               <text
@@ -588,7 +588,7 @@ onMounted(() => {
                 text-anchor="middle"
                 font-family="monospace"
                 font-size="6.5"
-                fill="rgba(0,242,255,0.35)"
+                fill="rgba(var(--hud-accent-rgb), 0.35)"
                 letter-spacing="1"
               >APG</text>
 
@@ -598,7 +598,7 @@ onMounted(() => {
                 :y1="ORB.ey"
                 :x2="moonOrbitX"
                 :y2="moonOrbitY"
-                stroke="rgba(0,242,255,0.12)"
+                stroke="rgba(var(--hud-accent-rgb), 0.12)"
                 stroke-width="0.7"
                 stroke-dasharray="2 4"
               />
@@ -609,7 +609,7 @@ onMounted(() => {
                 :cy="ORB.ey"
                 r="6"
                 fill="rgba(0,60,100,0.7)"
-                stroke="rgba(0,242,255,0.9)"
+                stroke="rgba(var(--hud-accent-rgb), 0.9)"
                 stroke-width="1.2"
               />
               <line
@@ -617,7 +617,7 @@ onMounted(() => {
                 :y1="ORB.ey"
                 :x2="ORB.ex + 10"
                 :y2="ORB.ey"
-                stroke="rgba(0,242,255,0.55)"
+                stroke="rgba(var(--hud-accent-rgb), 0.55)"
                 stroke-width="0.7"
               />
               <line
@@ -625,7 +625,7 @@ onMounted(() => {
                 :y1="ORB.ey - 10"
                 :x2="ORB.ex"
                 :y2="ORB.ey + 10"
-                stroke="rgba(0,242,255,0.55)"
+                stroke="rgba(var(--hud-accent-rgb), 0.55)"
                 stroke-width="0.7"
               />
               <text
@@ -634,7 +634,7 @@ onMounted(() => {
                 text-anchor="middle"
                 font-family="monospace"
                 font-size="7"
-                fill="rgba(0,242,255,0.8)"
+                fill="rgba(var(--hud-accent-rgb), 0.8)"
                 letter-spacing="1.5"
               >EARTH</text>
 
@@ -674,19 +674,19 @@ onMounted(() => {
                 text-anchor="middle"
                 font-family="monospace"
                 font-size="6"
-                fill="rgba(0,242,255,0.25)"
+                fill="rgba(var(--hud-accent-rgb), 0.25)"
                 letter-spacing="3"
               >ORBITAL PATH — SUNCALC LIVE</text>
             </svg>
 
             <!-- Etymology & Facts — enabled for all screens -->
-            <div class="relative z-10 mt-6 border-t border-cyan-400/10 pt-6 space-y-4">
+            <div class="relative z-10 mt-6 border-t border-hud-accent/10 pt-6 space-y-4">
               <!-- Perigee -->
               <div>
-                <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-2">
+                <p class="font-mono text-[9px] text-hud-accent/50 tracking-[0.5em] uppercase mb-2">
                   ETYMOLOGY // PERIGEE
                 </p>
-                <p class="font-mono text-[11px] text-cyan-400/70 leading-relaxed">
+                <p class="font-mono text-[11px] text-hud-accent/70 leading-relaxed">
                   From Greek <span class="text-white font-semibold drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]">περίγειον</span> — <span class="text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.4)]">peri</span> ("near") +
                   <span class="text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.4)]">gē</span> ("Earth"). The point in the lunar orbit of
                   <span class="text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]">closest approach</span> — approximately
@@ -696,10 +696,10 @@ onMounted(() => {
               </div>
               <!-- Apogee -->
               <div>
-                <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-2">
+                <p class="font-mono text-[9px] text-hud-accent/50 tracking-[0.5em] uppercase mb-2">
                   ETYMOLOGY // APOGEE
                 </p>
-                <p class="font-mono text-[11px] text-cyan-400/70 leading-relaxed">
+                <p class="font-mono text-[11px] text-hud-accent/70 leading-relaxed">
                   From Greek <span class="text-white font-semibold drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]">ἀπόγειον</span> — <span class="text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.4)]">apo</span> ("away from") +
                   <span class="text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.4)]">gē</span> ("Earth"). The point of
                   <span class="text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]">maximum separation</span> — approximately
@@ -709,8 +709,8 @@ onMounted(() => {
               </div>
               <!-- Current position -->
               <div class="flex items-center gap-3 pt-2 border-t border-white/5">
-                <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_6px_rgba(0,255,255,1)]" />
-                <span class="font-mono text-[9px] text-cyan-400/60 tracking-[0.3em] uppercase">
+                <span class="w-1.5 h-1.5 rounded-full bg-hud-accent animate-pulse shadow-[var(--hud-accent-glow)]" />
+                <span class="font-mono text-[9px] text-hud-accent/60 tracking-[0.3em] uppercase">
                   CURRENT_DIST: <span class="text-white/80">{{ distFormatted }} KM</span>
                   &nbsp;//&nbsp; {{ movingTowardPerigee ? 'APPROACHING PERIGEE' : 'RECEDING → APOGEE' }}
                 </span>
@@ -723,7 +723,7 @@ onMounted(() => {
             <div class="panel-card group p-10 rounded-2xl bento-flicker">
               <div class="panel-grid-mesh" /><div class="panel-scanlines" /><div class="card-brackets" />
               <div class="relative z-10 flex flex-col h-full">
-                <label class="font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase block mb-6">EVENT::RISE_SET</label>
+                <label class="font-mono text-[11px] text-hud-accent tracking-[0.5em] uppercase block mb-6">EVENT::RISE_SET</label>
                 <div class="space-y-6 mb-8">
                   <div>
                     <span class="block font-mono text-[9px] text-white/30 uppercase tracking-[0.3em] mb-1">Rise</span>
@@ -736,10 +736,10 @@ onMounted(() => {
                 </div>
                 <!-- Factoid -->
                 <div class="mt-auto pt-6 border-t border-white/5">
-                  <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-2">
+                  <p class="font-mono text-[9px] text-hud-accent/50 tracking-[0.5em] uppercase mb-2">
                     REFRACTION // ERR_CAL
                   </p>
-                  <p class="font-mono text-[10px] text-cyan-400/60 leading-relaxed">
+                  <p class="font-mono text-[10px] text-hud-accent/60 leading-relaxed">
                     Light bends through the <span class="text-white shadow-sm">atmosphere</span> causing the Moon to appear <span class="text-white">flattened</span> and larger near the horizon.
                   </p>
                 </div>
@@ -753,7 +753,7 @@ onMounted(() => {
             >
               <div class="panel-grid-mesh" /><div class="panel-scanlines" /><div class="card-brackets" />
               <div class="relative z-10 flex flex-col h-full">
-                <label class="font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase block mb-6">APPARENT_Ø::ARC</label>
+                <label class="font-mono text-[11px] text-hud-accent tracking-[0.5em] uppercase block mb-6">APPARENT_Ø::ARC</label>
 
                 <!-- Main Value -->
                 <div class="mb-6">
@@ -761,11 +761,11 @@ onMounted(() => {
                     <span class="font-orbitron font-black text-5xl text-white">{{ apparentDiameter }}′</span>
                     <span
                       v-if="isSupermoon"
-                      class="font-mono text-[9px] text-cyan-400 border border-cyan-400/50 px-2 py-0.5 rounded tracking-widest animate-pulse"
+                      class="font-mono text-[9px] text-hud-accent border border-hud-accent/50 px-2 py-0.5 rounded tracking-widest animate-pulse"
                     >SUPERMOON</span>
                   </div>
                   <p class="font-mono text-[10px] text-white/30 uppercase tracking-wider">
-                    <span :class="apparentVsMean >= 0 ? 'text-cyan-400' : 'text-white/40'">{{ apparentVsMean >= 0 ? '+' : '' }}{{ apparentVsMean }}%</span>
+                    <span :class="apparentVsMean >= 0 ? 'text-hud-accent' : 'text-white/40'">{{ apparentVsMean >= 0 ? '+' : '' }}{{ apparentVsMean }}%</span>
                     vs mean diameter
                   </p>
                 </div>
@@ -778,7 +778,7 @@ onMounted(() => {
                   </div>
                   <div class="h-2 bg-white/5 rounded-full overflow-hidden relative">
                     <div
-                      class="h-full bg-cyan-400 shadow-[0_0_10px_rgba(0,242,255,0.8)] rounded-full transition-all duration-1000"
+                      class="h-full bg-hud-accent shadow-[var(--hud-accent-glow)] rounded-full transition-all duration-1000"
                       :style="{ width: apparentDiameterRatio + '%' }"
                     />
                   </div>
@@ -796,7 +796,7 @@ onMounted(() => {
                   </div>
                   <div class="flex justify-between border-b border-white/5 pb-2">
                     <span class="font-mono text-[10px] text-white/30 uppercase tracking-widest">Size rank</span>
-                    <span class="font-orbitron font-black text-cyan-400 text-sm">{{ apparentDiameterRatio }}%</span>
+                    <span class="font-orbitron font-black text-hud-accent text-sm">{{ apparentDiameterRatio }}%</span>
                   </div>
                   <div class="flex justify-between">
                     <span class="font-mono text-[10px] text-white/30 uppercase tracking-widest">Supermoon ≥</span>
@@ -806,8 +806,8 @@ onMounted(() => {
 
                 <!-- Factoid -->
                 <div class="mt-auto pt-6 border-t border-white/5">
-                  <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-2">MOON ILLUSION</p>
-                  <p class="font-mono text-[11px] text-cyan-400/60 leading-relaxed">
+                  <p class="font-mono text-[9px] text-hud-accent/50 tracking-[0.5em] uppercase mb-2">MOON ILLUSION</p>
+                  <p class="font-mono text-[11px] text-hud-accent/60 leading-relaxed">
                     The Moon appears <span class="text-white">larger near the horizon</span> but its angular diameter is <span class="text-white">identical</span> at zenith. A purely psychological phenomenon caused by ground-reference comparison.
                   </p>
                 </div>
@@ -821,7 +821,7 @@ onMounted(() => {
             >
               <div class="panel-grid-mesh" /><div class="panel-scanlines" /><div class="card-brackets" />
               <div class="relative z-10 h-full flex flex-col">
-                <label class="font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase block mb-6">NEXT_FULL</label>
+                <label class="font-mono text-[11px] text-hud-accent tracking-[0.5em] uppercase block mb-6">NEXT_FULL</label>
                 <div class="font-orbitron font-black text-5xl xl:text-6xl text-white mb-2">
                   {{ daysToFullMoon }}<span class="text-2xl text-white/20 ml-2">d</span>
                 </div>
@@ -830,10 +830,10 @@ onMounted(() => {
                 </p>
                 <!-- Factoid -->
                 <div class="mt-auto pt-6 border-t border-white/5">
-                  <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-2">
+                  <p class="font-mono text-[9px] text-hud-accent/50 tracking-[0.5em] uppercase mb-2">
                     OPPOSITION // LUM
                   </p>
-                  <p class="font-mono text-[10px] text-cyan-400/60 leading-relaxed">
+                  <p class="font-mono text-[10px] text-hud-accent/60 leading-relaxed">
                     The Moon reaches <span class="text-white">opposition</span> when it is on the opposite side of Earth from the Sun, appearing <span class="text-white">100% lit</span>.
                   </p>
                 </div>

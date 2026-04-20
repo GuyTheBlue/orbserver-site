@@ -6,30 +6,33 @@ const { currentTheme, setTheme } = useTerminalTheme()
 const themes: { id: TerminalTheme; label: string; color: string }[] = [
   { id: 'cyan', label: 'CYAN', color: '#00f2ff' },
   { id: 'amber', label: 'AMBER', color: '#ffb000' },
-  { id: 'yellow', label: 'YELLO', color: '#fcd34d' },
+  { id: 'pink', label: 'PINK', color: '#ec4899' },
   { id: 'green', label: 'GREEN', color: '#00dc82' }
 ]
 </script>
 
 <template>
-  <div class="flex items-center gap-3 bg-black/40 backdrop-blur-md border border-white/10 px-4 py-2 rounded-full pointer-events-auto">
-    <span class="font-mono text-[9px] text-white/40 tracking-widest uppercase mr-2">Color_OS:</span>
+  <div class="flex items-center gap-4 bg-black/60 border border-white/20 p-2 rounded-lg pointer-events-auto shadow-2xl">
     <div class="flex gap-2">
       <button
         v-for="t in themes"
         :key="t.id"
         @click="setTheme(t.id)"
-        class="group relative w-5 h-5 rounded-full transition-all duration-300 hover:scale-125"
-        :style="{ backgroundColor: t.color }"
+        class="group relative w-8 h-8 rounded-sm transition-all duration-300 overflow-hidden bento-flicker"
+        :style="{ backgroundColor: t.color, opacity: currentTheme === t.id ? 1 : 0.4 }"
         :title="t.label"
       >
-        <span 
+        <!-- Gritty Scanlines -->
+        <div class="absolute inset-0 pointer-events-none opacity-40 panel-scanlines !bg-[length:100%_2px]" />
+        
+        <!-- Buggy Overlay -->
+        <div 
           v-if="currentTheme === t.id"
-          class="absolute inset-0 rounded-full border-2 border-white animate-ping opacity-40"
+          class="absolute inset-0 border-2 border-white/60 animate-pulse" 
         />
-        <span 
+        <div 
           v-if="currentTheme === t.id"
-          class="absolute inset-[-4px] rounded-full border border-white/40"
+          class="absolute inset-0 bg-white/10 animate-scan opacity-30" 
         />
       </button>
     </div>
