@@ -97,7 +97,7 @@ const moonRotation = computed(() => `${apparentRotation.value}deg`)
           />
 
           <!-- Technical HUD lines -->
-          <svg class="absolute inset-0 w-full h-full z-[65] pointer-events-none text-cyan-400 hidden sm:block">
+          <svg class="absolute inset-0 w-full h-full z-[65] pointer-events-none text-hud-accent hidden sm:block">
             <defs><linearGradient
               id="techGlow"
               x1="0%"
@@ -106,11 +106,11 @@ const moonRotation = computed(() => `${apparentRotation.value}deg`)
               y2="0%"
             ><stop
               offset="0%"
-              stop-color="#00ffff"
+              stop-color="currentColor"
               stop-opacity="0.8"
             /><stop
               offset="100%"
-              stop-color="#00ffff"
+              stop-color="currentColor"
               stop-opacity="0.1"
             /></linearGradient></defs>
             <g class="hidden sm:block">
@@ -163,14 +163,14 @@ const moonRotation = computed(() => `${apparentRotation.value}deg`)
                 ON
               </div>
               <div class="text-white/40 blur-[2px]">TELEMETRY</div>
-              <div class="text-cyan-400/80 drop-shadow-[0_0_15px_rgba(34,211,238,0.5)] animate-focus-pulse">DASHBOARD</div>
+              <div class="text-hud-accent/80 drop-shadow-[var(--hud-accent-glow)] animate-focus-pulse">DASHBOARD</div>
             </div>
             
             <!-- Technical Underline -->
-            <div class="mt-12 h-0.5 w-64 bg-cyan-400/30 mx-auto relative overflow-hidden">
-              <div class="absolute inset-0 bg-cyan-400 animate-scan" />
+            <div class="mt-12 h-0.5 w-64 bg-hud-accent/30 mx-auto relative overflow-hidden">
+              <div class="absolute inset-0 bg-hud-accent animate-scan" />
             </div>
-            <div class="mt-4 font-mono text-[9px] text-cyan-400/40 tracking-[0.8em] text-center">INITIALIZING_OS_ENVIRONMENT</div>
+            <div class="mt-4 font-mono text-[9px] text-hud-accent/40 tracking-[0.8em] text-center">INITIALIZING_OS_ENVIRONMENT</div>
           </div>
         </div>
 

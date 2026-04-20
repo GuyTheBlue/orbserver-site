@@ -17,12 +17,32 @@
   --color-green-900: #0A5331;
   --color-green-950: #052E16;
 
-  /* HUD Specific Tokens */
-  --color-hud-cyan: #00f2ff;
+  /* Global HUD Theme Variables (Dynamic) */
+  --hud-accent: #00f2ff;
+  --hud-accent-rgb: 0, 242, 255;
+  --hud-accent-glow: 0 0 12px rgba(var(--hud-accent-rgb), 0.6);
+
+  /* HUD Colors mapped to TW tokens */
+  --color-hud-accent: var(--hud-accent);
   --color-hud-red: #ef4444;
-  
-  --shadow-glow-cyan: 0 0 12px rgba(0, 242, 255, 0.6);
-  --shadow-glow-red: 0 0 16px rgba(239, 68, 68, 0.8);
+}
+
+/* Theme Definitions */
+:root[data-theme="amber"] {
+  --hud-accent: #ffb000;
+  --hud-accent-rgb: 255, 176, 0;
+}
+:root[data-theme="yellow"] {
+  --hud-accent: #fcd34d;
+  --hud-accent-rgb: 252, 211, 77;
+}
+:root[data-theme="green"] {
+  --hud-accent: #00dc82;
+  --hud-accent-rgb: 0, 220, 130;
+}
+:root[data-theme="cyan"] {
+  --hud-accent: #00f2ff;
+  --hud-accent-rgb: 0, 242, 255;
 }
 
 /* ── OS THEME: SHARED ANIMATIONS ── */

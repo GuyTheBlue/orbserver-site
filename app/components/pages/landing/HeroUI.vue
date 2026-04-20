@@ -113,7 +113,7 @@ onMounted(() => {
     
     <!-- 1. ADVANCED DIGITAL MATRIX WASH (Behind all layers) -->
     <div class="absolute inset-0 opacity-[0.7] select-none pointer-events-none bento-flicker overflow-hidden">
-      <div class="font-mono text-[10px] text-cyan-400/30 whitespace-pre leading-[0.85] p-10">
+      <div class="font-mono text-[10px] text-hud-accent/30 whitespace-pre leading-[0.85] p-10">
         {{ dataWash.repeat(10) }}
       </div>
     </div>
@@ -134,15 +134,15 @@ onMounted(() => {
 
         <div class="relative z-10 pt-6">
           <div class="flex items-center gap-3 mb-6">
-            <span class="w-1.5 h-6 bg-cyan-400 animate-pulse" />
-            <label class="font-mono text-[10px] text-cyan-400 tracking-[0.8em] uppercase opacity-70">SYST_HUD_v4.5</label>
+            <span class="w-1.5 h-6 bg-hud-accent animate-pulse" />
+            <label class="font-mono text-[10px] text-hud-accent tracking-[0.8em] uppercase opacity-70">SYST_HUD_v4.5</label>
           </div>
           
           <h1 class="font-orbitron font-black text-4xl md:text-7xl text-white tracking-[0.15em] uppercase leading-none mb-10 drop-shadow-[0_0_20px_rgba(255,255,255,0.2)]">
-            know thy <br> <span class="text-cyan-400 font-mono">{{ moonWord }}</span>
+            know thy <br> <span class="text-hud-accent font-mono">{{ moonWord }}</span>
           </h1>
           
-          <div class="font-mono text-[11px] text-cyan-400/50 tracking-[0.6em] uppercase border-t border-cyan-400/10 pt-8 flex items-center justify-between">
+          <div class="font-mono text-[11px] text-hud-accent/50 tracking-[0.6em] uppercase border-t border-white/10 pt-8 flex items-center justify-between">
             <span>REAL_TIME_LINK_ACTIVE</span>
             <span class="text-[8px] animate-pulse">00:00:00:01</span>
           </div>
@@ -155,8 +155,8 @@ onMounted(() => {
       
       <!-- Calibration Header -->
       <div class="flex flex-col items-end gap-1 opacity-60">
-        <div class="font-mono text-[9px] text-cyan-400 tracking-[0.8em] uppercase">SYSTEM_QUANTUM_CALIBRATION</div>
-        <div class="w-full h-[1px] bg-cyan-400/20" />
+        <div class="font-mono text-[9px] text-hud-accent tracking-[0.8em] uppercase">SYSTEM_QUANTUM_CALIBRATION</div>
+        <div class="w-full h-[1px] bg-hud-accent/20" />
       </div>
 
       <!-- Telemetry Matrix -->
@@ -167,9 +167,9 @@ onMounted(() => {
           class="flex flex-col items-end group transition-colors duration-150 mb-4"
           :style="{ animationDelay: `${i * 0.2}s` }"
         >
-          <div class="font-mono text-[10px] text-cyan-400/60 uppercase tracking-widest mb-1">{{ row.info }}</div>
+          <div class="font-mono text-[10px] text-hud-accent/60 uppercase tracking-widest mb-1">{{ row.info }}</div>
           <div class="flex items-baseline gap-4">
-            <span class="font-mono text-[11px] uppercase tracking-[0.5em] transition-colors" :class="glitchMap[row.label] ? 'text-red-500' : 'text-cyan-400/50'">{{ row.label }}</span>
+            <span class="font-mono text-[11px] uppercase tracking-[0.5em] transition-colors" :class="glitchMap[row.label] ? 'text-red-500' : 'text-hud-accent/50'">{{ row.label }}</span>
             <span 
               class="font-orbitron text-3xl lg:text-5xl font-black tracking-widest tabular-nums transition-all"
               :class="glitchMap[row.label] ? 'text-red-600 animate-pulse scale-105' : 'text-white'"
@@ -181,11 +181,11 @@ onMounted(() => {
           <div class="w-48 h-1 bg-white/5 relative overflow-hidden flex items-center">
             <div 
               class="h-full transition-all duration-1000" 
-              :class="glitchMap[row.label] ? 'bg-red-500 shadow-[0_0_10px_rgba(255,0,0,0.5)]' : 'bg-cyan-400 opacity-60'"
+              :class="glitchMap[row.label] ? 'bg-red-500 shadow-[0_0_10px_rgba(255,0,0,0.5)]' : 'bg-hud-accent opacity-60'"
               :style="{ width: `${row.scale}%` }" 
             />
             <div class="absolute inset-0 bg-white/10 translate-x-[-100%] animate-scan" />
-            <div class="absolute right-0 top-0 text-[7px] font-mono text-cyan-400/30 uppercase mr-[-24px]">{{ row.unit }}</div>
+            <div class="absolute right-0 top-0 text-[7px] font-mono text-hud-accent/30 uppercase mr-[-24px]">{{ row.unit }}</div>
           </div>
         </div>
       </div>
@@ -193,15 +193,15 @@ onMounted(() => {
 
     <!-- 4. BOTTOM-RIGHT FACTOID AR (Integrated Dash Style) -->
     <div class="absolute bottom-[10%] right-[10%] max-w-sm pointer-events-auto hidden md:block">
-      <div class="panel-card p-6 rounded-xl border-cyan-400/10 bento-flicker backdrop-blur-md">
+      <div class="panel-card p-6 rounded-xl border-white/5 bento-flicker backdrop-blur-md">
         <div class="panel-grid-mesh opacity-10" /><div class="panel-scanlines opacity-20" />
         <div class="relative z-10">
-          <p class="font-mono text-[9px] text-cyan-400/60 tracking-[0.6em] uppercase mb-4 flex items-center justify-between">
+          <p class="font-mono text-[9px] text-hud-accent/60 tracking-[0.6em] uppercase mb-4 flex items-center justify-between">
             AR_ANNOTATION::INTEL
-            <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+            <span class="w-2 h-2 rounded-full bg-hud-accent animate-pulse" />
           </p>
-          <p class="font-orbitron text-[11px] text-white/70 tracking-wider leading-relaxed bg-black/20 p-4 border-l-2 border-cyan-400/40">
-            {{ factoidText }}<span class="inline-block w-2 h-4 bg-cyan-400 opacity-80 align-middle ml-1" />
+          <p class="font-orbitron text-[11px] text-white/70 tracking-wider leading-relaxed bg-black/20 p-4 border-l-2 border-hud-accent/40">
+            {{ factoidText }}<span class="inline-block w-2 h-4 bg-hud-accent opacity-80 align-middle ml-1" />
           </p>
         </div>
       </div>
@@ -209,7 +209,7 @@ onMounted(() => {
 
     <!-- 5. HUD CALIBRATION RING (Center-Oriented around Moon) -->
     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.2] pointer-events-none scale-150 bento-flicker">
-      <svg width="400" height="400" viewBox="0 0 240 240" class="text-cyan-400">
+      <svg width="400" height="400" viewBox="0 0 240 240" class="text-hud-accent">
         <circle cx="120" cy="120" r="115" fill="none" stroke="currentColor" stroke-width="0.2" stroke-dasharray="1 8" />
         <circle cx="120" cy="120" r="100" fill="none" stroke="currentColor" stroke-width="0.5" stroke-dasharray="20 40" />
         <path d="M 120 10 L 120 20 M 120 220 L 120 230 M 10 120 L 20 120 M 220 120 L 230 120" stroke="currentColor" stroke-width="1" />

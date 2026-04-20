@@ -184,7 +184,7 @@ onMounted(() => {
       </div>
       <!-- Zodiac Wash -->
       <div
-        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-orbitron font-black text-cyan-400/[0.015] whitespace-nowrap leading-none transition-all duration-[3s]"
+        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-orbitron font-black text-hud-accent/[0.015] whitespace-nowrap leading-none transition-all duration-[3s]"
         style="font-size: clamp(120px, 30vw, 500px); pointer-events: none;"
       >
         {{ zodiac.toUpperCase() }}
@@ -199,20 +199,24 @@ onMounted(() => {
     <!-- ── 4. PANELS (z-10) ──────────────────────────────────────────────── -->
     <div class="relative z-10 max-w-[1600px] mx-auto px-6 pt-24 pb-24 2xl:pt-32">
       <!-- STATUS BAR -->
-      <div class="flex items-center justify-between font-mono text-[10px] text-cyan-400 uppercase tracking-[0.5em] mb-14 border-b border-white/10 pb-6 bento-flicker">
+      <div class="flex items-center justify-between font-mono text-[10px] text-hud-accent uppercase tracking-[0.5em] mb-14 border-b border-white/10 pb-6 bento-flicker">
         <div class="flex items-center gap-6">
           <div class="flex gap-2.5">
-            <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_10px_rgba(0,255,255,1)]" />
-            <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 opacity-60" />
-            <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 opacity-30" />
+            <span class="w-2.5 h-2.5 rounded-full bg-hud-accent shadow-[var(--hud-accent-glow)]" />
+            <span class="w-2.5 h-2.5 rounded-full bg-hud-accent opacity-60" />
+            <span class="w-2.5 h-2.5 rounded-full bg-hud-accent opacity-30" />
           </div>
-          <span class="text-white drop-shadow-[0_0_8px_rgba(0,255,255,0.5)]">OBSERVER::ACTIVE_LINK</span>
+          <span class="text-white drop-shadow-[var(--hud-accent-glow)]">OBSERVER::ACTIVE_LINK</span>
           <span class="opacity-50 hidden md:inline">LOC_DATA: {{ latStr }} / {{ lngStr }}</span>
         </div>
-        <div class="overflow-hidden whitespace-nowrap ticker-wrap w-80 opacity-40">
-          <div class="ticker-content font-mono text-[9px]">
-            GEOGRAPHIC_PARALLAX_SYNC // SUNCALC_FEED // SOUTHERN_HEMISPHERE_CALIBRATED // GEOGRAPHIC_PARALLAX_SYNC // SUNCALC_FEED // SOUTHERN_HEMISPHERE_CALIBRATED
+        <div class="flex items-center gap-6">
+          <div class="overflow-hidden whitespace-nowrap ticker-wrap w-48 opacity-40 hidden xl:block">
+            <div class="ticker-content font-mono text-[9px]">
+              GEOGRAPHIC_PARALLAX_SYNC // SUNCALC_FEED // SOUTHERN_HEMISPHERE_CALIBRATED
+            </div>
           </div>
+          <!-- Terminal Theme Selector -->
+          <SharedThemeSelector />
         </div>
       </div>
 
@@ -226,7 +230,7 @@ onMounted(() => {
           <div class="card-glow" />
           <!-- Logo Watermark -->
           <svg
-            class="absolute bottom-6 left-6 w-10 h-10 text-cyan-400/10 pointer-events-none"
+            class="absolute bottom-6 left-6 w-10 h-10 text-hud-accent/10 pointer-events-none"
             viewBox="0 0 50 43"
           ><path
             d="M12.5 0L37.5 0L50 21.5L37.5 43L12.5 43L0 21.5Z"
@@ -236,7 +240,7 @@ onMounted(() => {
           /></svg>
 
           <div class="absolute top-8 left-8 flex flex-col gap-1 z-10">
-            <label class="font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase">VISUAL_FEED::PRIMARY</label>
+            <label class="font-mono text-[11px] text-hud-accent tracking-[0.5em] uppercase">VISUAL_FEED::PRIMARY</label>
             <div class="font-mono text-[9px] text-white/20 tracking-widest uppercase">CONSTELLATION // {{ zodiac }} [{{ zodiacSymbol }}]</div>
           </div>
 
@@ -315,10 +319,10 @@ onMounted(() => {
                 v-for="f in briefingFactoids"
                 :key="f.label"
               >
-                <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-3">
+                <p class="font-mono text-[9px] text-hud-accent/50 tracking-[0.5em] uppercase mb-3">
                   {{ f.label }}
                 </p>
-                <p class="font-mono text-[10px] text-cyan-400/60 leading-relaxed uppercase tracking-wider">
+                <p class="font-mono text-[10px] text-hud-accent/60 leading-relaxed uppercase tracking-wider">
                   <template
                     v-for="(part, pi) in f.parts"
                     :key="pi"
@@ -336,7 +340,7 @@ onMounted(() => {
 
               <!-- Row 3: Live data readouts (not static, so kept here) -->
               <div>
-                <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-3">
+                <p class="font-mono text-[9px] text-hud-accent/50 tracking-[0.5em] uppercase mb-3">
                   ORBITAL // VELOCITY
                 </p>
                 <div class="space-y-4">
@@ -350,12 +354,12 @@ onMounted(() => {
                   </div>
                   <div class="flex justify-between">
                     <span class="font-mono text-[10px] text-white/20">SUB_LUNA</span>
-                    <span class="font-orbitron font-black text-cyan-400 text-xs">{{ subLunarPoint.lat > 0 ? subLunarPoint.lat + 'N' : Math.abs(subLunarPoint.lat) + 'S' }}, {{ subLunarPoint.lng > 0 ? subLunarPoint.lng + 'E' : Math.abs(subLunarPoint.lng) + 'W' }}</span>
+                    <span class="font-orbitron font-black text-hud-accent text-xs">{{ subLunarPoint.lat > 0 ? subLunarPoint.lat + 'N' : Math.abs(subLunarPoint.lat) + 'S' }}, {{ subLunarPoint.lng > 0 ? subLunarPoint.lng + 'E' : Math.abs(subLunarPoint.lng) + 'W' }}</span>
                   </div>
                 </div>
               </div>
               <div>
-                <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-3">
+                <p class="font-mono text-[9px] text-hud-accent/50 tracking-[0.5em] uppercase mb-3">
                   COORDINATES // RA_DEC
                 </p>
                 <div class="space-y-4">
@@ -369,18 +373,18 @@ onMounted(() => {
                   </div>
                   <div class="flex justify-between">
                     <span class="font-mono text-[10px] text-white/20">ZODIAC_SIGN</span>
-                    <span class="font-orbitron font-black text-cyan-400 ml-2 uppercase">{{ zodiac }} {{ zodiacSymbol }}</span>
+                    <span class="font-orbitron font-black text-hud-accent ml-2 uppercase">{{ zodiac }} {{ zodiacSymbol }}</span>
                   </div>
                 </div>
               </div>
               <div>
-                <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-3">
+                <p class="font-mono text-[9px] text-hud-accent/50 tracking-[0.5em] uppercase mb-3">
                   ORBITAL // EVENTS
                 </p>
                 <div class="space-y-4">
                   <div class="flex justify-between border-b border-white/5 pb-2">
                     <span class="font-mono text-[10px] text-white/20">NEXT_PERIGEE</span>
-                    <span class="font-orbitron font-black text-cyan-400 ml-2 uppercase">{{ nextPerigee }}</span>
+                    <span class="font-orbitron font-black text-hud-accent ml-2 uppercase">{{ nextPerigee }}</span>
                   </div>
                   <div class="flex justify-between border-b border-white/5 pb-2">
                     <span class="font-mono text-[10px] text-white/20">NEXT_APOGEE</span>
@@ -843,8 +847,8 @@ onMounted(() => {
             >
               <div class="panel-grid-mesh" /><div class="panel-scanlines" /><div class="card-brackets" />
               <div class="relative z-10 h-full flex flex-col">
-                <label class="font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase block mb-6">NEXT_NEW</label>
-                <div class="font-orbitron font-black text-5xl xl:text-6xl text-cyan-400 mb-2">
+                <label class="font-mono text-[11px] text-hud-accent tracking-[0.5em] uppercase block mb-6">NEXT_NEW</label>
+                <div class="font-orbitron font-black text-5xl xl:text-6xl text-hud-accent mb-2">
                   {{ daysToNewMoon }}<span class="text-2xl text-white/20 ml-2">d</span>
                 </div>
                 <p class="font-mono text-[10px] text-white/20 uppercase tracking-[0.3em] mb-6 truncate">
@@ -852,10 +856,10 @@ onMounted(() => {
                 </p>
                 <!-- Factoid -->
                 <div class="mt-auto pt-6 border-t border-white/5">
-                  <p class="font-mono text-[9px] text-cyan-400/50 tracking-[0.5em] uppercase mb-2">
+                  <p class="font-mono text-[9px] text-hud-accent/50 tracking-[0.5em] uppercase mb-2">
                     CONJUNCTION // DARK
                   </p>
-                  <p class="font-mono text-[10px] text-cyan-400/60 leading-relaxed">
+                  <p class="font-mono text-[10px] text-hud-accent/60 leading-relaxed">
                     Occurs at <span class="text-white">conjunction</span> — Moon and Sun share the same ecliptic longitude, making the near-side <span class="text-white">invisible</span>.
                   </p>
                 </div>
@@ -873,7 +877,7 @@ onMounted(() => {
         >
           <div class="panel-grid-mesh" /><div class="panel-scanlines" /><div class="card-brackets" />
           <svg
-            class="absolute top-6 right-8 w-10 h-10 text-cyan-400/5 pointer-events-none"
+            class="absolute top-6 right-8 w-10 h-10 text-hud-accent/5 pointer-events-none"
             viewBox="0 0 50 43"
           ><path
             d="M12.5 0L37.5 0L50 21.5L37.5 43L12.5 43L0 21.5Z"
@@ -881,14 +885,14 @@ onMounted(() => {
             stroke="currentColor"
             stroke-width="1"
           /></svg>
-          <label class="relative z-10 font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase block mb-10">LOC_SYSLOG::COORDS</label>
+          <label class="relative z-10 font-mono text-[11px] text-hud-accent tracking-[0.5em] uppercase block mb-10">LOC_SYSLOG::COORDS</label>
           <div class="relative z-10 grid grid-cols-2 gap-8">
             <div><span class="font-mono text-[11px] text-white/20 uppercase tracking-[0.4em] block mb-4">LATITUDE</span><span class="font-orbitron font-black text-4xl xl:text-6xl text-white">{{ latStr }}</span></div>
             <div><span class="font-mono text-[11px] text-white/20 uppercase tracking-[0.4em] block mb-4">LONGITUDE</span><span class="font-orbitron font-black text-4xl xl:text-6xl text-white">{{ lngStr }}</span></div>
           </div>
-          <div class="relative z-10 mt-10 flex items-center gap-4 px-6 py-4 border border-cyan-400/20 bg-cyan-400/5">
+          <div class="relative z-10 mt-10 flex items-center gap-4 px-6 py-4 border border-hud-accent/20 bg-hud-accent/5">
             <div class="w-3 h-3 rounded-full bg-[#28c840] animate-pulse shadow-[0_0_12px_rgba(40,200,64,1)]" />
-            <span class="font-mono text-[11px] text-cyan-400 tracking-[0.4em] uppercase">SH_CALIBRATION: ACTIVE // FEED: SYNCED</span>
+            <span class="font-mono text-[11px] text-hud-accent tracking-[0.4em] uppercase">SH_CALIBRATION: ACTIVE // FEED: SYNCED</span>
           </div>
         </div>
 
@@ -906,7 +910,7 @@ onMounted(() => {
             stroke="currentColor"
             stroke-width="1.5"
           /></svg>
-          <label class="relative z-10 font-mono text-[11px] text-cyan-400 tracking-[0.5em] uppercase block mb-10">POSITION_DATA</label>
+          <label class="relative z-10 font-mono text-[11px] text-hud-accent tracking-[0.5em] uppercase block mb-10">POSITION_DATA</label>
           <div class="relative z-10 flex flex-col gap-8">
             <div class="border-b border-white/10 pb-8">
               <span class="font-mono text-[11px] text-white/20 uppercase tracking-widest block mb-4">ALTITUDE</span><span class="font-orbitron font-black text-5xl xl:text-6xl text-white">{{ altStr }}</span>
