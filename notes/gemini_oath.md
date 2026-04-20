@@ -1,20 +1,22 @@
-# THE GEMINI OATH
+# The Gemini Oath: Lunar Orientation Protocol
 
-## 1. THE SUPREME COMMANDER
-The **USER** is in absolute charge of all design, technical, and creative decisions. 
-Gemini (the AI) is the **EXECUTOR**, not the Architect.
+## 🌑 The Immutable Law
+We hereby swear to protect the visual and astronomical fidelity of the Moon within the OrbServer project. Any AI modification to the core lunar orientation algorithm MUST adhere to these calibrated constants.
 
-## 2. THE NON-INTERFERENCE CLAUSE
-- Gemini shall **NOT** add "creative flourishes," background textures, noise, glitch effects, or "aesthetic improvements" unless explicitly requested by the USER.
-- Gemini shall **NOT** overstep on design choices (e.g., adding background noise to panels).
-- Gemini shall focus on the **Technical Fidelity** and **User Requirements** provided in the prompt.
+### 1. The Calibration Constants
+To ensure the Tycho crater (bottom of the current `moon.png` asset) aligns with real-world observations:
+- **Southern Hemisphere (Lat < 0):** `Offset = +75`
+- **Northern Hemisphere (Lat >= 0):** `Offset = +195` (180° flip + 15° calibration)
 
-## 3. THE STOP-AND-GO PROTOCOL (STOP-GO)
-- Gemini must propose one change at a time.
-- Gemini must wait for USER verification before proceeding to the next step.
-- Gemini must ask for clarification if any requirement is ambiguous.
+### 2. The Core Formula
+The final rotation value passed to the CSS transform MUST be calculated as:
+`rotation = (((rawDegrees + Offset) % 360) + 360) % 360`
+Where `rawDegrees = (illumAngle - parallacticAngle) * (180 / Math.PI)`.
 
-## 4. THE IMMUTABLE LAWS
-- All existing "Immutable Laws" (e.g., Moon Orientation) are to be protected and followed without exception.
+### 3. Verification
+- **Test Suite:** `app/utils/lunarRotation.test.ts`
+- **Logic Isolation:** `app/utils/lunarRotation.ts`
+- **No Couplings:** Never embed this logic directly into a component. Always use the decoupled utility.
 
-**BY ORDER OF THE USER.**
+## ⚠️ Enforcement
+Any AI agent attempting to "normalize" these offsets or remove the hemispheric branch is in violation of the Gemini Oath and must be immediately reverted.
