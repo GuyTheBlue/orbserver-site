@@ -37,7 +37,7 @@ function cypherMoon() {
 // ── TELEMETRY GLITCH LOGIC ──────────────────────────────────────────────────
 const glitchMap = ref<Record<string, boolean>>({})
 function triggerGlitch() {
-  const keys = ['DISTANCE', 'VELOCITY', 'LOC_COORD', 'LIGHT_SPD']
+  const keys = ['PHASE', 'ZODIAC', 'ORB_VEL', 'LT_DELAY']
   const target = keys[Math.floor(Math.random() * keys.length)]
   glitchMap.value[target] = true
   setTimeout(() => { glitchMap.value[target] = false }, 150)
@@ -88,10 +88,10 @@ const telemetryRows = computed(() => {
   const ltSeconds = (lightTravelTime.value / 1000).toFixed(3)
   
   return [
-    { id: 'PHA', label: 'PHASE', val: getGlitchedVal('LOC_COORD', phaseName.value?.toUpperCase()), info: 'Current lunar illumination cycle', scale: 75 },
-    { id: 'ZOD', label: 'ZODIAC', val: getGlitchedVal('LOC_COORD', (zodiac.value + ' ' + zodiacSymbol.value).toUpperCase()), info: 'Lunar position in tropical zodiac', scale: 60 },
-    { id: 'VEL', label: 'ORB_VEL', val: getGlitchedVal('VELOCITY', Math.round(velocity.value * 3600).toLocaleString('en-GB') + ' KM/H'), info: 'Moon orbital speed around Earth', scale: 75 },
-    { id: 'LT', label: 'LT_DELAY', val: getGlitchedVal('LIGHT_SPD', ltSeconds + ' SEC'), info: 'Time for light to reach Earth from Moon', scale: 92 }
+    { id: 'PHA', label: 'PHASE', val: getGlitchedVal('PHASE', phaseName.value?.toUpperCase()), info: 'Current lunar illumination cycle', scale: 75 },
+    { id: 'ZOD', label: 'ZODIAC', val: getGlitchedVal('ZODIAC', (zodiac.value + ' ' + zodiacSymbol.value).toUpperCase()), info: 'Lunar position in tropical zodiac', scale: 60 },
+    { id: 'VEL', label: 'ORB_VEL', val: getGlitchedVal('ORB_VEL', Math.round(velocity.value * 3600).toLocaleString('en-GB') + ' KM/H'), info: 'Moon orbital speed around Earth', scale: 75 },
+    { id: 'LT', label: 'LT_DELAY', val: getGlitchedVal('LT_DELAY', ltSeconds + ' SEC'), info: 'Time for light to reach Earth from Moon', scale: 92 }
   ]
 })
 
@@ -138,7 +138,7 @@ onMounted(() => {
           </div>
           
           <h1 class="font-orbitron font-black text-4xl md:text-7xl text-white tracking-[0.15em] uppercase leading-none mb-10 drop-shadow-[0_0_20px_rgba(255,255,255,0.2)]">
-            know thy <br> <span class="text-hud-accent font-mono">{{ moonWord }}</span>
+            know thy <br> <span class="font-mono transition-colors duration-75" :class="moonWord === 'moon.' ? 'text-hud-accent' : 'text-red-600 animate-pulse'">{{ moonWord }}</span>
           </h1>
           
           <div class="font-mono text-[14px] text-hud-accent/50 tracking-[0.6em] uppercase border-t border-white/10 pt-8 flex items-center justify-between">
