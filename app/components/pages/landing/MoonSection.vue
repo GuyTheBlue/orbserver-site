@@ -18,7 +18,6 @@ const {
 
 const showHandRule = ref(false)
 
-
 // ── Intersection ────────────────────────────────────────────────────────────
 const sectionEl = ref<HTMLElement | null>(null)
 const isVisible = ref(false)// Supermoon: apparent diameter > 33.0' AND near Full or New Moon
