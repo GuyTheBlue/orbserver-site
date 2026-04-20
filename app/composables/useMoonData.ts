@@ -2,6 +2,7 @@
 // All calculations run client-side only via suncalc.
 // Guarded by import.meta.client to prevent any SSR execution.
 import { ref, onMounted } from 'vue'
+import { calculateApparentRotation } from '~/utils/lunarRotation'
 
 // The standard 29.53-day synodic lunar month
 const LUNAR_MONTH = 29.530588853
@@ -281,16 +282,8 @@ export function useMoonData() {
       moonrise.value = times.rise ? times.rise.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) : 'N/A'
       moonset.value = times.set ? times.set.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) : 'N/A'
 
-      // ── Apparent Rotation (Orientation relative to observer's sky) ────
-      // ⚠️ IMPORTANT: THE IMMUTABLE LAW OF MOON ORIENTATION
-      // SEE: notes/MOON_ORIENTATION_PROTOCOL.md for full technical details.
-      //
-      // 1. illum.angle: Angle of the bright limb from North (Radians).
-      // 2. pos.parallacticAngle: Angle of the Zenith from North (Radians).
-      // 3. + 180 (IF lat < 0): THE IMMUTABLE LAW for Southern Hemisphere inversion.
-      // 4. + 15: Visual calibration offset to match asset landmarks (Tycho) to real-world observer standards in Cape Town.
-      const raw = (illum.angle - pos.parallacticAngle) * (180 / Math.PI)
-      apparentRotation.value = (raw + (lat.value < 0 ? 180 : 0) + 15) % 360
+      // Uses the calibrated, decoupled utility for astronomical fidelity.
+      apparentRotation.value = calculateApparentRotation(illum.angle, pos.parallacticAngle, lat.value)
     } catch {
       hasError.value = true
     } finally {
