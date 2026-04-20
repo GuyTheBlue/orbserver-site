@@ -127,10 +127,10 @@ onMounted(() => {
     <ClientOnly>
       <div class="absolute inset-0 z-0 p-10 lg:p-16 font-mono overflow-hidden select-none pointer-events-none">
         <div class="flex items-center gap-2.5 mb-10 opacity-60">
-          <span class="w-3 h-3 rounded-full bg-cyan-400 opacity-100 shadow-[0_0_8px_rgba(0,255,255,0.6)]" />
-          <span class="w-3 h-3 rounded-full bg-cyan-400 opacity-70" />
-          <span class="w-3 h-3 rounded-full bg-cyan-400 opacity-40" />
-          <span class="ml-6 text-[13px] text-cyan-400/40 tracking-[0.4em] uppercase">terminal_bg::process_feed</span>
+          <span class="w-3 h-3 rounded-full" :style="{ backgroundColor: 'var(--hud-accent)', boxShadow: 'var(--hud-accent-glow)' }" />
+          <span class="w-3 h-3 rounded-full" :style="{ backgroundColor: 'rgba(var(--hud-accent-rgb), 0.7)' }" />
+          <span class="w-3 h-3 rounded-full" :style="{ backgroundColor: 'rgba(var(--hud-accent-rgb), 0.4)' }" />
+          <span class="ml-6 text-[13px] tracking-[0.4em] uppercase" :style="{ color: 'rgba(var(--hud-accent-rgb), 0.4)' }">terminal_bg::process_feed</span>
         </div>
         <!-- BIGGER wash for depth -->
         <div class="text-[22px] leading-relaxed opacity-[0.35]">
@@ -144,16 +144,16 @@ onMounted(() => {
             />
             <div
               v-else
-              :class="{
-                'text-cyan-400': line.cls === 'term-cmd',
-                'text-green-300': line.cls === 'term-out'
+              :style="{
+                color: line.cls === 'term-cmd' ? 'var(--hud-accent)' : '#86efac'
               }"
             >
               {{ line.text }}
             </div>
           </div>
           <span
-            class="inline-block w-[12px] h-[1em] bg-cyan-400 align-middle"
+            class="inline-block w-[12px] h-[1em] align-middle"
+            :style="{ backgroundColor: 'var(--hud-accent)' }"
             :class="termCursor ? 'opacity-50' : 'opacity-0'"
           />
         </div>

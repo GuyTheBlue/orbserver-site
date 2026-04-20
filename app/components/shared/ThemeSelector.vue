@@ -18,21 +18,26 @@ const themes: { id: TerminalTheme; label: string; color: string }[] = [
         v-for="t in themes"
         :key="t.id"
         @click="setTheme(t.id)"
-        class="group relative w-8 h-8 rounded-sm transition-all duration-300 overflow-hidden bento-flicker"
-        :style="{ backgroundColor: t.color, opacity: currentTheme === t.id ? 1 : 0.4 }"
+        class="group relative w-10 h-10 rounded-sm transition-all duration-300 overflow-hidden bento-flicker border border-white/10"
         :title="t.label"
       >
-        <!-- Gritty Scanlines -->
-        <div class="absolute inset-0 pointer-events-none opacity-40 panel-scanlines !bg-[length:100%_2px]" />
+        <!-- Color Background -->
+        <div 
+          class="absolute inset-0 transition-opacity duration-300"
+          :style="{ backgroundColor: t.color, opacity: currentTheme === t.id ? 1 : 0.3 }"
+        />
         
-        <!-- Buggy Overlay -->
+        <!-- CRT Texture Overlay -->
+        <div class="absolute inset-0 pointer-events-none opacity-25 panel-scanlines" />
+        
+        <!-- Selection Highlight -->
         <div 
           v-if="currentTheme === t.id"
-          class="absolute inset-0 border-2 border-white/60 animate-pulse" 
+          class="absolute inset-0 border-t-2 border-white/50 mix-blend-overlay"
         />
         <div 
           v-if="currentTheme === t.id"
-          class="absolute inset-0 bg-white/10 animate-scan opacity-30" 
+          class="absolute inset-0 bg-white/5"
         />
       </button>
     </div>
