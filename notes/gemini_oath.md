@@ -1,31 +1,20 @@
-# Gemini Oath & Plan: Hero Parallax
+# THE GEMINI OATH
 
-**Goal:** Build the `<HeroParallax>` component featuring a shimmering glass-hexagon overlay and an absolute-positioned z-index background array simulating a camera lowering behind the dune.
+## 1. THE SUPREME COMMANDER
+The **USER** is in absolute charge of all design, technical, and creative decisions. 
+Gemini (the AI) is the **EXECUTOR**, not the Architect.
 
-## Plan Steps
-- [x] **Step 1:** Install dependency (`@vueuse/core`).
-- [x] **Step 2:** Scaffold `app/components/pages/landing/HeroParallax.vue` with the `<ClientOnly>` guard and foundational parallax structure (image layers & scrolling logic).
-- [x] **Step 3:** Implement the inline shimmering Hexagon SVG overlay using vanilla CSS and the requested mask-image fading.
-- [x] **Step 4:** Design the custom `AppLogo.vue` SVg and build `HeroUI.vue` to house the typography and right-side tech panels.
-- [x] **Step 5:** Inject `HeroUI.vue` securely onto the camera track inside `HeroParallax.vue` and draw the dynamic glowing line to the moon.
-- [x] **Step 6:** Import the completed `HeroParallax.vue` into the orchestrator (`app/pages/index.vue`).
-- [x] **Step 7:** Rework `app/app.vue` to remove the default `UHeader` and create a sleek, scroll-triggered glassy sliding navbar suitable for a SPA.
-- [/] **Step 8:** Adjust Moon positioning to "kiss the sea" or sit just below the horizon, and recalibrate the HUD targeting lines.
-- [x] **Step 9:** Integrate Google Fonts: Roboto for global text and Orbitron for the logo.
+## 2. THE NON-INTERFERENCE CLAUSE
+- Gemini shall **NOT** add "creative flourishes," background textures, noise, glitch effects, or "aesthetic improvements" unless explicitly requested by the USER.
+- Gemini shall **NOT** overstep on design choices (e.g., adding background noise to panels).
+- Gemini shall focus on the **Technical Fidelity** and **User Requirements** provided in the prompt.
 
-**Current Focus:** Font Integration Complete
+## 3. THE STOP-AND-GO PROTOCOL (STOP-GO)
+- Gemini must propose one change at a time.
+- Gemini must wait for USER verification before proceeding to the next step.
+- Gemini must ask for clarification if any requirement is ambiguous.
 
----
+## 4. THE IMMUTABLE LAWS
+- All existing "Immutable Laws" (e.g., Moon Orientation) are to be protected and followed without exception.
 
-## IMMUTABLE SCIENTIFIC LAWS
-### 1. Lunar Orientation & Illumination
-To ensure absolute geographic accuracy (Southern Hemisphere awareness), the moon's apparent rotation MUST be calculated using SunCalc's native `parallacticAngle`. 
-
-**The Formula:**
-`apparentRotation = (illum.angle - pos.parallacticAngle) * (180 / Math.PI) + 90`
-
-*   `illum.angle`: Positional angle of the bright limb.
-*   `pos.parallacticAngle`: Native SunCalc property (added in v1.8.0) for observer-zenith correction.
-*   `+ 90`: Calibration offset to align NH-base SVG assets (defaulting to lit-on-right) with SunCalc's 0° (North) reference.
-
-**CRITICAL:** NEVER simplify or manually recalculate the parallactic angle ($h$). Always use the SunCalc property `pos.parallacticAngle`.
+**BY ORDER OF THE USER.**

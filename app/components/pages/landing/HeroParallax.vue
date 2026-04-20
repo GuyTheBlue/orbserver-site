@@ -141,10 +141,6 @@ const moonRotation = computed(() => `${apparentRotation.value}deg`)
           <div class="absolute inset-0 opacity-40 scanline-overlay pointer-events-none z-20" />
           <div class="absolute inset-0 opacity-10 grid-overlay pointer-events-none z-10 scale-[2]" />
           
-          <!-- Noise & Glitch Effect (CSS Generated) -->
-          <div class="absolute inset-0 opacity-[0.08] pointer-events-none mix-blend-screen" 
-               style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22%2F%3E%3C%2Ffilter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22%2F%3E%3C%2Fsvg%3E');" />
-
           <!-- Title Card -->
           <div
             class="relative z-30 transition-transform duration-700"

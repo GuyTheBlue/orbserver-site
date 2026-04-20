@@ -244,8 +244,8 @@ onMounted(() => {
           /></svg>
 
           <div class="absolute top-8 left-8 flex flex-col gap-1 z-10">
-            <label class="font-mono text-[11px] text-hud-accent tracking-[0.5em] uppercase">VISUAL_FEED::PRIMARY</label>
-            <div class="font-mono text-[9px] text-white/20 tracking-widest uppercase">CONSTELLATION // {{ zodiac }} [{{ zodiacSymbol }}]</div>
+            <label class="font-mono text-[14px] text-hud-accent tracking-[0.5em] uppercase">VISUAL_FEED::PRIMARY</label>
+            <div class="font-mono text-[12px] text-white/20 tracking-widest uppercase">CONSTELLATION // {{ zodiac }} [{{ zodiacSymbol }}]</div>
           </div>
 
           <div
@@ -303,15 +303,15 @@ onMounted(() => {
             </h2>
             <div class="mt-8 flex flex-wrap items-center justify-center gap-y-8">
               <div class="flex flex-col items-center px-6 sm:px-10 border-r border-white/10 last:border-r-0">
-                <span class="font-mono text-[10px] text-hud-accent/60 tracking-[0.5em] uppercase mb-2">Age</span>
+                <span class="font-mono text-[13px] text-hud-accent/60 tracking-[0.5em] uppercase mb-2">Age</span>
                 <span class="font-orbitron font-black text-3xl sm:text-5xl text-white">{{ age }}<span class="text-lg text-white/20 ml-1">d</span></span>
               </div>
               <div class="flex flex-col items-center px-6 sm:px-10 border-r border-white/10 last:border-r-0">
-                <span class="font-mono text-[10px] text-hud-accent/60 tracking-[0.5em] uppercase mb-2">Illum</span>
+                <span class="font-mono text-[13px] text-hud-accent/60 tracking-[0.5em] uppercase mb-2">Illum</span>
                 <span class="font-orbitron font-black text-3xl sm:text-5xl text-white">{{ illuminationPct }}<span class="text-lg text-white/20 ml-1">%</span></span>
               </div>
               <div class="flex flex-col items-center px-6 sm:px-10 border-r-0 sm:border-r last:border-r-0">
-                <span class="font-mono text-[10px] text-hud-accent/60 tracking-[0.5em] uppercase mb-2">Rot</span>
+                <span class="font-mono text-[13px] text-hud-accent/60 tracking-[0.5em] uppercase mb-2">Rot</span>
                 <span class="font-orbitron font-black text-3xl sm:text-5xl text-hud-accent">{{ Math.round(apparentRotation) }}<span class="text-lg text-white/20 ml-1">°</span></span>
               </div>
             </div>
@@ -323,10 +323,10 @@ onMounted(() => {
                 v-for="f in briefingFactoids"
                 :key="f.label"
               >
-                <p class="font-mono text-[9px] text-hud-accent/50 tracking-[0.5em] uppercase mb-3">
+                <p class="font-mono text-[12px] text-hud-accent/50 tracking-[0.5em] uppercase mb-3">
                   {{ f.label }}
                 </p>
-                <p class="font-mono text-[10px] text-hud-accent/60 leading-relaxed uppercase tracking-wider">
+                <p class="font-mono text-[13px] text-hud-accent/60 leading-relaxed uppercase tracking-wider">
                   <template
                     v-for="(part, pi) in f.parts"
                     :key="pi"
@@ -905,15 +905,15 @@ onMounted(() => {
           style="animation-delay:2.8s"
         >
           <div class="panel-grid-mesh" /><div class="panel-scanlines" /><div class="card-brackets" />
-          <label class="relative z-10 font-mono text-[11px] text-hud-accent tracking-[0.5em] uppercase block mb-10">
+          <label class="relative z-10 font-mono text-[14px] text-hud-accent tracking-[0.5em] uppercase block mb-10">
             POSITION_DATA
           </label>
           <div class="relative z-10 flex flex-col gap-8">
             <div class="border-b border-white/10 pb-8">
-              <span class="font-mono text-[11px] text-white/20 uppercase tracking-widest block mb-4">ALTITUDE</span><span class="font-orbitron font-black text-5xl xl:text-6xl text-white">{{ altStr }}</span>
+              <span class="font-mono text-[14px] text-white/20 uppercase tracking-widest block mb-4">ALTITUDE</span><span class="font-orbitron font-black text-5xl xl:text-6xl text-white">{{ altStr }}</span>
             </div>
             <div>
-              <span class="font-mono text-[11px] text-white/20 uppercase tracking-widest block mb-4">AZIMUTH</span><span class="font-orbitron font-black text-5xl xl:text-6xl text-white">{{ azStr }}</span>
+              <span class="font-mono text-[14px] text-white/20 uppercase tracking-widest block mb-4">AZIMUTH</span><span class="font-orbitron font-black text-5xl xl:text-6xl text-white">{{ azStr }}</span>
             </div>
           </div>
           
@@ -948,7 +948,7 @@ onMounted(() => {
             
             <!-- Header -->
             <div class="flex-none p-4 md:p-6 border-b border-hud-accent/20 bg-hud-accent/5 flex items-center justify-between z-20">
-              <h3 class="font-orbitron font-black text-hud-accent tracking-[0.2em] uppercase text-xs md:text-sm">
+              <h3 class="font-orbitron font-black text-hud-accent tracking-[0.2em] uppercase text-sm md:text-xl">
                 LOCATING THE MOON // MANUAL TELEMETRY
               </h3>
               <button
@@ -966,45 +966,45 @@ onMounted(() => {
               <div class="panel-scanlines opacity-40 absolute inset-0 pointer-events-none" />
               
               <div class="relative z-10 p-6 md:p-10 space-y-12 pb-12">
-                <p class="text-sm text-hud-accent/80 leading-relaxed italic border-b border-hud-accent/10 pb-8">
+                <p class="text-lg text-hud-accent/80 leading-relaxed italic border-b border-hud-accent/10 pb-8">
                   When you have no tools, your body becomes the measuring device. This guide explains how to find the Moon's position using cardinal orientation and the "Hand Rule" method.
                 </p>
 
                 <section>
-                  <h4 class="font-orbitron font-black text-white text-md tracking-wider mb-6 border-l-2 border-hud-accent pl-4 uppercase">
+                  <h4 class="font-orbitron font-black text-white text-xl tracking-wider mb-6 border-l-2 border-hud-accent pl-4 uppercase">
                     1. Establish Heading (Azimuth)
                   </h4>
-                  <div class="text-[11px] text-white/50 leading-relaxed space-y-6">
+                  <div class="text-[14px] text-white/50 leading-relaxed space-y-6">
                     <p>To measure the Moon's position, you must first orient yourself toward the correct sector of the sky.</p>
                     
                     <!-- Dynamic Hemisphere Guidance -->
                     <div v-if="lat >= 0" class="p-6 border border-hud-accent/20 bg-hud-accent/5 rounded space-y-4">
-                      <p class="text-hud-accent font-bold tracking-widest uppercase">NORTHERN HEMISPHERE DETECTED [{{ lat.toFixed(2) }}°N]</p>
-                      <p>The Moon generally traverses the <strong class="text-white">Southern</strong> sky. To find South (180°) without a compass:</p>
-                      <ul class="space-y-3 list-disc pl-4">
+                      <p class="text-hud-accent font-bold tracking-widest uppercase text-base">NORTHERN HEMISPHERE DETECTED [{{ lat.toFixed(2) }}°N]</p>
+                      <p>The Moon generally traverses the <strong class="text-white text-lg">Southern</strong> sky. To find South (180°) without a compass:</p>
+                      <ul class="space-y-3 list-disc pl-4 text-base">
                         <li>Locate where the sun set today (West).</li>
-                        <li>Stand with the sunset point on your <strong class="text-white uppercase">Right</strong> shoulder.</li>
-                        <li>You are now facing directly <strong class="text-hud-accent uppercase">South</strong>.</li>
+                        <li>Stand with the sunset point on your <strong class="text-white uppercase font-black">Right</strong> shoulder.</li>
+                        <li>You are now facing directly <strong class="text-hud-accent uppercase font-black">South</strong>.</li>
                       </ul>
                     </div>
                     
                     <div v-else class="p-6 border border-hud-accent/20 bg-hud-accent/5 rounded space-y-4">
-                      <p class="text-hud-accent font-bold tracking-widest uppercase">SOUTHERN HEMISPHERE DETECTED [{{ lat.toFixed(2) }}°S]</p>
-                      <p>The Moon generally traverses the <strong class="text-white">Northern</strong> sky. To find North (0°) without a compass:</p>
-                      <ul class="space-y-3 list-disc pl-4">
+                      <p class="text-hud-accent font-bold tracking-widest uppercase text-base">SOUTHERN HEMISPHERE DETECTED [{{ lat.toFixed(2) }}°S]</p>
+                      <p>The Moon generally traverses the <strong class="text-white text-lg">Northern</strong> sky. To find North (0°) without a compass:</p>
+                      <ul class="space-y-3 list-disc pl-4 text-base">
                         <li>Locate where the sun set today (West).</li>
-                        <li>Stand with the sunset point on your <strong class="text-white uppercase">Left</strong> shoulder.</li>
-                        <li>You are now facing directly <strong class="text-hud-accent uppercase">North</strong>.</li>
+                        <li>Stand with the sunset point on your <strong class="text-white uppercase font-black">Left</strong> shoulder.</li>
+                        <li>You are now facing directly <strong class="text-hud-accent uppercase font-black">North</strong>.</li>
                       </ul>
                     </div>
                   </div>
                 </section>
 
                 <section>
-                  <h4 class="font-orbitron font-black text-white text-md tracking-wider mb-6 border-l-2 border-hud-accent pl-4 uppercase">
+                  <h4 class="font-orbitron font-black text-white text-xl tracking-wider mb-6 border-l-2 border-hud-accent pl-4 uppercase">
                     2. Measure Altitude (Hand Rule)
                   </h4>
-                  <p class="text-[11px] text-white/50 leading-relaxed mb-6">
+                  <p class="text-base text-white/50 leading-relaxed mb-6">
                     Once facing the correct quadrant, use your arm at full extension to measure degrees above the horizon.
                   </p>
                 </section>
