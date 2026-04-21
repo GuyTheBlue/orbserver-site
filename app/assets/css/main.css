@@ -1,6 +1,12 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
 
+@layer base {
+  body {
+    @apply bg-black text-white antialiased;
+  }
+}
+
 @theme static {
   --font-sans: 'Roboto', sans-serif;
   --font-orbitron: 'Orbitron', sans-serif;
