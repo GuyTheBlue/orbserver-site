@@ -7,6 +7,24 @@ const { y } = useWindowScroll()
 
 // The navbar appears transparent natively, but becomes truly "glassy" once the user scrolls past 50px
 const isGlassy = computed(() => y.value > 50)
+
+// ── SEO & SOCIAL METADATA ────────────────────────────────────────────────────
+useSeoMeta({
+  title: 'ORBSERVER // Lunar Telemetry Dashboard',
+  ogTitle: 'ORBSERVER // Lunar Telemetry Dashboard',
+  description: 'A high-fidelity, real-time lunar observation and orbital synchronization dashboard. Calibrated for Southern Hemisphere (SH) precision.',
+  ogDescription: 'A high-fidelity, real-time lunar observation and orbital synchronization dashboard. Calibrated for Southern Hemisphere (SH) precision.',
+  ogImage: 'https://orbserver.g-squared.co.za/social_orbserver.png',
+  ogUrl: 'https://orbserver.g-squared.co.za/',
+  ogType: 'website',
+  ogSiteName: 'Orbserver',
+  twitterCard: 'summary_large_image',
+  twitterTitle: 'ORBSERVER // Lunar Telemetry Dashboard',
+  twitterDescription: 'A high-fidelity, real-time lunar observation and orbital synchronization dashboard.',
+  twitterImage: 'https://orbserver.g-squared.co.za/social_orbserver.png',
+  themeColor: '#000000',
+  author: 'GSQUARED'
+})
 </script>
 
 <template>
