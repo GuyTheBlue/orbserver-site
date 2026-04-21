@@ -190,7 +190,9 @@ const moonRotation = computed(() => `${textureRotation.value}deg`)
         </div>
 
         <!-- Debug utility -->
-        <SharedScreenSizeHelper />
+        <DevOnly>
+          <SharedScreenSizeHelper />
+        </DevOnly>
       </div>
 
       <template #fallback>
@@ -206,9 +208,19 @@ const moonRotation = computed(() => `${textureRotation.value}deg`)
 
 <style scoped>
 @keyframes focus-pulse {
-  0%, 100% { filter: blur(0px); opacity: 0.8; }
-  50% { filter: blur(8px); opacity: 0.4; }
+
+  0%,
+  100% {
+    filter: blur(0px);
+    opacity: 0.8;
+  }
+
+  50% {
+    filter: blur(8px);
+    opacity: 0.4;
+  }
 }
+
 .animate-focus-pulse {
   animation: focus-pulse 5s ease-in-out infinite;
 }
