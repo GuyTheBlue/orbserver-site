@@ -15,8 +15,8 @@ const voidOpacity = computed(() => Math.min(y.value / 400, 1))
 const environmentOpacity = computed(() => 1 - voidOpacity.value)
 
 // Real-time geographic rotation
-const { apparentRotation } = useMoonData()
-const moonRotation = computed(() => `${apparentRotation.value}deg`)
+const { textureRotation } = useMoonData()
+const moonRotation = computed(() => `${textureRotation.value}deg`)
 </script>
 
 <template>

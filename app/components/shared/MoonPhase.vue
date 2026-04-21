@@ -4,7 +4,8 @@ import { computed } from 'vue'
 const props = defineProps<{
   fraction: number // 0 (new) → 1 (full)
   phase: number // 0–1 position across the full lunation cycle
-  rotation?: number // Degrees of rotation relative to horizon
+  textureRotation?: number // Degrees for the craters/image
+  limbRotation?: number    // Degrees for the shadow/light
 }>()
 
 function getMoonShadowPath(phase: number): string {
@@ -29,7 +30,7 @@ function getMoonShadowPath(phase: number): string {
   }
 }
 
-// Shape only — rotation (which encodes lit-limb direction) is in apparentRotation
+// Shape only — rotation (which encodes lit-limb direction) is in limbRotation
 const shadowPath = computed(() => getMoonShadowPath(props.phase))
 
 // Ambient glow intensity scales with illumination
@@ -67,15 +68,18 @@ const glowSpread = computed(() => `${40 + props.fraction * 60}px`)
     <!-- Shadow path handles SH via effectivePhase; disc just rotates by parallactic angle -->
     <div
       class="relative rounded-full overflow-hidden moon-disc-element"
-      style="width: 100%; aspect-ratio: 1; transition: transform 2s cubic-bezier(0.16, 1, 0.3, 1);"
-      :style="{ transform: `rotate(${props.rotation ?? 0}deg)` }"
+      style="width: 100%; aspect-ratio: 1;"
     >
-      <!-- The full-disc moon photograph -->
+      <!-- The full-disc moon photograph: Rotated to coordinate with Zenith/Horizon -->
       <img
         src="/images/hero_layers/moon.png"
         alt="Moon"
         class="block w-full h-full object-cover select-none"
         draggable="false"
+        :style="{ 
+          transform: `rotate(${props.textureRotation ?? 0}deg)`,
+          transition: 'transform 2s cubic-bezier(0.16, 1, 0.3, 1)'
+        }"
       >
 
       <!-- SVG shadow overlay — covers the unlit portion of the moon -->
@@ -85,6 +89,10 @@ const glowSpread = computed(() => `${40 + props.fraction * 60}px`)
         viewBox="0 0 100 100"
         xmlns="http://www.w3.org/2000/svg"
         preserveAspectRatio="none"
+        :style="{ 
+          transform: `rotate(${props.limbRotation ?? 0}deg)`,
+          transition: 'transform 2s cubic-bezier(0.16, 1, 0.3, 1)'
+        }"
       >
         <!-- Soft terminator edge: a blurred ellipse sitting on the boundary -->
         <defs>

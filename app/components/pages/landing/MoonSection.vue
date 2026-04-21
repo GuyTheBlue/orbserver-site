@@ -9,7 +9,7 @@ const {
   isLoading, fraction, phase, phaseName, age,
   distance, altitude, azimuth,
   nextFullMoon, nextNewMoon, daysToFullMoon, daysToNewMoon,
-  apparentRotation, lat, lng, movingTowardPerigee,
+  textureRotation, limbRotation, lat, lng, movingTowardPerigee,
   moonrise, moonset,
   apparentDiameter, apparentDiameterRatio, apparentVsMean,
   velocity, lightTravelTime, subLunarPoint,
@@ -89,7 +89,7 @@ async function runSession() {
     { t: `  DISTANCE       ${distance.value > 0 ? `${distFormatted.value} km` : '...'}` },
     { t: `  ALTITUDE       ${altStr.value}` },
     { t: `  AZIMUTH        ${azStr.value}` },
-    { t: `  PARALLAX_ROT   ${Math.round(apparentRotation.value)}° [SH_CALIBRATED]` },
+    { t: `  PARALLAX_ROT   ${Math.round(textureRotation.value)}° [SH_CALIBRATED]` },
     { t: '', blank: true },
     { t: `  STATUS         OK // FEED_STABLE // SECURE_LINK_ACTIVE` },
     { t: '', blank: true },
@@ -279,7 +279,8 @@ onMounted(() => {
             <SharedMoonPhase
               :fraction="fraction"
               :phase="phase"
-              :rotation="apparentRotation"
+              :texture-rotation="textureRotation"
+              :limb-rotation="limbRotation"
             />
             <svg
               class="absolute pointer-events-none text-cyan-400/30 rotate-ring"
@@ -335,7 +336,7 @@ onMounted(() => {
               </div>
               <div class="flex flex-col items-center px-6 sm:px-10 border-r-0 sm:border-r last:border-r-0">
                 <span class="font-mono text-[13px] text-hud-accent/60 tracking-[0.5em] uppercase mb-2">Rot</span>
-                <span class="font-orbitron font-black text-3xl sm:text-5xl text-hud-accent">{{ Math.round(apparentRotation) }}<span class="text-lg text-white/20 ml-1">°</span></span>
+                <span class="font-orbitron font-black text-3xl sm:text-5xl text-hud-accent">{{ Math.round(textureRotation) }}<span class="text-lg text-white/20 ml-1">°</span></span>
               </div>
             </div>
 

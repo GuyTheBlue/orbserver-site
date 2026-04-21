@@ -2,7 +2,7 @@
 // All calculations run client-side only via suncalc.
 // Guarded by import.meta.client to prevent any SSR execution.
 import { ref, onMounted } from 'vue'
-import { calculateApparentRotation } from '~/utils/lunarRotation'
+import { calculateLunarRotation } from '~/utils/lunarRotation'
 
 // The standard 29.53-day synodic lunar month
 const LUNAR_MONTH = 29.530588853
@@ -91,7 +91,8 @@ export function useMoonData() {
   const lat = ref(0)
   const lng = ref(0)
   const librationAngle = ref(0) // Position angle of the bright limb
-  const apparentRotation = ref(0) // Rotation relative to observer zenith
+  const textureRotation = ref(0) // Rotation of craters relative to zenith
+  const limbRotation = ref(0)    // Rotation of the light relative to zenith
   const movingTowardPerigee = ref(false) // true = distance shrinking (toward perigee)
   const moonrise = ref<string>('—')
   const moonset = ref<string>('—')
@@ -282,8 +283,10 @@ export function useMoonData() {
       moonrise.value = times.rise ? times.rise.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) : 'N/A'
       moonset.value = times.set ? times.set.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) : 'N/A'
 
-      // Uses the calibrated, decoupled utility for astronomical fidelity.
-      apparentRotation.value = calculateApparentRotation(illum.angle, pos.parallacticAngle, lat.value)
+      // Uses the calibrated, decoupled utility for astronomical fidelity (V2).
+      const rotations = calculateLunarRotation(illum.angle, pos.parallacticAngle, lat.value)
+      textureRotation.value = rotations.textureRotation
+      limbRotation.value = rotations.limbRotation
     } catch {
       hasError.value = true
     } finally {
@@ -309,7 +312,8 @@ export function useMoonData() {
     lat,
     lng,
     librationAngle,
-    apparentRotation,
+    textureRotation,
+    limbRotation,
     movingTowardPerigee,
     moonrise,
     moonset,
