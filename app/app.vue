@@ -46,10 +46,12 @@ useSeoMeta({
       </header>
     </ClientOnly>
 
-    <!-- The actual page orchestrator renders natively underneath! -->
     <UMain>
       <NuxtPage />
     </UMain>
+
+    <!-- Narrative Lore: The Umph Anomaly -->
+    <SharedStoryBanner />
 
     <!-- Deep-themed Terminal Footer -->
     <UFooter class="bg-black border-t border-white/5 relative z-50 py-12 overflow-hidden">

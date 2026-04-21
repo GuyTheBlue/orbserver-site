@@ -6,6 +6,7 @@ const props = defineProps<{
   density?: number // 0 to 1
   minSize?: number
   maxSize?: number
+  color?: string
 }>()
 
 interface GlitchInstance {
@@ -94,9 +95,10 @@ onMounted(() => {
       >
         <polygon
           points="50,5 95,25 95,75 50,95 5,75 5,25"
-          :fill="g.type === 'solid-pop' ? 'rgba(239,68,68,0.7)' : 'none'"
-          :stroke="'rgba(239,68,68,0.9)'"
+          :fill="g.type === 'solid-pop' ? (props.color || 'rgba(239,68,68,0.7)') : 'none'"
+          :stroke="props.color || 'rgba(239,68,68,0.9)'"
           :stroke-width="g.type === 'solid-pop' ? '0' : '4'"
+          :style="{ opacity: g.type === 'solid-pop' ? 0.7 : 0.9 }"
         />
       </svg>
     </div>
