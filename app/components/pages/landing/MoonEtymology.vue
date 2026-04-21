@@ -12,8 +12,14 @@ defineProps<{
       ETYMOLOGY // PERIGEE
     </p>
     <p class="font-mono text-[11px] text-hud-accent/70 leading-relaxed">
-      <template v-for="part in useTitleParser(data.perigee)" :key="part.id">
-        <span v-if="part.type === 'highlight'" class="text-white font-semibold drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]">{{ part.content }}</span>
+      <template
+        v-for="part in useTitleParser(data.perigee)"
+        :key="part.id"
+      >
+        <span
+          v-if="part.type === 'highlight'"
+          class="text-white font-semibold drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]"
+        >{{ part.content }}</span>
         <span v-else>{{ part.content }}</span>
       </template>
     </p>
@@ -23,8 +29,14 @@ defineProps<{
       ETYMOLOGY // APOGEE
     </p>
     <p class="font-mono text-[11px] text-hud-accent/70 leading-relaxed">
-      <template v-for="part in useTitleParser(data.apogee)" :key="part.id">
-        <span v-if="part.type === 'highlight'" class="text-white font-semibold drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]">{{ part.content }}</span>
+      <template
+        v-for="part in useTitleParser(data.apogee)"
+        :key="part.id"
+      >
+        <span
+          v-if="part.type === 'highlight'"
+          class="text-white font-semibold drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]"
+        >{{ part.content }}</span>
         <span v-else>{{ part.content }}</span>
       </template>
     </p>

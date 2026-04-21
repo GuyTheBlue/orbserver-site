@@ -40,8 +40,8 @@ async function resolveLatLng(): Promise<{ lat: number, lng: number }> {
     navigator.geolocation.getCurrentPosition(
       pos => resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
       (err) => {
-        console.warn('Geolocation Error:', err.message, '| Defaulting to Cape Town (SH).');
-        resolve({ lat: -33.9249, lng: 18.4241 });
+        console.warn('Geolocation Error:', err.message, '| Defaulting to Cape Town (SH).')
+        resolve({ lat: -33.9249, lng: 18.4241 })
       },
       { timeout: 5000, enableHighAccuracy: false }
     )
@@ -95,7 +95,7 @@ export function useMoonData() {
   const lng = ref(18.4241)
   const librationAngle = ref(0) // Position angle of the bright limb
   const textureRotation = ref(0) // Rotation of craters relative to zenith
-  const limbRotation = ref(0)    // Rotation of the light relative to zenith
+  const limbRotation = ref(0) // Rotation of the light relative to zenith
   const movingTowardPerigee = ref(false) // true = distance shrinking (toward perigee)
   const moonrise = ref<string>('—')
   const moonset = ref<string>('—')
@@ -122,14 +122,14 @@ export function useMoonData() {
       const now = new Date()
 
       // ── Position / Geolocation ──────────────────────────────────────────
-      const loc = await new Promise<{ lat: number, lng: number }>(resolve => {
+      const loc = await new Promise<{ lat: number, lng: number }>((resolve) => {
         if (typeof navigator === 'undefined' || !navigator.geolocation) {
           locationStatus.value = 'FALLBACK'
           resolve({ lat: -33.9249, lng: 18.4241 })
           return
         }
         navigator.geolocation.getCurrentPosition(
-          pos => {
+          (pos) => {
             locationStatus.value = 'SYNCED'
             resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude })
           },

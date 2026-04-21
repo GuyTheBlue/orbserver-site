@@ -31,10 +31,10 @@ export function useMoonTerminal(scriptData: any[], telemetry: ComputedRef<Termin
   async function runSession() {
     alive = true
     termLines.value = []
-    
+
     for (const e of scriptData) {
       if (!alive) return
-      
+
       if (e.blank) {
         termLines.value.push({ text: '', cls: 'term-blank' })
         await sleep(160)
@@ -43,7 +43,7 @@ export function useMoonTerminal(scriptData: any[], telemetry: ComputedRef<Termin
 
       // Replace placeholders with real telemetry
       const tel = telemetry.value
-      let processedText = e.t
+      const processedText = e.t
         .replace('{{lat}}', tel.lat)
         .replace('{{lng}}', tel.lng)
         .replace('{{phaseName}}', (tel.phaseName || 'ACQUIRING').toUpperCase())
@@ -57,7 +57,7 @@ export function useMoonTerminal(scriptData: any[], telemetry: ComputedRef<Termin
       termLines.value.push({ text: '', cls: e.cmd ? 'term-cmd' : 'term-out' })
       await typeChar(termLines.value.length - 1, processedText, !!e.cmd)
     }
-    
+
     await sleep(7000)
     termLines.value = []
     await sleep(600)
@@ -69,9 +69,9 @@ export function useMoonTerminal(scriptData: any[], telemetry: ComputedRef<Termin
     const cursorInterval = setInterval(() => {
       termCursor.value = !termCursor.value
     }, 530)
-    
+
     onUnmounted(() => clearInterval(cursorInterval))
-    
+
     setTimeout(runSession, 1400)
   })
 

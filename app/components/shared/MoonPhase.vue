@@ -5,7 +5,7 @@ const props = defineProps<{
   fraction: number // 0 (new) → 1 (full)
   phase: number // 0–1 position across the full lunation cycle
   textureRotation?: number // Degrees for the craters/image
-  limbRotation?: number    // Degrees for the shadow/light
+  limbRotation?: number // Degrees for the shadow/light
 }>()
 
 function getMoonShadowPath(phase: number): string {
@@ -76,7 +76,7 @@ const glowSpread = computed(() => `${40 + props.fraction * 60}px`)
         alt="Moon"
         class="block w-full h-full object-cover select-none"
         draggable="false"
-        :style="{ 
+        :style="{
           transform: `rotate(${props.textureRotation ?? 0}deg)`,
           transition: 'transform 2s cubic-bezier(0.16, 1, 0.3, 1)'
         }"
@@ -89,7 +89,7 @@ const glowSpread = computed(() => `${40 + props.fraction * 60}px`)
         viewBox="0 0 100 100"
         xmlns="http://www.w3.org/2000/svg"
         preserveAspectRatio="none"
-        :style="{ 
+        :style="{
           transform: `rotate(${props.limbRotation ?? 0}deg)`,
           transition: 'transform 2s cubic-bezier(0.16, 1, 0.3, 1)'
         }"

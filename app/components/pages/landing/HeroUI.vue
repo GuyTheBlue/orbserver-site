@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { computed, ref, onMounted } from 'vue'
+import { landingData } from '~/utils/landingData'
+
+const ui = landingData.heroUI
 
 const {
   isLoading, phaseName,
@@ -37,7 +40,7 @@ function cypherMoon() {
 // ── TELEMETRY GLITCH LOGIC ──────────────────────────────────────────────────
 const glitchMap = ref<Record<string, boolean>>({})
 function triggerGlitch() {
-  const keys = ['PHASE', 'ZODIAC', 'ORB_VEL', 'LT_DELAY']
+  const keys = ui.telemetry.rows.map(r => r.label)
   const target = keys[Math.floor(Math.random() * keys.length)]
   if (target) {
     glitchMap.value[target] = true
@@ -57,15 +60,7 @@ const getGlitchedVal = (label: string, original: string) => {
 
 // ── TYPEWRITER & HUD FACTOIDS ──────────────────────────────────────────────
 const factoidText = ref('')
-const factoids = [
-  'The moon is receding from Earth at a rate of 3.8cm per year. Our link monitors exact proximity in real-time.',
-  'Formation theory: The Moon likely formed from a giant impact between Earth and a Mars-sized body named Theia.',
-  'Apollo 11 mission: Neil Armstrong became the first human to step onto the lunar surface on 20 July 1969.',
-  'Apollo 1 tragedy: A cabin fire during a pre-launch test killed three astronauts on 27 January 1967.',
-  'Artemis mission: NASA\'s multi-decade initiative to return humans to the Moon and establish a permanent base.',
-  'Lunar Age: The Moon is approximately 4.5 billion years old, nearly as old as Earth itself.',
-  'Apollo 13: An oxygen tank explosion aborted the landing, but the crew returned safely against all odds.'
-]
+const factoids = ui.intel.factoids
 let fIdx = 0
 let fCharIdx = 0
 let isDeleting = false
@@ -101,12 +96,18 @@ function typeFactoid() {
 const telemetryRows = computed(() => {
   const ltSeconds = (lightTravelTime.value / 1000).toFixed(3)
 
-  return [
-    { id: 'PHA', label: 'PHASE', val: getGlitchedVal('PHASE', phaseName.value?.toUpperCase()), info: 'Current lunar illumination cycle', scale: 75, unit: 'ILL' },
-    { id: 'ZOD', label: 'ZODIAC', val: getGlitchedVal('ZODIAC', (zodiac.value + ' ' + zodiacSymbol.value).toUpperCase()), info: 'Lunar position in tropical zodiac', scale: 60, unit: 'ZOD' },
-    { id: 'VEL', label: 'ORB_VEL', val: getGlitchedVal('ORB_VEL', Math.round(velocity.value * 3600).toLocaleString('en-GB') + ' KM/H'), info: 'Moon orbital speed around Earth', scale: 75, unit: 'KPH' },
-    { id: 'LT', label: 'LT_DELAY', val: getGlitchedVal('LT_DELAY', ltSeconds + ' SEC'), info: 'Time for light to reach Earth from Moon', scale: 92, unit: 'SEC' }
-  ]
+  return ui.telemetry.rows.map((row) => {
+    let rawVal = '—'
+    if (row.id === 'PHA') rawVal = phaseName.value?.toUpperCase() ?? '—'
+    if (row.id === 'ZOD') rawVal = (zodiac.value + ' ' + zodiacSymbol.value).toUpperCase()
+    if (row.id === 'VEL') rawVal = Math.round(velocity.value * 3600).toLocaleString('en-GB') + ' KM/H'
+    if (row.id === 'LT') rawVal = ltSeconds + ' SEC'
+
+    return {
+      ...row,
+      val: getGlitchedVal(row.label, rawVal)
+    }
+  })
 })
 
 onMounted(() => {
@@ -152,18 +153,18 @@ onMounted(() => {
         <div class="relative z-10 pt-6">
           <div class="flex items-center gap-3 mb-6">
             <span class="w-1.5 h-6 bg-hud-accent animate-pulse" />
-            <label class="font-mono text-[13px] text-hud-accent tracking-[0.8em] uppercase opacity-70">SYST_HUD_v4.5</label>
+            <label class="font-mono text-[13px] text-hud-accent tracking-[0.8em] uppercase opacity-70">{{ ui.cta.version }}</label>
           </div>
 
           <h1 class="font-orbitron font-black text-4xl md:text-7xl text-white tracking-[0.15em] uppercase leading-none mb-10 drop-shadow-[0_0_20px_rgba(255,255,255,0.2)]">
-            know thy <br> <span
+            {{ ui.cta.title }} <br> <span
               class="font-mono transition-colors duration-75"
               :class="moonWord === 'moon.' ? 'text-hud-accent' : 'text-red-600 animate-pulse'"
             >{{ moonWord }}</span>
           </h1>
 
           <div class="font-mono text-[14px] text-hud-accent/50 tracking-[0.6em] uppercase border-t border-white/10 pt-8 flex items-center justify-between">
-            <span>REAL_TIME_LINK_ACTIVE</span>
+            <span>{{ ui.cta.status }}</span>
             <span class="text-[11px] animate-pulse">00:00:00:01</span>
           </div>
         </div>
@@ -175,7 +176,7 @@ onMounted(() => {
       <!-- Calibration Header -->
       <div class="flex flex-col items-end gap-1 opacity-60">
         <div class="font-mono text-[8px] sm:text-[12px] text-hud-accent tracking-[0.4em] sm:tracking-[0.8em] uppercase">
-          SYSTEM_QUANTUM_CALIBRATION
+          {{ ui.telemetry.header }}
         </div>
         <div class="w-full h-[1px] bg-hud-accent/20" />
       </div>
@@ -225,7 +226,7 @@ onMounted(() => {
         <div class="panel-grid-mesh opacity-10" /><div class="panel-scanlines opacity-20" />
         <div class="relative z-10">
           <p class="font-mono text-[12px] text-hud-accent/60 tracking-[0.6em] uppercase mb-4 flex items-center justify-between">
-            AR_ANNOTATION::INTEL
+            {{ ui.intel.label }}
             <span class="w-2 h-2 rounded-full bg-hud-accent animate-pulse" />
           </p>
           <p class="font-orbitron text-[14px] text-white/70 tracking-wider leading-relaxed bg-black/20 p-4 border-l-2 border-hud-accent/40">

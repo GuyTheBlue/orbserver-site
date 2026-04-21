@@ -287,7 +287,9 @@ const { termLines, termCursor } = useMoonTerminal(lunar?.terminal ?? [], termina
               <MoonBriefingRows :data="lunar?.briefing ?? []" />
 
               <div>
-                <p class="font-mono text-[9px] text-hud-accent/50 tracking-[0.5em] uppercase mb-3">ORBITAL // VELOCITY</p>
+                <p class="font-mono text-[9px] text-hud-accent/50 tracking-[0.5em] uppercase mb-3">
+                  ORBITAL // VELOCITY
+                </p>
                 <div class="space-y-4">
                   <div class="flex flex-col sm:flex-row sm:justify-between border-b border-white/5 pb-2">
                     <span class="font-mono text-[9px] sm:text-[10px] text-white/20 tracking-wider">V_ORB</span>
@@ -304,7 +306,9 @@ const { termLines, termCursor } = useMoonTerminal(lunar?.terminal ?? [], termina
                 </div>
               </div>
               <div>
-                <p class="font-mono text-[9px] text-hud-accent/50 tracking-[0.5em] uppercase mb-3">COORDINATES // RA_DEC</p>
+                <p class="font-mono text-[9px] text-hud-accent/50 tracking-[0.5em] uppercase mb-3">
+                  COORDINATES // RA_DEC
+                </p>
                 <div class="space-y-4">
                   <div class="flex flex-col sm:flex-row sm:justify-between border-b border-white/5 pb-2">
                     <span class="font-mono text-[9px] sm:text-[10px] text-white/20 tracking-wider">R_ASCENSION</span>
@@ -321,7 +325,9 @@ const { termLines, termCursor } = useMoonTerminal(lunar?.terminal ?? [], termina
                 </div>
               </div>
               <div>
-                <p class="font-mono text-[9px] text-hud-accent/50 tracking-[0.5em] uppercase mb-3">ORBITAL // EVENTS</p>
+                <p class="font-mono text-[9px] text-hud-accent/50 tracking-[0.5em] uppercase mb-3">
+                  ORBITAL // EVENTS
+                </p>
                 <div class="space-y-4">
                   <div class="flex justify-between border-b border-white/5 pb-2">
                     <span class="font-mono text-[9px] sm:text-[10px] text-white/20 tracking-wider">NEXT_PERIGEE</span>
@@ -348,18 +354,68 @@ const { termLines, termCursor } = useMoonTerminal(lunar?.terminal ?? [], termina
                   class="relative z-10 w-full h-full max-w-[280px]"
                   viewBox="0 0 200 120"
                 >
-                  <circle cx="100" cy="60" r="8" fill="none" stroke="var(--hud-accent)" stroke-width="0.5" class="animate-pulse" />
-                  <circle cx="100" cy="60" r="12" fill="none" stroke="var(--hud-accent)" stroke-width="0.2" stroke-dasharray="2 4" />
-                  <ellipse cx="100" cy="60" rx="90" ry="35" fill="none" stroke="white" stroke-width="0.6" stroke-dasharray="4 8" opacity="0.4" />
+                  <circle
+                    cx="100"
+                    cy="60"
+                    r="8"
+                    fill="none"
+                    stroke="var(--hud-accent)"
+                    stroke-width="0.5"
+                    class="animate-pulse"
+                  />
+                  <circle
+                    cx="100"
+                    cy="60"
+                    r="12"
+                    fill="none"
+                    stroke="var(--hud-accent)"
+                    stroke-width="0.2"
+                    stroke-dasharray="2 4"
+                  />
+                  <ellipse
+                    cx="100"
+                    cy="60"
+                    rx="90"
+                    ry="35"
+                    fill="none"
+                    stroke="white"
+                    stroke-width="0.6"
+                    stroke-dasharray="4 8"
+                    opacity="0.4"
+                  />
                   <g class="celestial-system-anim">
-                    <circle cx="0" cy="0" r="4" fill="none" stroke="white" stroke-width="1" />
-                    <circle cx="0" cy="0" r="12" fill="none" stroke="white" stroke-width="0.6" stroke-dasharray="2 2" opacity="0.6" />
+                    <circle
+                      cx="0"
+                      cy="0"
+                      r="4"
+                      fill="none"
+                      stroke="white"
+                      stroke-width="1"
+                    />
+                    <circle
+                      cx="0"
+                      cy="0"
+                      r="12"
+                      fill="none"
+                      stroke="white"
+                      stroke-width="0.6"
+                      stroke-dasharray="2 2"
+                      opacity="0.6"
+                    />
                     <g class="moon-orbit-anim">
-                      <circle cx="12" cy="0" r="1.5" fill="var(--hud-accent)" stroke="none" />
+                      <circle
+                        cx="12"
+                        cy="0"
+                        r="1.5"
+                        fill="var(--hud-accent)"
+                        stroke="none"
+                      />
                     </g>
                   </g>
                 </svg>
-                <p class="absolute bottom-2 left-1/2 -translate-x-1/2 font-mono text-[8px] text-white/30 tracking-[0.5em] uppercase pointer-events-none">simulation::orbital_sync</p>
+                <p class="absolute bottom-2 left-1/2 -translate-x-1/2 font-mono text-[8px] text-white/30 tracking-[0.5em] uppercase pointer-events-none">
+                  simulation::orbital_sync
+                </p>
               </div>
             </div>
           </div>
@@ -401,25 +457,147 @@ const { termLines, termCursor } = useMoonTerminal(lunar?.terminal ?? [], termina
               xmlns="http://www.w3.org/2000/svg"
             >
               <defs>
-                <pattern id="orbit-grid-radar" width="14" height="14" patternUnits="userSpaceOnUse">
-                  <path d="M14 0 L0 0 0 14" fill="none" stroke="rgba(var(--hud-accent-rgb), 0.04)" stroke-width="0.5" />
+                <pattern
+                  id="orbit-grid-radar"
+                  width="14"
+                  height="14"
+                  patternUnits="userSpaceOnUse"
+                >
+                  <path
+                    d="M14 0 L0 0 0 14"
+                    fill="none"
+                    stroke="rgba(var(--hud-accent-rgb), 0.04)"
+                    stroke-width="0.5"
+                  />
                 </pattern>
               </defs>
-              <rect width="280" height="124" fill="url(#orbit-grid-radar)" />
-              <ellipse :cx="ORB.cx" :cy="ORB.cy" :rx="ORB.rx" :ry="ORB.ry" fill="none" stroke="rgba(var(--hud-accent-rgb), 0.22)" stroke-width="0.8" stroke-dasharray="5 8" />
-              <line x1="48" y1="55" x2="48" y2="69" stroke="rgba(var(--hud-accent-rgb), 0.45)" stroke-width="0.8" />
-              <text x="48" y="48" text-anchor="middle" font-family="monospace" font-size="6.5" fill="rgba(var(--hud-accent-rgb), 0.55)" letter-spacing="1">PRG</text>
-              <line x1="232" y1="55" x2="232" y2="69" stroke="rgba(var(--hud-accent-rgb), 0.30)" stroke-width="0.8" />
-              <text x="232" y="48" text-anchor="middle" font-family="monospace" font-size="6.5" fill="rgba(var(--hud-accent-rgb), 0.35)" letter-spacing="1">APG</text>
-              <line :x1="ORB.ex" :y1="ORB.ey" :x2="moonOrbitX" :y2="moonOrbitY" stroke="rgba(var(--hud-accent-rgb), 0.12)" stroke-width="0.7" stroke-dasharray="2 4" />
-              <circle :cx="ORB.ex" :cy="ORB.ey" r="6" fill="rgba(0,60,100,0.7)" stroke="rgba(var(--hud-accent-rgb), 0.9)" stroke-width="1.2" />
-              <line :x1="ORB.ex - 10" :y1="ORB.ey" :x2="ORB.ex + 10" :y2="ORB.ey" stroke="rgba(var(--hud-accent-rgb), 0.55)" stroke-width="0.7" />
-              <line :x1="ORB.ex" :y1="ORB.ey - 10" :x2="ORB.ex" :y2="ORB.ey + 10" stroke="rgba(var(--hud-accent-rgb), 0.55)" stroke-width="0.7" />
-              <text :x="ORB.ex" :y="ORB.ey + 20" text-anchor="middle" font-family="monospace" font-size="7" fill="rgba(var(--hud-accent-rgb), 0.8)" letter-spacing="1.5">EARTH</text>
-              <circle :cx="moonOrbitX" :cy="moonOrbitY" r="10" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="0.6" stroke-dasharray="2 3" />
-              <circle :cx="moonOrbitX" :cy="moonOrbitY" r="4.5" fill="rgba(200,215,255,0.15)" stroke="rgba(255,255,255,0.85)" stroke-width="1.2" style="transition: all 1s ease;" />
-              <text :x="moonOrbitX" :y="moonLabelY" text-anchor="middle" font-family="monospace" font-size="7" fill="rgba(255,255,255,0.9)" letter-spacing="1.5">LUNA</text>
-              <text x="140" y="116" text-anchor="middle" font-family="monospace" font-size="6" fill="rgba(var(--hud-accent-rgb), 0.25)" letter-spacing="3">ORBITAL PATH — SUNCALC LIVE</text>
+              <rect
+                width="280"
+                height="124"
+                fill="url(#orbit-grid-radar)"
+              />
+              <ellipse
+                :cx="ORB.cx"
+                :cy="ORB.cy"
+                :rx="ORB.rx"
+                :ry="ORB.ry"
+                fill="none"
+                stroke="rgba(var(--hud-accent-rgb), 0.22)"
+                stroke-width="0.8"
+                stroke-dasharray="5 8"
+              />
+              <line
+                x1="48"
+                y1="55"
+                x2="48"
+                y2="69"
+                stroke="rgba(var(--hud-accent-rgb), 0.45)"
+                stroke-width="0.8"
+              />
+              <text
+                x="48"
+                y="48"
+                text-anchor="middle"
+                font-family="monospace"
+                font-size="6.5"
+                fill="rgba(var(--hud-accent-rgb), 0.55)"
+                letter-spacing="1"
+              >PRG</text>
+              <line
+                x1="232"
+                y1="55"
+                x2="232"
+                y2="69"
+                stroke="rgba(var(--hud-accent-rgb), 0.30)"
+                stroke-width="0.8"
+              />
+              <text
+                x="232"
+                y="48"
+                text-anchor="middle"
+                font-family="monospace"
+                font-size="6.5"
+                fill="rgba(var(--hud-accent-rgb), 0.35)"
+                letter-spacing="1"
+              >APG</text>
+              <line
+                :x1="ORB.ex"
+                :y1="ORB.ey"
+                :x2="moonOrbitX"
+                :y2="moonOrbitY"
+                stroke="rgba(var(--hud-accent-rgb), 0.12)"
+                stroke-width="0.7"
+                stroke-dasharray="2 4"
+              />
+              <circle
+                :cx="ORB.ex"
+                :cy="ORB.ey"
+                r="6"
+                fill="rgba(0,60,100,0.7)"
+                stroke="rgba(var(--hud-accent-rgb), 0.9)"
+                stroke-width="1.2"
+              />
+              <line
+                :x1="ORB.ex - 10"
+                :y1="ORB.ey"
+                :x2="ORB.ex + 10"
+                :y2="ORB.ey"
+                stroke="rgba(var(--hud-accent-rgb), 0.55)"
+                stroke-width="0.7"
+              />
+              <line
+                :x1="ORB.ex"
+                :y1="ORB.ey - 10"
+                :x2="ORB.ex"
+                :y2="ORB.ey + 10"
+                stroke="rgba(var(--hud-accent-rgb), 0.55)"
+                stroke-width="0.7"
+              />
+              <text
+                :x="ORB.ex"
+                :y="ORB.ey + 20"
+                text-anchor="middle"
+                font-family="monospace"
+                font-size="7"
+                fill="rgba(var(--hud-accent-rgb), 0.8)"
+                letter-spacing="1.5"
+              >EARTH</text>
+              <circle
+                :cx="moonOrbitX"
+                :cy="moonOrbitY"
+                r="10"
+                fill="none"
+                stroke="rgba(255,255,255,0.12)"
+                stroke-width="0.6"
+                stroke-dasharray="2 3"
+              />
+              <circle
+                :cx="moonOrbitX"
+                :cy="moonOrbitY"
+                r="4.5"
+                fill="rgba(200,215,255,0.15)"
+                stroke="rgba(255,255,255,0.85)"
+                stroke-width="1.2"
+                style="transition: all 1s ease;"
+              />
+              <text
+                :x="moonOrbitX"
+                :y="moonLabelY"
+                text-anchor="middle"
+                font-family="monospace"
+                font-size="7"
+                fill="rgba(255,255,255,0.9)"
+                letter-spacing="1.5"
+              >LUNA</text>
+              <text
+                x="140"
+                y="116"
+                text-anchor="middle"
+                font-family="monospace"
+                font-size="6"
+                fill="rgba(var(--hud-accent-rgb), 0.25)"
+                letter-spacing="3"
+              >ORBITAL PATH — SUNCALC LIVE</text>
             </svg>
 
             <div class="relative z-10 mt-6 border-t border-hud-accent/10 pt-6 space-y-4">
@@ -451,10 +629,18 @@ const { termLines, termCursor } = useMoonTerminal(lunar?.terminal ?? [], termina
                   </div>
                 </div>
                 <div class="mt-auto pt-6 border-t border-white/5">
-                  <p class="font-mono text-[9px] text-hud-accent/50 tracking-[0.5em] uppercase mb-2">{{ lunar.riseSetFactoid.label }}</p>
+                  <p class="font-mono text-[9px] text-hud-accent/50 tracking-[0.5em] uppercase mb-2">
+                    {{ lunar.riseSetFactoid.label }}
+                  </p>
                   <p class="font-mono text-[10px] text-hud-accent/60 leading-relaxed uppercase">
-                    <template v-for="part in useTitleParser(lunar.riseSetFactoid.text)" :key="part.id">
-                      <span v-if="part.type === 'highlight'" class="text-white drop-shadow-[0_0_6px_white]">{{ part.content }}</span>
+                    <template
+                      v-for="part in useTitleParser(lunar.riseSetFactoid.text)"
+                      :key="part.id"
+                    >
+                      <span
+                        v-if="part.type === 'highlight'"
+                        class="text-white drop-shadow-[0_0_6px_white]"
+                      >{{ part.content }}</span>
                       <span v-else>{{ part.content }}</span>
                     </template>
                   </p>
@@ -463,14 +649,20 @@ const { termLines, termCursor } = useMoonTerminal(lunar?.terminal ?? [], termina
             </div>
 
             <!-- Panel: Apparent Angular Diameter -->
-            <div class="panel-card group p-10 rounded-2xl bento-flicker" style="animation-delay:0.4s">
+            <div
+              class="panel-card group p-10 rounded-2xl bento-flicker"
+              style="animation-delay:0.4s"
+            >
               <div class="panel-grid-mesh" /><div class="panel-scanlines" /><div class="card-brackets" />
               <div class="relative z-10 flex flex-col h-full">
                 <label class="font-mono text-[11px] text-hud-accent tracking-[0.5em] uppercase block mb-6">{{ lunar.labels.diameter }}</label>
                 <div class="mb-6">
                   <div class="flex items-baseline gap-3 mb-1">
                     <span class="font-orbitron font-black text-5xl text-white">{{ apparentDiameter }}′</span>
-                    <span v-if="isSupermoon" class="font-mono text-[9px] text-hud-accent border border-hud-accent/50 px-2 py-0.5 rounded tracking-widest animate-pulse">SUPERMOON</span>
+                    <span
+                      v-if="isSupermoon"
+                      class="font-mono text-[9px] text-hud-accent border border-hud-accent/50 px-2 py-0.5 rounded tracking-widest animate-pulse"
+                    >SUPERMOON</span>
                   </div>
                   <p class="font-mono text-[10px] text-white/30 uppercase tracking-wider">
                     <span :class="apparentVsMean >= 0 ? 'text-hud-accent' : 'text-white/40'">{{ apparentVsMean >= 0 ? '+' : '' }}{{ apparentVsMean }}%</span>
@@ -482,40 +674,61 @@ const { termLines, termCursor } = useMoonTerminal(lunar?.terminal ?? [], termina
                     <span>Minimum (29.4′)</span><span>Maximum (33.5′)</span>
                   </div>
                   <div class="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
-                    <div class="h-full bg-hud-accent shadow-[var(--hud-accent-glow)] transition-all duration-[1.5s]" :style="{ width: `${apparentDiameterRatio}%` }" />
+                    <div
+                      class="h-full bg-hud-accent shadow-[var(--hud-accent-glow)] transition-all duration-[1.5s]"
+                      :style="{ width: `${apparentDiameterRatio}%` }"
+                    />
                   </div>
                 </div>
               </div>
             </div>
 
             <!-- Panel: Next Full -->
-            <div class="panel-card group p-10 rounded-2xl bento-flicker" style="animation-delay:0.8s">
+            <div
+              class="panel-card group p-10 rounded-2xl bento-flicker"
+              style="animation-delay:0.8s"
+            >
               <div class="panel-grid-mesh" /><div class="panel-scanlines" /><div class="card-brackets" />
               <div class="relative z-10 h-full flex flex-col">
                 <label class="font-mono text-[11px] text-hud-accent tracking-[0.5em] uppercase block mb-6">NEXT_FULL</label>
                 <div class="font-orbitron font-black text-5xl xl:text-6xl text-white mb-2">
                   {{ daysToFullMoon }}<span class="text-2xl text-white/20 ml-2">d</span>
                 </div>
-                <p class="font-mono text-[10px] text-white/20 uppercase tracking-[0.3em] mb-6 truncate">{{ nextFullMoon }}</p>
+                <p class="font-mono text-[10px] text-white/20 uppercase tracking-[0.3em] mb-6 truncate">
+                  {{ nextFullMoon }}
+                </p>
                 <div class="mt-auto pt-6 border-t border-white/5">
-                  <p class="font-mono text-[9px] text-hud-accent/50 tracking-[0.5em] uppercase mb-2">OPPOSITION // LUM</p>
-                  <p class="font-mono text-[10px] text-hud-accent/60 leading-relaxed uppercase tracking-wider">Analysis detects #h#solar opposition#/h# state.</p>
+                  <p class="font-mono text-[9px] text-hud-accent/50 tracking-[0.5em] uppercase mb-2">
+                    OPPOSITION // LUM
+                  </p>
+                  <p class="font-mono text-[10px] text-hud-accent/60 leading-relaxed uppercase tracking-wider">
+                    Analysis detects #h#solar opposition#/h# state.
+                  </p>
                 </div>
               </div>
             </div>
 
             <!-- Panel: Next New -->
-            <div class="panel-card group p-10 rounded-2xl bento-flicker" style="animation-delay:1.4s">
+            <div
+              class="panel-card group p-10 rounded-2xl bento-flicker"
+              style="animation-delay:1.4s"
+            >
               <div class="panel-grid-mesh" /><div class="panel-scanlines" /><div class="card-brackets" />
               <div class="relative z-10 h-full flex flex-col">
                 <label class="font-mono text-[11px] text-hud-accent tracking-[0.5em] uppercase block mb-6">NEXT_NEW</label>
                 <div class="font-orbitron font-black text-5xl xl:text-6xl text-hud-accent mb-2">
                   {{ daysToNewMoon }}<span class="text-2xl text-white/20 ml-2">d</span>
                 </div>
-                <p class="font-mono text-[10px] text-white/20 uppercase tracking-[0.3em] mb-6 truncate">{{ nextNewMoon }}</p>
+                <p class="font-mono text-[10px] text-white/20 uppercase tracking-[0.3em] mb-6 truncate">
+                  {{ nextNewMoon }}
+                </p>
                 <div class="mt-auto pt-6 border-t border-white/5">
-                  <p class="font-mono text-[9px] text-hud-accent/50 tracking-[0.5em] uppercase mb-2">CONJUNCTION // DARK</p>
-                  <p class="font-mono text-[10px] text-hud-accent/60 leading-relaxed uppercase tracking-wider">Orbital alignment at #h#conjunction#/h# state.</p>
+                  <p class="font-mono text-[9px] text-hud-accent/50 tracking-[0.5em] uppercase mb-2">
+                    CONJUNCTION // DARK
+                  </p>
+                  <p class="font-mono text-[10px] text-hud-accent/60 leading-relaxed uppercase tracking-wider">
+                    Orbital alignment at #h#conjunction#/h# state.
+                  </p>
                 </div>
               </div>
             </div>
@@ -525,26 +738,48 @@ const { termLines, termCursor } = useMoonTerminal(lunar?.terminal ?? [], termina
 
       <!-- ROW 2: OBSERVER COORDS + ALT/AZ -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div class="lg:col-span-2 panel-card group p-10 rounded-2xl bento-flicker" style="animation-delay:2s">
+        <div
+          class="lg:col-span-2 panel-card group p-10 rounded-2xl bento-flicker"
+          style="animation-delay:2s"
+        >
           <div class="panel-grid-mesh" /><div class="panel-scanlines" /><div class="card-brackets" />
-          <svg class="absolute top-6 right-8 w-10 h-10 text-hud-accent/5 pointer-events-none" viewBox="0 0 50 43"><path d="M12.5 0L37.5 0L50 21.5L37.5 43L12.5 43L0 21.5Z" fill="none" stroke="currentColor" stroke-width="1" /></svg>
+          <svg
+            class="absolute top-6 right-8 w-10 h-10 text-hud-accent/5 pointer-events-none"
+            viewBox="0 0 50 43"
+          ><path
+            d="M12.5 0L37.5 0L50 21.5L37.5 43L12.5 43L0 21.5Z"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1"
+          /></svg>
           <label class="relative z-10 font-mono text-[11px] text-hud-accent tracking-[0.5em] uppercase block mb-10">LOC_SYSLOG::COORDS</label>
           <div class="relative z-10 grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
-            <div class="border-b border-white/5 sm:border-0 pb-4 sm:pb-0"><span class="font-mono text-[10px] sm:text-[11px] text-white/20 uppercase tracking-[0.4em] block mb-2 sm:mb-4">LATITUDE</span><span class="font-orbitron font-black text-2xl sm:text-4xl xl:text-6xl text-white">{{ latStr }}</span></div>
+            <div class="border-b border-white/5 sm:border-0 pb-4 sm:pb-0">
+              <span class="font-mono text-[10px] sm:text-[11px] text-white/20 uppercase tracking-[0.4em] block mb-2 sm:mb-4">LATITUDE</span><span class="font-orbitron font-black text-2xl sm:text-4xl xl:text-6xl text-white">{{ latStr }}</span>
+            </div>
             <div><span class="font-mono text-[10px] sm:text-[11px] text-white/20 uppercase tracking-[0.4em] block mb-2 sm:mb-4">LONGITUDE</span><span class="font-orbitron font-black text-2xl sm:text-4xl xl:text-6xl text-white">{{ lngStr }}</span></div>
           </div>
-          <div class="relative z-10 mt-10 flex items-center gap-4 px-6 py-4 border bg-opacity-5 transition-colors duration-1000"
-               :class="locationStatus === 'FALLBACK' ? 'border-red-500/30 bg-red-500/5' : 'border-hud-accent/20 bg-hud-accent/5'">
-            <div class="w-3 h-3 rounded-full animate-pulse transition-all duration-1000"
-                 :class="locationStatus === 'FALLBACK' ? 'bg-[#ff3e3e] shadow-[0_0_12px_rgba(255,62,62,1)]' : 'bg-[#28c840] shadow-[0_0_12px_rgba(40,200,64,1)]'" />
-            <span class="font-mono text-[11px] tracking-[0.4em] uppercase transition-colors duration-1000"
-                  :class="locationStatus === 'FALLBACK' ? 'text-red-400' : 'text-hud-accent'">
+          <div
+            class="relative z-10 mt-10 flex items-center gap-4 px-6 py-4 border bg-opacity-5 transition-colors duration-1000"
+            :class="locationStatus === 'FALLBACK' ? 'border-red-500/30 bg-red-500/5' : 'border-hud-accent/20 bg-hud-accent/5'"
+          >
+            <div
+              class="w-3 h-3 rounded-full animate-pulse transition-all duration-1000"
+              :class="locationStatus === 'FALLBACK' ? 'bg-[#ff3e3e] shadow-[0_0_12px_rgba(255,62,62,1)]' : 'bg-[#28c840] shadow-[0_0_12px_rgba(40,200,64,1)]'"
+            />
+            <span
+              class="font-mono text-[11px] tracking-[0.4em] uppercase transition-colors duration-1000"
+              :class="locationStatus === 'FALLBACK' ? 'text-red-400' : 'text-hud-accent'"
+            >
               SH_CALIBRATION: {{ locationStatus === 'FALLBACK' ? 'SIGNAL_LOSS // IP_DEFAULT' : 'ACTIVE // FEED: SYNCED' }}
             </span>
           </div>
         </div>
 
-        <div class="panel-card group p-10 rounded-2xl flex flex-col justify-between bento-flicker relative" style="animation-delay:2.8s">
+        <div
+          class="panel-card group p-10 rounded-2xl flex flex-col justify-between bento-flicker relative"
+          style="animation-delay:2.8s"
+        >
           <div class="panel-grid-mesh" /><div class="panel-scanlines" /><div class="card-brackets" />
           <div class="relative z-10 flex flex-col gap-8">
             <div class="border-b border-white/10 pb-8">
@@ -554,7 +789,13 @@ const { termLines, termCursor } = useMoonTerminal(lunar?.terminal ?? [], termina
               <span class="font-mono text-[14px] text-white/20 uppercase tracking-widest block mb-4">AZIMUTH</span><span class="font-orbitron font-black text-5xl xl:text-6xl text-white">{{ azStr }}</span>
             </div>
           </div>
-          <button class="absolute bottom-6 right-6 z-[100] w-12 h-12 rounded-sm border border-hud-accent/40 bg-black/80 backdrop-blur-md flex items-center justify-center text-2xl font-orbitron font-black text-hud-accent hover:bg-hud-accent hover:text-black transition-all cursor-pointer shadow-[0_0_20px_rgba(var(--hud-accent-rgb),0.3)] pointer-events-auto active:scale-95" title="Open Hand Rule Guide" @click="openModal">?</button>
+          <button
+            class="absolute bottom-6 right-6 z-[100] w-12 h-12 rounded-sm border border-hud-accent/40 bg-black/80 backdrop-blur-md flex items-center justify-center text-2xl font-orbitron font-black text-hud-accent hover:bg-hud-accent hover:text-black transition-all cursor-pointer shadow-[0_0_20px_rgba(var(--hud-accent-rgb),0.3)] pointer-events-auto active:scale-95"
+            title="Open Hand Rule Guide"
+            @click="openModal"
+          >
+            ?
+          </button>
         </div>
       </div>
     </div>

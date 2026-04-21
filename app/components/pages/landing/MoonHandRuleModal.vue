@@ -33,7 +33,6 @@ const emit = defineEmits(['close'])
 
           <!-- Modal Container -->
           <div class="relative w-full max-w-2xl max-h-[90vh] bg-[#020a14] border border-hud-accent/40 rounded-lg overflow-hidden flex flex-col shadow-[0_0_120px_rgba(0,0,0,1)] ring-1 ring-hud-accent/30">
-            
             <!-- Header -->
             <div class="flex-none p-4 md:p-8 border-b border-hud-accent/20 bg-hud-accent/5 flex flex-col gap-6 z-20">
               <h3 class="font-orbitron font-black text-hud-accent tracking-[0.1em] sm:tracking-[0.2em] uppercase text-xl md:text-3xl leading-tight">
@@ -53,10 +52,15 @@ const emit = defineEmits(['close'])
               <div class="panel-scanlines opacity-40 absolute inset-0 pointer-events-none" />
 
               <div class="relative z-10 p-6 md:p-12 space-y-12 pb-24">
-                
                 <p class="text-lg sm:text-2xl text-hud-accent/80 leading-relaxed italic border-b border-hud-accent/10 pb-10">
-                  <template v-for="part in useTitleParser(data.intro)" :key="part.id">
-                    <span v-if="part.type === 'highlight'" class="text-white drop-shadow-[0_0_8px_white]">{{ part.content }}</span>
+                  <template
+                    v-for="part in useTitleParser(data.intro)"
+                    :key="part.id"
+                  >
+                    <span
+                      v-if="part.type === 'highlight'"
+                      class="text-white drop-shadow-[0_0_8px_white]"
+                    >{{ part.content }}</span>
                     <span v-else>{{ part.content }}</span>
                   </template>
                 </p>
@@ -85,12 +89,14 @@ const emit = defineEmits(['close'])
                             Target Sector: <span class="text-hud-accent uppercase">{{ lat >= 0 ? 'Southern' : 'Northern' }} Sky</span>
                           </p>
                           <div class="bg-black/60 p-6 rounded border border-white/5 font-mono">
-                             <p class="text-[11px] text-hud-accent font-black tracking-widest uppercase mb-4 border-b border-white/10 pb-2">Non-Compass Orientation</p>
-                             <ul class="space-y-4 list-disc pl-6 text-sm sm:text-lg text-white/70 leading-relaxed text-left">
-                               <li>Identify where the <span class="text-white">Sunset</span> point was today (West).</li>
-                               <li>Stand with the sunset point on your <span class="text-hud-accent font-bold">{{ lat >= 0 ? 'Right' : 'Left' }}</span> shoulder.</li>
-                               <li>You are now facing <span class="text-white font-bold">{{ lat >= 0 ? 'South (180°)' : 'North (0°)' }}</span>.</li>
-                             </ul>
+                            <p class="text-[11px] text-hud-accent font-black tracking-widest uppercase mb-4 border-b border-white/10 pb-2">
+                              Non-Compass Orientation
+                            </p>
+                            <ul class="space-y-4 list-disc pl-6 text-sm sm:text-lg text-white/70 leading-relaxed text-left">
+                              <li>Identify where the <span class="text-white">Sunset</span> point was today (West).</li>
+                              <li>Stand with the sunset point on your <span class="text-hud-accent font-bold">{{ lat >= 0 ? 'Right' : 'Left' }}</span> shoulder.</li>
+                              <li>You are now facing <span class="text-white font-bold">{{ lat >= 0 ? 'South (180°)' : 'North (0°)' }}</span>.</li>
+                            </ul>
                           </div>
                         </div>
                       </div>
@@ -99,7 +105,7 @@ const emit = defineEmits(['close'])
 
                   <!-- Section 2: Altitude -->
                   <section class="block w-full">
-                     <div class="flex items-center gap-4 mb-8">
+                    <div class="flex items-center gap-4 mb-8">
                       <div class="h-6 w-1 bg-hud-accent" />
                       <h4 class="font-orbitron font-black text-white text-xl sm:text-3xl tracking-wider uppercase">
                         {{ data.measureAltitude.title }}
@@ -115,7 +121,7 @@ const emit = defineEmits(['close'])
                     <h5 class="text-xs sm:text-base text-hud-accent tracking-[0.4em] uppercase font-black mb-12 text-center">
                       EXECUTION_PROTOCOL // MANUAL_TRACKING
                     </h5>
-                    
+
                     <div class="flex flex-col gap-12 w-full text-left">
                       <div
                         v-for="(step, i) in data.steps"
@@ -130,8 +136,14 @@ const emit = defineEmits(['close'])
                           {{ step.title }}
                         </div>
                         <div class="text-base sm:text-xl text-white/50 leading-relaxed font-medium">
-                          <template v-for="part in useTitleParser(step.desc)" :key="part.id">
-                            <span v-if="part.type === 'highlight'" class="text-white drop-shadow-[0_0_8px_white]">{{ part.content }}</span>
+                          <template
+                            v-for="part in useTitleParser(step.desc)"
+                            :key="part.id"
+                          >
+                            <span
+                              v-if="part.type === 'highlight'"
+                              class="text-white drop-shadow-[0_0_8px_white]"
+                            >{{ part.content }}</span>
                             <span v-else>{{ part.content }}</span>
                           </template>
                         </div>
