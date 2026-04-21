@@ -186,4 +186,11 @@ const style = computed(() => themeMap[currentTheme.value] || themeMap.cyan)
 .animate-text-flicker {
   animation: text-flicker 5s infinite step-end;
 }
+
+/* Force text to black on hover to remain visible against solid background */
+.group\/btn:hover .animate-text-flicker {
+  animation: none !important;
+  color: #000000 !important;
+  text-shadow: none !important;
+}
 </style>
