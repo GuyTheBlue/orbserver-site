@@ -862,7 +862,14 @@ const { termLines, termCursor } = useMoonTerminal(lunar?.terminal ?? [], termina
 }
 
 .celestial-system-anim {
-  animation: earth-orbit 60s linear infinite;
+  /* Using offset-path for 1:1 precision with the SVG ellipse */
+  offset-path: ellipse(90px 35px at 100px 60px);
+  animation: orbit-follow 60s linear infinite;
+}
+
+@keyframes orbit-follow {
+  from { offset-distance: 0%; }
+  to { offset-distance: 100%; }
 }
 
 .moon-orbit-anim {
@@ -871,11 +878,11 @@ const { termLines, termCursor } = useMoonTerminal(lunar?.terminal ?? [], termina
 
 @keyframes earth-orbit {
   from {
-    transform: translate(100px, 60px) rotate(0deg) translateX(90px) scaleY(0.4) rotate(0deg);
+    transform: translate(100px, 60px) rotate(0deg) translateX(90px) scaleY(0.388) rotate(0deg);
   }
 
   to {
-    transform: translate(100px, 60px) rotate(360deg) translateX(90px) scaleY(0.4) rotate(-360deg);
+    transform: translate(100px, 60px) rotate(360deg) translateX(90px) scaleY(0.388) rotate(-360deg);
   }
 }
 
