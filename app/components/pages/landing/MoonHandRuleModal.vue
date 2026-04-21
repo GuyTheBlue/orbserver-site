@@ -132,6 +132,174 @@ const emit = defineEmits(['close'])
                     <p class="text-base sm:text-xl text-white/50 leading-relaxed">
                       {{ data.measureAltitude.description }}
                     </p>
+
+                    <!-- Technical Illustration -->
+                    <div class="relative w-full max-w-lg mx-auto py-12 px-6 border border-hud-accent/10 rounded-2xl bg-hud-accent/[0.02]">
+                      <div class="panel-grid-mesh opacity-10 absolute inset-0 rounded-2xl" />
+                      <svg
+                        viewBox="0 0 400 300"
+                        class="w-full h-auto text-hud-accent"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <defs>
+                          <linearGradient
+                            id="beamGrad"
+                            x1="0%"
+                            y1="100%"
+                            x2="0%"
+                            y2="0%"
+                          >
+                            <stop
+                              offset="0%"
+                              stop-color="currentColor"
+                              stop-opacity="0.2"
+                            />
+                            <stop
+                              offset="100%"
+                              stop-color="currentColor"
+                              stop-opacity="0.05"
+                            />
+                          </linearGradient>
+                        </defs>
+
+                        <!-- Ground / Horizon -->
+                        <line
+                          x1="40"
+                          y1="260"
+                          x2="360"
+                          y2="260"
+                          stroke="currentColor"
+                          stroke-width="1"
+                          stroke-dasharray="4 4"
+                          opacity="0.3"
+                        />
+                        <text
+                          x="40"
+                          y="275"
+                          font-family="monospace"
+                          font-size="8"
+                          fill="currentColor"
+                          opacity="0.5"
+                        >REF_HORIZON // 000°_ALT</text>
+
+                        <!-- The "Ladder" Beam -->
+                        <rect
+                          x="180"
+                          y="60"
+                          width="40"
+                          height="200"
+                          fill="url(#beamGrad)"
+                        />
+
+                        <!-- Fist 1 (10 deg) -->
+                        <g opacity="0.8">
+                          <rect
+                            x="185"
+                            y="215"
+                            width="30"
+                            height="40"
+                            rx="4"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.5"
+                          />
+                          <text
+                            x="225"
+                            y="240"
+                            font-family="monospace"
+                            font-size="10"
+                            fill="currentColor"
+                          >+ 10°</text>
+                        </g>
+
+                        <!-- Fist 2 (20 deg) -->
+                        <g opacity="0.8">
+                          <rect
+                            x="185"
+                            y="170"
+                            width="30"
+                            height="40"
+                            rx="4"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.5"
+                          />
+                          <text
+                            x="225"
+                            y="195"
+                            font-family="monospace"
+                            font-size="10"
+                            fill="currentColor"
+                          >+ 20°</text>
+                        </g>
+
+                        <!-- Fist 3 (30 deg) -->
+                        <g class="animate-pulse">
+                          <rect
+                            x="185"
+                            y="125"
+                            width="30"
+                            height="40"
+                            rx="4"
+                            fill="currentColor"
+                            fill-opacity="0.1"
+                            stroke="currentColor"
+                            stroke-width="2"
+                          />
+                          <text
+                            x="225"
+                            y="150"
+                            font-family="monospace"
+                            font-size="10"
+                            fill="currentColor"
+                            font-weight="bold"
+                          >+ 30° [TARGET]</text>
+                        </g>
+
+                        <!-- Callouts -->
+                        <path
+                          d="M185 235 L120 235"
+                          stroke="currentColor"
+                          stroke-width="0.5"
+                          opacity="0.4"
+                        />
+                        <text
+                          x="60"
+                          y="235"
+                          font-family="monospace"
+                          font-size="7"
+                          fill="currentColor"
+                          opacity="0.6"
+                        >FIST_BASE_SYNC</text>
+
+                        <path
+                          d="M215 125 L280 80"
+                          stroke="currentColor"
+                          stroke-width="0.5"
+                          opacity="0.4"
+                        />
+                        <text
+                          x="285"
+                          y="75"
+                          font-family="monospace"
+                          font-size="7"
+                          fill="white"
+                          opacity="0.8"
+                        >LUNAR_INTERSECT</text>
+
+                        <!-- The Moon circle -->
+                        <circle
+                          cx="215"
+                          cy="125"
+                          r="6"
+                          fill="white"
+                          class="animate-pulse"
+                        />
+                      </svg>
+                      <p class="mt-6 text-center text-[10px] text-hud-accent/40 font-mono tracking-[0.4em] uppercase">
+                        Fig_01 // Angular_Altitude_Ladder
+                      </p>
+                    </div>
                   </section>
 
                   <!-- Section 3: Protocol Steps -->
