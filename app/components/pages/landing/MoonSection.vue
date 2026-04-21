@@ -17,6 +17,7 @@ const {
   apparentDiameter, apparentDiameterRatio, apparentVsMean,
   velocity, lightTravelTime, subLunarPoint,
   ra, dec, nextPerigee, nextApogee, zodiac, zodiacSymbol,
+  constellation,
   locationStatus
 } = useMoonData()
 
@@ -66,6 +67,8 @@ const terminalTelemetry = computed(() => ({
   alt: altStr.value,
   az: azStr.value,
   rot: Math.round(textureRotation.value || 0).toString(),
+  zodiac: zodiac.value,
+  constellation: constellation.value,
   locStatus: locationStatus.value === 'FALLBACK' ? 'SIGNAL_LOSS // IP_DEFAULT' : 'SYNCED'
 }))
 
@@ -209,8 +212,8 @@ const { termLines, termCursor } = useMoonTerminal(lunar?.terminal ?? [], termina
 
           <div class="absolute top-8 left-8 flex flex-col gap-1 z-10">
             <label class="font-mono text-[14px] text-hud-accent tracking-[0.5em] uppercase">{{ lunar.labels.visualPrimary }}</label>
-            <div class="font-mono text-[12px] text-white/20 tracking-widest uppercase">
-              CONSTELLATION // {{ zodiac }} [{{ zodiacSymbol }}]
+            <div class="font-mono text-[12px] text-white/20 tracking-widest uppercase italic">
+              {{ constellation }} :: {{ zodiac }}
             </div>
           </div>
 
@@ -318,9 +321,13 @@ const { termLines, termCursor } = useMoonTerminal(lunar?.terminal ?? [], termina
                     <span class="font-mono text-[9px] sm:text-[10px] text-white/20 tracking-wider">DECLINATION</span>
                     <span class="font-orbitron font-black text-white text-[12px] sm:text-base">{{ dec }}</span>
                   </div>
+                  <div class="flex flex-col sm:flex-row sm:justify-between border-b border-white/5 pb-2">
+                    <span class="font-mono text-[9px] sm:text-[10px] text-white/20 tracking-wider uppercase">ZODIAC_SIGN</span>
+                    <span class="font-orbitron font-black text-hud-accent text-[12px] sm:text-base uppercase underline decoration-hud-accent/20">{{ zodiac }}</span>
+                  </div>
                   <div class="flex flex-col sm:flex-row sm:justify-between">
-                    <span class="font-mono text-[9px] sm:text-[10px] text-white/20 tracking-wider">ZODIAC_SIGN</span>
-                    <span class="font-orbitron font-black text-hud-accent text-[12px] sm:text-base uppercase">{{ zodiac }} {{ zodiacSymbol }}</span>
+                    <span class="font-mono text-[9px] sm:text-[10px] text-white/20 tracking-wider uppercase">CONSTELLATION</span>
+                    <span class="font-orbitron font-black text-white text-[12px] sm:text-base uppercase">{{ constellation }}</span>
                   </div>
                 </div>
               </div>

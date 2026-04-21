@@ -10,6 +10,8 @@ export interface TerminalTelemetry {
   alt: string
   az: string
   rot: string
+  zodiac: string
+  constellation: string
 }
 
 export interface TerminalScriptEntry {
@@ -59,6 +61,8 @@ export function useMoonTerminal(scriptData: TerminalScriptEntry[], telemetry: Co
         .replace('{{alt}}', tel.alt)
         .replace('{{az}}', tel.az)
         .replace('{{rot}}', tel.rot)
+        .replace('{{zodiac}}', tel.zodiac.toUpperCase())
+        .replace('{{constellation}}', tel.constellation.toUpperCase())
 
       termLines.value.push({ text: '', cls: e.cmd ? 'term-cmd' : 'term-out' })
       await typeChar(termLines.value.length - 1, processedText, !!e.cmd)

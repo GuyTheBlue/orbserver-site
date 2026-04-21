@@ -95,6 +95,7 @@ export function useMoonData() {
   const nextApogee = ref('—')
   const zodiac = ref('—')
   const zodiacSymbol = ref('—')
+  const constellation = ref('—')
   const locationStatus = ref<'ACQUIRING' | 'SYNCED' | 'FALLBACK'>('ACQUIRING')
 
   onMounted(async () => {
@@ -215,7 +216,7 @@ export function useMoonData() {
         const decM = Math.floor((decAbs - decD) * 60)
         dec.value = `${decDeg >= 0 ? '+' : '-'}${decD}° ${String(decM).padStart(2, '0')}m`
 
-        // ── Zodiac / Constellation ──────────────────────────────────────────
+        // ── Zodiac (Astrology — Tropical) ──────────────────────────────────
         const lDeg = ((l * 180 / Math.PI) % 360 + 360) % 360
         const zodiacIdx = Math.floor(lDeg / 30)
         const ZODIAC_DATA = [
@@ -231,6 +232,26 @@ export function useMoonData() {
           zodiac.value = zodiacEntry.name
           zodiacSymbol.value = zodiacEntry.sym
         }
+
+        // ── Constellation (Astronomy — Actual IAU Boundaries) ──────────────
+        const getConstellation = (long: number) => {
+          // Precise IAU ecliptic boundaries (approx. J2000)
+          if (long < 28.5) return 'Pisces'
+          if (long < 53.5) return 'Aries'
+          if (long < 90.3) return 'Taurus'
+          if (long < 118.1) return 'Gemini'
+          if (long < 138.2) return 'Cancer'
+          if (long < 173.9) return 'Leo'
+          if (long < 218.0) return 'Virgo'
+          if (long < 241.0) return 'Libra'
+          if (long < 247.7) return 'Scorpio'
+          if (long < 266.6) return 'Ophiuchus'
+          if (long < 300.0) return 'Sagittarius'
+          if (long < 327.9) return 'Capricorn'
+          if (long < 352.0) return 'Aquarius'
+          return 'Pisces'
+        }
+        constellation.value = getConstellation(lDeg)
       }
 
       // ── Next Perigee / Apogee — ephemeris scan ────────────────────────────
@@ -320,6 +341,7 @@ export function useMoonData() {
     ra, dec,
     nextPerigee, nextApogee,
     zodiac, zodiacSymbol,
+    constellation,
     locationStatus
   }
 }
