@@ -39,8 +39,11 @@ async function resolveLatLng(): Promise<{ lat: number, lng: number }> {
   return new Promise((resolve) => {
     navigator.geolocation.getCurrentPosition(
       pos => resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
-      () => resolve({ lat: -33.9249, lng: 18.4241 }), // fallback to Cape Town
-      { timeout: 3000 }
+      (err) => {
+        console.warn('Geolocation Error:', err.message, '| Defaulting to Cape Town (SH).');
+        resolve({ lat: -33.9249, lng: 18.4241 });
+      },
+      { timeout: 5000, enableHighAccuracy: false }
     )
   })
 }
@@ -88,8 +91,8 @@ export function useMoonData() {
   const distance = ref(0) // km
   const altitude = ref(0) // degrees above/below horizon
   const azimuth = ref(0) // degrees, 0° = North, clockwise
-  const lat = ref(0)
-  const lng = ref(0)
+  const lat = ref(-33.9249) // SH Priority Fallback (Cape Town)
+  const lng = ref(18.4241)
   const librationAngle = ref(0) // Position angle of the bright limb
   const textureRotation = ref(0) // Rotation of craters relative to zenith
   const limbRotation = ref(0)    // Rotation of the light relative to zenith
