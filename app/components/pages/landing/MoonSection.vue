@@ -17,6 +17,9 @@ const {
 } = useMoonData()
 
 const showHandRule = ref(false)
+function openModal() {
+  showHandRule.value = true
+}
 
 // ── Intersection ────────────────────────────────────────────────────────────
 const sectionEl = ref<HTMLElement | null>(null)
@@ -146,10 +149,7 @@ onMounted(() => {
             class="w-3 h-3 rounded-full"
             :style="{ backgroundColor: 'rgba(var(--hud-accent-rgb), 0.4)' }"
           />
-          <span
-            class="ml-6 text-[13px] tracking-[0.4em] uppercase"
-            :style="{ color: 'rgba(var(--hud-accent-rgb), 0.4)' }"
-          >terminal_bg::process_feed</span>
+          <span class="ml-3 sm:ml-6 text-[9px] sm:text-[13px] tracking-[0.2em] sm:tracking-[0.4em] uppercase text-hud-accent/60">terminal_bg::process_feed</span>
         </div>
         <!-- BIGGER wash for depth -->
         <div class="text-[22px] leading-relaxed opacity-[0.35]">
@@ -191,7 +191,7 @@ onMounted(() => {
     <div class="absolute inset-0 z-[1] pointer-events-none overflow-hidden select-none">
       <div
         class="absolute -top-[5%] -left-[5%] font-orbitron font-black text-white/[0.035] whitespace-nowrap leading-none"
-        style="font-size: clamp(100px, 22vw, 320px); transform: rotate(-5deg);"
+        style="font-size: clamp(80px, 20vw, 320px); transform: rotate(-5deg);"
       >
         {{ latStr }}
       </div>
@@ -204,7 +204,7 @@ onMounted(() => {
       <!-- Zodiac Wash -->
       <div
         class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-orbitron font-black text-hud-accent/[0.015] whitespace-nowrap leading-none transition-all duration-[3s]"
-        style="font-size: clamp(120px, 30vw, 500px); pointer-events: none;"
+        style="font-size: clamp(80px, 25vw, 500px); pointer-events: none;"
       >
         {{ zodiac.toUpperCase() }}
       </div>
@@ -372,17 +372,17 @@ onMounted(() => {
                   ORBITAL // VELOCITY
                 </p>
                 <div class="space-y-4">
-                  <div class="flex justify-between border-b border-white/5 pb-2">
-                    <span class="font-mono text-[10px] text-white/20">V_ORB</span>
-                    <span class="font-orbitron font-black text-white">{{ velocity.toFixed(3) }} <small class="text-[8px] opacity-30">KM/S</small></span>
+                  <div class="flex flex-col sm:flex-row sm:justify-between border-b border-white/5 pb-2">
+                    <span class="font-mono text-[9px] sm:text-[10px] text-white/20 tracking-wider">V_ORB</span>
+                    <span class="font-orbitron font-black text-white text-[12px] sm:text-base">{{ velocity.toFixed(3) }} <small class="text-[8px] opacity-30">KM/S</small></span>
                   </div>
-                  <div class="flex justify-between border-b border-white/5 pb-2">
-                    <span class="font-mono text-[10px] text-white/20">SIG_DELAY</span>
-                    <span class="font-orbitron font-black text-white">{{ lightTravelTime.toFixed(2) }} <small class="text-[8px] opacity-30">MS</small></span>
+                  <div class="flex flex-col sm:flex-row sm:justify-between border-b border-white/5 pb-2">
+                    <span class="font-mono text-[9px] sm:text-[10px] text-white/20 tracking-wider">SIG_DELAY</span>
+                    <span class="font-orbitron font-black text-white text-[12px] sm:text-base">{{ lightTravelTime.toFixed(2) }} <small class="text-[8px] opacity-30">MS</small></span>
                   </div>
-                  <div class="flex justify-between">
-                    <span class="font-mono text-[10px] text-white/20">SUB_LUNA</span>
-                    <span class="font-orbitron font-black text-hud-accent text-xs">{{ subLunarPoint.lat > 0 ? subLunarPoint.lat + 'N' : Math.abs(subLunarPoint.lat) + 'S' }}, {{ subLunarPoint.lng > 0 ? subLunarPoint.lng + 'E' : Math.abs(subLunarPoint.lng) + 'W' }}</span>
+                  <div class="flex flex-col sm:flex-row sm:justify-between">
+                    <span class="font-mono text-[9px] sm:text-[10px] text-white/20 tracking-wider">SUB_LUNA</span>
+                    <span class="font-orbitron font-black text-hud-accent text-[10px] sm:text-xs">{{ subLunarPoint.lat > 0 ? subLunarPoint.lat + 'N' : Math.abs(subLunarPoint.lat) + 'S' }}, {{ subLunarPoint.lng > 0 ? subLunarPoint.lng + 'E' : Math.abs(subLunarPoint.lng) + 'W' }}</span>
                   </div>
                 </div>
               </div>
@@ -391,17 +391,17 @@ onMounted(() => {
                   COORDINATES // RA_DEC
                 </p>
                 <div class="space-y-4">
-                  <div class="flex justify-between border-b border-white/5 pb-2">
-                    <span class="font-mono text-[10px] text-white/20">R_ASCENSION</span>
-                    <span class="font-orbitron font-black text-white ml-2">{{ ra }}</span>
+                  <div class="flex flex-col sm:flex-row sm:justify-between border-b border-white/5 pb-2">
+                    <span class="font-mono text-[9px] sm:text-[10px] text-white/20 tracking-wider">R_ASCENSION</span>
+                    <span class="font-orbitron font-black text-white text-[12px] sm:text-base">{{ ra }}</span>
                   </div>
-                  <div class="flex justify-between border-b border-white/5 pb-2">
-                    <span class="font-mono text-[10px] text-white/20">DECLINATION</span>
-                    <span class="font-orbitron font-black text-white ml-2">{{ dec }}</span>
+                  <div class="flex flex-col sm:flex-row sm:justify-between border-b border-white/5 pb-2">
+                    <span class="font-mono text-[9px] sm:text-[10px] text-white/20 tracking-wider">DECLINATION</span>
+                    <span class="font-orbitron font-black text-white text-[12px] sm:text-base">{{ dec }}</span>
                   </div>
-                  <div class="flex justify-between">
-                    <span class="font-mono text-[10px] text-white/20">ZODIAC_SIGN</span>
-                    <span class="font-orbitron font-black text-hud-accent ml-2 uppercase">{{ zodiac }} {{ zodiacSymbol }}</span>
+                  <div class="flex flex-col sm:flex-row sm:justify-between">
+                    <span class="font-mono text-[9px] sm:text-[10px] text-white/20 tracking-wider">ZODIAC_SIGN</span>
+                    <span class="font-orbitron font-black text-hud-accent text-[12px] sm:text-base uppercase">{{ zodiac }} {{ zodiacSymbol }}</span>
                   </div>
                 </div>
               </div>
@@ -411,20 +411,20 @@ onMounted(() => {
                 </p>
                 <div class="space-y-4">
                   <div class="flex justify-between border-b border-white/5 pb-2">
-                    <span class="font-mono text-[10px] text-white/20">NEXT_PERIGEE</span>
-                    <span class="font-orbitron font-black text-hud-accent ml-2 uppercase">{{ nextPerigee }}</span>
+                    <span class="font-mono text-[9px] sm:text-[10px] text-white/20 tracking-wider">NEXT_PERIGEE</span>
+                    <span class="font-orbitron font-black text-hud-accent ml-2 uppercase text-[10px] sm:text-xs text-right">{{ nextPerigee }}</span>
                   </div>
                   <div class="flex justify-between border-b border-white/5 pb-2">
-                    <span class="font-mono text-[10px] text-white/20">NEXT_APOGEE</span>
-                    <span class="font-orbitron font-black text-white/40 ml-2 uppercase">{{ nextApogee }}</span>
+                    <span class="font-mono text-[9px] sm:text-[10px] text-white/20 tracking-wider">NEXT_APOGEE</span>
+                    <span class="font-orbitron font-black text-white/40 ml-2 uppercase text-[10px] sm:text-xs text-right">{{ nextApogee }}</span>
                   </div>
-                  <div class="flex justify-between border-b border-white/5 pb-2">
-                    <span class="font-mono text-[10px] text-white/20">GRAVITY</span>
-                    <span class="font-orbitron font-black text-white ml-2">1.62 <small class="text-[8px] opacity-30">M/S²</small></span>
+                  <div class="flex flex-col sm:flex-row sm:justify-between border-b border-white/5 pb-2">
+                    <span class="font-mono text-[9px] sm:text-[10px] text-white/20 tracking-wider">GRAVITY</span>
+                    <span class="font-orbitron font-black text-white text-[12px] sm:text-base">1.62 <small class="text-[8px] opacity-30">M/S²</small></span>
                   </div>
-                  <div class="flex justify-between">
-                    <span class="font-mono text-[10px] text-white/20">ESCAPE_V</span>
-                    <span class="font-orbitron font-black text-white ml-2">2.38 <small class="text-[8px] opacity-30">KM/S</small></span>
+                  <div class="flex flex-col sm:flex-row sm:justify-between">
+                    <span class="font-mono text-[9px] sm:text-[10px] text-white/20 tracking-wider">ESCAPE_V</span>
+                    <span class="font-orbitron font-black text-white text-[12px] sm:text-base">2.38 <small class="text-[8px] opacity-30">KM/S</small></span>
                   </div>
                 </div>
               </div>
@@ -916,9 +916,9 @@ onMounted(() => {
             stroke-width="1"
           /></svg>
           <label class="relative z-10 font-mono text-[11px] text-hud-accent tracking-[0.5em] uppercase block mb-10">LOC_SYSLOG::COORDS</label>
-          <div class="relative z-10 grid grid-cols-2 gap-8">
-            <div><span class="font-mono text-[11px] text-white/20 uppercase tracking-[0.4em] block mb-4">LATITUDE</span><span class="font-orbitron font-black text-xl sm:text-4xl xl:text-6xl text-white">{{ latStr }}</span></div>
-            <div><span class="font-mono text-[11px] text-white/20 uppercase tracking-[0.4em] block mb-4">LONGITUDE</span><span class="font-orbitron font-black text-xl sm:text-4xl xl:text-6xl text-white">{{ lngStr }}</span></div>
+          <div class="relative z-10 grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
+            <div class="border-b border-white/5 sm:border-0 pb-4 sm:pb-0"><span class="font-mono text-[10px] sm:text-[11px] text-white/20 uppercase tracking-[0.4em] block mb-2 sm:mb-4">LATITUDE</span><span class="font-orbitron font-black text-2xl sm:text-4xl xl:text-6xl text-white">{{ latStr }}</span></div>
+            <div><span class="font-mono text-[10px] sm:text-[11px] text-white/20 uppercase tracking-[0.4em] block mb-2 sm:mb-4">LONGITUDE</span><span class="font-orbitron font-black text-2xl sm:text-4xl xl:text-6xl text-white">{{ lngStr }}</span></div>
           </div>
           <div class="relative z-10 mt-10 flex items-center gap-4 px-6 py-4 border border-hud-accent/20 bg-hud-accent/5">
             <div class="w-3 h-3 rounded-full bg-[#28c840] animate-pulse shadow-[0_0_12px_rgba(40,200,64,1)]" />
@@ -931,10 +931,7 @@ onMounted(() => {
           style="animation-delay:2.8s"
         >
           <div class="panel-grid-mesh" /><div class="panel-scanlines" /><div class="card-brackets" />
-          <label class="relative z-10 font-mono text-[14px] text-hud-accent tracking-[0.5em] uppercase block mb-10">
-            POSITION_DATA
-          </label>
-          <div class="relative z-10 flex flex-col gap-8">
+              <div class="relative z-10 flex flex-col gap-8">
             <div class="border-b border-white/10 pb-8">
               <span class="font-mono text-[14px] text-white/20 uppercase tracking-widest block mb-4">ALTITUDE</span><span class="font-orbitron font-black text-5xl xl:text-6xl text-white">{{ altStr }}</span>
             </div>
@@ -945,154 +942,156 @@ onMounted(() => {
 
           <!-- Large Info Button: Bottom Right -->
           <button
-            class="absolute bottom-6 right-6 z-[100] w-12 h-12 rounded-sm border border-hud-accent/40 bg-black/80 backdrop-blur-md flex items-center justify-center text-2xl font-orbitron font-black text-hud-accent hover:bg-hud-accent hover:text-black transition-all cursor-pointer bento-flicker shadow-[0_0_20px_rgba(var(--hud-accent-rgb),0.3)] pointer-events-auto"
+            class="absolute bottom-6 right-6 z-[100] w-12 h-12 rounded-sm border border-hud-accent/40 bg-black/80 backdrop-blur-md flex items-center justify-center text-2xl font-orbitron font-black text-hud-accent hover:bg-hud-accent hover:text-black transition-all cursor-pointer shadow-[0_0_20px_rgba(var(--hud-accent-rgb),0.3)] pointer-events-auto active:scale-95"
             title="Open Hand Rule Guide"
-            @click.stop="() => { console.log('OPENING_HAND_RULE_GUIDE'); showHandRule = true }"
+            @click="openModal"
           >
             ?
           </button>
         </div>
       </div>
     </div>
-
-    <!-- ── 5. OVERLAYS (TELEPORTED TO BODY FOR GUARANTEED OVERLAY) ── -->
-    <Teleport to="body">
-      <Transition
-        enter-active-class="transition-all duration-300 ease-out"
-        enter-from-class="opacity-0 scale-95"
-        enter-to-class="opacity-100 scale-100"
-        leave-active-class="transition-all duration-200 ease-in"
-        leave-from-class="opacity-100 scale-100"
-        leave-to-class="opacity-0 scale-95"
-      >
-        <div
-          v-if="showHandRule"
-          class="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6"
-          style="pointer-events: auto;"
+    <!-- ── 5. OVERLAYS (TELEPORTED TO BODY) ── -->
+    <ClientOnly>
+      <Teleport to="body">
+        <Transition
+          enter-active-class="transition-all duration-300 ease-out"
+          enter-from-class="opacity-0 scale-95"
+          enter-to-class="opacity-100 scale-100"
+          leave-active-class="transition-all duration-300 ease-in"
+          leave-from-class="opacity-100 scale-100"
+          leave-to-class="opacity-0 scale-95"
         >
-          <!-- Backdrop -->
           <div
-            class="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity"
-            @click="showHandRule = false"
-          />
+            v-if="showHandRule"
+            class="fixed inset-0 z-[10000] flex items-center justify-center p-4 sm:p-6 pointer-events-auto"
+          >
+            <!-- Backdrop -->
+            <div
+              class="absolute inset-0 bg-black/90 backdrop-blur-md transition-opacity cursor-pointer"
+              @click="showHandRule = false"
+            />
 
-          <!-- Modal Container -->
-          <div class="relative w-full max-w-2xl max-h-[85vh] bg-[#020a14] border border-hud-accent/30 rounded-lg overflow-hidden flex flex-col font-mono shadow-[0_0_80px_rgba(0,0,0,1)] ring-1 ring-hud-accent/20">
-            <!-- Header -->
-            <div class="flex-none p-4 md:p-6 border-b border-hud-accent/20 bg-hud-accent/5 flex items-center justify-between z-20">
-              <h3 class="font-orbitron font-black text-hud-accent tracking-[0.2em] uppercase text-xl md:text-3xl">
-                LOCATING THE MOON // MANUAL TELEMETRY
-              </h3>
-              <button
-                class="w-8 h-8 flex items-center justify-center rounded bg-black/40 border border-hud-accent/20 text-hud-accent/60 hover:text-hud-accent hover:border-hud-accent/60 hover:bg-hud-accent/10 transition-colors"
-                title="Close"
-                @click="showHandRule = false"
-              >
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                ><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
-              </button>
-            </div>
+            <!-- Modal Container -->
+            <div class="relative w-full max-w-2xl max-h-[90vh] bg-[#020a14] border border-hud-accent/40 rounded-lg overflow-hidden flex flex-col shadow-[0_0_120px_rgba(0,0,0,1)] ring-1 ring-hud-accent/30">
+              
+              <!-- Header -->
+              <div class="flex-none p-4 md:p-8 border-b border-hud-accent/20 bg-hud-accent/5 flex flex-col gap-6 z-20">
+                <h3 class="font-orbitron font-black text-hud-accent tracking-[0.1em] sm:tracking-[0.2em] uppercase text-xl md:text-3xl leading-tight">
+                  LOCATING THE MOON // MANUAL TELEMETRY
+                </h3>
+                <button
+                  class="w-full py-4 rounded bg-hud-accent/10 border border-hud-accent/40 text-hud-accent font-orbitron text-xs sm:text-sm tracking-[0.4em] hover:bg-hud-accent hover:text-black transition-all duration-300 uppercase font-bold"
+                  @click="showHandRule = false"
+                >
+                  CLOSE OVERLAY PROTOCOL
+                </button>
+              </div>
 
-            <!-- Body -->
-            <div class="relative flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar bento-flicker">
-              <div class="panel-grid-mesh opacity-10 absolute inset-0 pointer-events-none" />
-              <div class="panel-scanlines opacity-40 absolute inset-0 pointer-events-none" />
+              <!-- Body -->
+              <div class="relative flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar bg-black/40">
+                <div class="panel-grid-mesh opacity-10 absolute inset-0 pointer-events-none" />
+                <div class="panel-scanlines opacity-40 absolute inset-0 pointer-events-none" />
 
-              <div class="relative z-10 p-6 md:p-14 space-y-16 pb-20">
-                <p class="text-2xl text-hud-accent/80 leading-relaxed italic border-b border-hud-accent/10 pb-12">
-                  When you have no tools, your body becomes the measuring device. This guide explains how to find the Moon's position using cardinal orientation and the "Hand Rule" method.
-                </p>
-
-                <section>
-                  <h4 class="font-orbitron font-black text-white text-3xl tracking-wider mb-8 border-l-4 border-hud-accent pl-6 uppercase">
-                    1. Establish Heading (Azimuth)
-                  </h4>
-                  <div class="text-xl text-white/50 leading-loose space-y-10">
-                    <p>To measure the Moon's position, you must first orient yourself toward the correct sector of the sky.</p>
-
-                    <!-- Dynamic Hemisphere Guidance -->
-                    <div
-                      v-if="lat >= 0"
-                      class="p-10 border border-hud-accent/30 bg-hud-accent/5 rounded-xl space-y-8"
-                    >
-                      <p class="text-hud-accent font-bold tracking-[0.3em] uppercase text-xl">
-                        NORTHERN HEMISPHERE DETECTED [{{ lat.toFixed(2) }}°N]
-                      </p>
-                      <p class="text-2xl">
-                        The Moon generally traverses the <strong class="text-white">Southern</strong> sky. To find South (180°) without a compass:
-                      </p>
-                      <ul class="space-y-6 list-disc pl-10 text-xl text-white/70">
-                        <li>Locate where the sun set today (West).</li>
-                        <li>Stand with the sunset point on your <strong class="text-white uppercase font-black underline decoration-hud-accent">Right</strong> shoulder.</li>
-                        <li>You are now facing directly <strong class="text-hud-accent uppercase font-black">South</strong>.</li>
-                      </ul>
-                    </div>
-
-                    <div
-                      v-else
-                      class="p-10 border border-hud-accent/30 bg-hud-accent/5 rounded-xl space-y-8"
-                    >
-                      <p class="text-hud-accent font-bold tracking-[0.3em] uppercase text-xl">
-                        SOUTHERN HEMISPHERE DETECTED [{{ lat.toFixed(2) }}°S]
-                      </p>
-                      <p class="text-2xl">
-                        The Moon generally traverses the <strong class="text-white">Northern</strong> sky. To find North (0°) without a compass:
-                      </p>
-                      <ul class="space-y-6 list-disc pl-10 text-xl text-white/70">
-                        <li>Locate where the sun set today (West).</li>
-                        <li>Stand with the sunset point on your <strong class="text-white uppercase font-black underline decoration-hud-accent">Left</strong> shoulder.</li>
-                        <li>You are now facing directly <strong class="text-hud-accent uppercase font-black">North</strong>.</li>
-                      </ul>
-                    </div>
-                  </div>
-                </section>
-
-                <section>
-                  <h4 class="font-orbitron font-black text-white text-3xl tracking-wider mb-8 border-l-4 border-hud-accent pl-6 uppercase">
-                    2. Measure Altitude (Hand Rule)
-                  </h4>
-                  <p class="text-xl text-white/50 leading-loose mb-10">
-                    Once facing the correct quadrant, use your arm at full extension to measure degrees above the horizon.
+                <div class="relative z-10 p-6 md:p-12 space-y-12 pb-24">
+                  
+                  <p class="text-lg sm:text-2xl text-hud-accent/80 leading-relaxed italic border-b border-hud-accent/10 pb-10">
+                    When you have no tools, your body becomes the measuring device. This guide explains how to find the Moon's position using cardinal orientation and the "Hand Rule" method.
                   </p>
-                </section>
 
-                <section class="bg-hud-accent/5 p-10 border border-hud-accent/30 rounded-xl space-y-12">
-                  <h5 class="text-base text-hud-accent tracking-[0.5em] uppercase font-bold">
-                    EXECUTION_PROTOCOL
-                  </h5>
-                  <div class="space-y-10">
-                    <div
-                      v-for="(step, i) in [
-                        ['Fully Extend Your Arm', 'Your arm must be straight out. The Hand Rule fails if your elbow is bent.'],
-                        ['The Horizon Line', 'Align the bottom of your first fist with the visible horizon.'],
-                        ['The Ladder', 'Stack your second hand directly on top of the first (20° Altitude).'],
-                        ['The Target', 'The Moon should appear at the top knuckle of the third fist (30° Altitude).']
-                      ]"
-                      :key="i"
-                      class="flex gap-8"
-                    >
-                      <span class="font-orbitron font-black text-hud-accent/40 text-3xl leading-none mt-1">{{ (i + 1).toString().padStart(2, '0') }}</span>
-                      <div>
-                        <span class="block text-xl text-white uppercase tracking-widest mb-3 font-bold">{{ step[0] }}</span>
-                        <span class="block text-lg text-white/50 leading-relaxed">{{ step[1] }}</span>
+                  <div class="flex flex-col gap-16">
+                    <!-- Section 1: Azimuth -->
+                    <section class="block w-full">
+                      <div class="flex items-center gap-4 mb-8">
+                        <div class="h-6 w-1 bg-hud-accent" />
+                        <h4 class="font-orbitron font-black text-white text-xl sm:text-3xl tracking-wider uppercase">
+                          1. Establish Heading
+                        </h4>
                       </div>
-                    </div>
+                      <div class="space-y-8 text-left">
+                        <p class="text-base sm:text-xl text-white/50 leading-relaxed">
+                          To measure the Moon's position, you must first orient yourself toward the correct sector of the sky.
+                        </p>
+                        <div class="p-6 sm:p-10 border border-hud-accent/20 bg-hud-accent/5 rounded-xl">
+                          <div class="flex items-center gap-3 mb-6">
+                            <span class="w-2 h-2 rounded-full bg-hud-accent animate-pulse" />
+                            <div class="h-[1px] flex-1 bg-hud-accent/10" />
+                            <span class="font-mono text-[10px] text-hud-accent tracking-widest">{{ lat?.toFixed(2) ?? '0.00' }}°{{ lat >= 0 ? 'N' : 'S' }}</span>
+                          </div>
+                          <div class="space-y-6">
+                            <p class="text-lg sm:text-2xl text-white font-bold leading-tight">
+                              Target Sector: <span class="text-hud-accent uppercase">{{ lat >= 0 ? 'Southern' : 'Northern' }} Sky</span>
+                            </p>
+                            <div class="bg-black/60 p-6 rounded border border-white/5 font-mono">
+                               <p class="text-[11px] text-hud-accent font-black tracking-widest uppercase mb-4 border-b border-white/10 pb-2">Non-Compass Orientation</p>
+                               <ul class="space-y-4 list-disc pl-6 text-sm sm:text-lg text-white/70 leading-relaxed text-left">
+                                 <li>Identify where the <span class="text-white">Sunset</span> point was today (West).</li>
+                                 <li>Stand with the sunset point on your <span class="text-hud-accent font-bold">{{ lat >= 0 ? 'Right' : 'Left' }}</span> shoulder.</li>
+                                 <li>You are now facing <span class="text-white font-bold">{{ lat >= 0 ? 'South (180°)' : 'North (0°)' }}</span>.</li>
+                               </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+
+                    <!-- Section 2: Altitude -->
+                    <section class="block w-full">
+                       <div class="flex items-center gap-4 mb-8">
+                        <div class="h-6 w-1 bg-hud-accent" />
+                        <h4 class="font-orbitron font-black text-white text-xl sm:text-3xl tracking-wider uppercase">
+                          2. Measure Altitude
+                        </h4>
+                      </div>
+                      <p class="text-base sm:text-xl text-white/50 leading-relaxed">
+                        Once facing the correct quadrant, use your arm at full extension to measure degrees above the horizon using the "Hand Rule" ladder.
+                      </p>
+                    </section>
+
+                    <!-- Section 3: Protocol Steps (THE LIST) -->
+                    <section class="bg-hud-accent/5 p-6 sm:p-10 border border-hud-accent/30 rounded-xl">
+                      <h5 class="text-xs sm:text-base text-hud-accent tracking-[0.4em] uppercase font-black mb-12 text-center">
+                        EXECUTION_PROTOCOL // MANUAL_TRACKING
+                      </h5>
+                      
+                      <div class="flex flex-col gap-12 w-full text-left">
+                        <div
+                          v-for="(step, i) in [
+                            ['Fully Extend Your Arm', 'Your arm must be straight out. The Hand Rule fails if your elbow is bent.'],
+                            ['The Horizon Line', 'Align the bottom of your first fist with the visible horizon.'],
+                            ['The Ladder', 'Stack your second hand directly on top of the first (20° Altitude).'],
+                            ['The Target', 'The Moon should appear at the top knuckle of the third fist (30° Altitude).']
+                          ]"
+                          :key="i"
+                          class="flex flex-col w-full"
+                        >
+                          <div class="h-[1px] w-full bg-hud-accent/30 mb-8" />
+                          
+                          <!-- Number Label -->
+                          <div class="font-orbitron font-black text-hud-accent text-sm sm:text-xl tracking-[0.4em] mb-4">
+                            {{ (i + 1).toString().padStart(2, '0') }}
+                          </div>
+
+                          <!-- Step Title -->
+                          <div class="text-2xl sm:text-4xl text-white font-black uppercase tracking-widest mb-4 leading-tight">
+                            {{ step[0] }}
+                          </div>
+
+                          <!-- Step Instruction -->
+                          <div class="text-base sm:text-xl text-white/50 leading-relaxed font-medium">
+                            {{ step[1] }}
+                          </div>
+                        </div>
+                      </div>
+                    </section>
                   </div>
-                </section>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </Transition>
-    </Teleport>
+        </Transition>
+      </Teleport>
+    </ClientOnly>
   </section>
 </template>
 
