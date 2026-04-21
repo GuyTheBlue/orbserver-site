@@ -10,6 +10,15 @@ export default defineNuxtConfig({
     enabled: false
   },
 
+  vite: {
+    optimizeDeps: {
+      include: [
+        '@vueuse/core',
+        'suncalc'
+      ]
+    }
+  },
+
   css: ['~/assets/css/main.css'],
 
   routeRules: {
