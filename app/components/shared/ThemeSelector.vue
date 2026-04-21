@@ -12,8 +12,8 @@ const themes: { id: TerminalTheme, label: string, color: string }[] = [
 </script>
 
 <template>
-  <div class="flex items-center gap-4 bg-black/60 border border-white/20 p-2 rounded-lg pointer-events-auto shadow-2xl">
-    <div class="flex gap-2">
+  <div class="flex flex-wrap items-center justify-center sm:justify-start gap-3 sm:gap-4 bg-black/60 border border-white/20 p-1.5 sm:p-2 rounded-lg pointer-events-auto shadow-2xl">
+    <div class="flex flex-wrap justify-center gap-2">
       <button
         v-for="t in themes"
         :key="t.id"

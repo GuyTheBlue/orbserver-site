@@ -223,8 +223,8 @@ onMounted(() => {
     <!-- ── 4. PANELS (z-10) ──────────────────────────────────────────────── -->
     <div class="relative z-10 max-w-[1600px] mx-auto px-6 pt-24 pb-24 2xl:pt-32">
       <!-- STATUS BAR -->
-      <div class="flex items-center justify-between font-mono text-[10px] text-hud-accent uppercase tracking-[0.5em] mb-14 border-b border-white/10 pb-6 bento-flicker">
-        <div class="flex items-center gap-6">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-6 font-mono text-[10px] text-hud-accent uppercase tracking-[0.2em] sm:tracking-[0.5em] mb-14 border-b border-white/10 pb-6 bento-flicker">
+        <div class="flex flex-wrap items-center justify-center sm:justify-start gap-4 sm:gap-6">
           <div class="flex gap-2.5">
             <span class="w-2.5 h-2.5 rounded-full bg-hud-accent shadow-[var(--hud-accent-glow)]" />
             <span class="w-2.5 h-2.5 rounded-full bg-hud-accent opacity-60" />
@@ -233,7 +233,7 @@ onMounted(() => {
           <span class="text-white drop-shadow-[var(--hud-accent-glow)]">OBSERVER::ACTIVE_LINK</span>
           <span class="opacity-50 hidden md:inline">LOC_DATA: {{ latStr }} / {{ lngStr }}</span>
         </div>
-        <div class="flex items-center gap-6">
+        <div class="flex items-center justify-center sm:justify-end gap-6 w-full sm:w-auto">
           <div class="overflow-hidden whitespace-nowrap ticker-wrap w-48 opacity-40 hidden xl:block">
             <div class="ticker-content font-mono text-[9px]">
               GEOGRAPHIC_PARALLAX_SYNC // SUNCALC_FEED // SOUTHERN_HEMISPHERE_CALIBRATED
@@ -917,8 +917,8 @@ onMounted(() => {
           /></svg>
           <label class="relative z-10 font-mono text-[11px] text-hud-accent tracking-[0.5em] uppercase block mb-10">LOC_SYSLOG::COORDS</label>
           <div class="relative z-10 grid grid-cols-2 gap-8">
-            <div><span class="font-mono text-[11px] text-white/20 uppercase tracking-[0.4em] block mb-4">LATITUDE</span><span class="font-orbitron font-black text-4xl xl:text-6xl text-white">{{ latStr }}</span></div>
-            <div><span class="font-mono text-[11px] text-white/20 uppercase tracking-[0.4em] block mb-4">LONGITUDE</span><span class="font-orbitron font-black text-4xl xl:text-6xl text-white">{{ lngStr }}</span></div>
+            <div><span class="font-mono text-[11px] text-white/20 uppercase tracking-[0.4em] block mb-4">LATITUDE</span><span class="font-orbitron font-black text-xl sm:text-4xl xl:text-6xl text-white">{{ latStr }}</span></div>
+            <div><span class="font-mono text-[11px] text-white/20 uppercase tracking-[0.4em] block mb-4">LONGITUDE</span><span class="font-orbitron font-black text-xl sm:text-4xl xl:text-6xl text-white">{{ lngStr }}</span></div>
           </div>
           <div class="relative z-10 mt-10 flex items-center gap-4 px-6 py-4 border border-hud-accent/20 bg-hud-accent/5">
             <div class="w-3 h-3 rounded-full bg-[#28c840] animate-pulse shadow-[0_0_12px_rgba(40,200,64,1)]" />

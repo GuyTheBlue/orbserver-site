@@ -171,10 +171,10 @@ onMounted(() => {
     </div>
 
     <!-- 3. HIGH-VISIBLE TELEMETRY MATRIX (TOP-RIGHT) -->
-    <div class="absolute top-[8%] right-[5%] lg:right-[10%] pointer-events-auto z-[80] space-y-8 min-w-[320px]">
+    <div class="absolute top-[5%] right-[5%] lg:right-[10%] pointer-events-auto z-[80] space-y-4 sm:space-y-8 min-w-[200px] sm:min-w-[320px]">
       <!-- Calibration Header -->
       <div class="flex flex-col items-end gap-1 opacity-60">
-        <div class="font-mono text-[12px] text-hud-accent tracking-[0.8em] uppercase">
+        <div class="font-mono text-[8px] sm:text-[12px] text-hud-accent tracking-[0.4em] sm:tracking-[0.8em] uppercase">
           SYSTEM_QUANTUM_CALIBRATION
         </div>
         <div class="w-full h-[1px] bg-hud-accent/20" />
@@ -188,23 +188,23 @@ onMounted(() => {
           class="flex flex-col items-end group transition-colors duration-150 mb-4"
           :style="{ animationDelay: `${i * 0.2}s` }"
         >
-          <div class="font-mono text-[13px] text-hud-accent/60 uppercase tracking-widest mb-1">
+          <div class="font-mono text-[9px] sm:text-[13px] text-hud-accent/60 uppercase tracking-widest mb-1">
             {{ row.info }}
           </div>
           <div class="flex items-baseline gap-4">
             <span
-              class="font-mono text-[14px] uppercase tracking-[0.5em] transition-colors"
+              class="font-mono text-[10px] sm:text-[14px] uppercase tracking-[0.3em] sm:tracking-[0.5em] transition-colors"
               :class="glitchMap[row.label] ? 'text-red-500' : 'text-hud-accent/50'"
             >{{ row.label }}</span>
             <span
-              class="font-orbitron text-3xl lg:text-5xl font-black tracking-widest tabular-nums transition-all"
+              class="font-orbitron text-xl sm:text-3xl lg:text-5xl font-black tracking-widest tabular-nums transition-all"
               :class="glitchMap[row.label] ? 'text-red-600 animate-pulse scale-105' : 'text-white'"
             >
               {{ isLoading ? 'SCAN...' : row.val }}
             </span>
           </div>
           <!-- Signal Scalar Metre -->
-          <div class="w-48 h-1 bg-white/5 relative overflow-hidden flex items-center">
+          <div class="w-24 sm:w-48 h-1 bg-white/5 relative overflow-hidden flex items-center">
             <div
               class="h-full transition-all duration-1000"
               :class="glitchMap[row.label] ? 'bg-red-500 shadow-[0_0_10px_rgba(255,0,0,0.5)]' : 'bg-hud-accent opacity-60'"
