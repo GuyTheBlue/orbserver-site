@@ -14,6 +14,7 @@ export const landingData = {
       { t: 'INITIALIZING LUNAR_OBSERVER PROTOCOL...', cmd: true },
       { t: 'ESTABLISHING HANDSHAKE WITH SUNCALC_API...', cmd: true },
       { t: 'LINK_ESTABLISHED: OBS_LAT:{{lat}} // OBS_LNG:{{lng}}' },
+      { t: 'LOC_SYNC_STATUS: {{locStatus}}' },
       { blank: true },
       { t: 'TELEMETRY_SYNC [LIVE]:' },
       { t: '> PHASE: {{phaseName}} [{{illum}}%]' },

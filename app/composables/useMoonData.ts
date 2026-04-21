@@ -112,6 +112,7 @@ export function useMoonData() {
   const nextApogee = ref('—')
   const zodiac = ref('—')
   const zodiacSymbol = ref('—')
+  const locationStatus = ref<'ACQUIRING' | 'SYNCED' | 'FALLBACK'>('ACQUIRING')
 
   onMounted(async () => {
     if (!import.meta.client) return
@@ -119,6 +120,29 @@ export function useMoonData() {
     try {
       const SunCalc = (await import('suncalc')).default
       const now = new Date()
+
+      // ── Position / Geolocation ──────────────────────────────────────────
+      const loc = await new Promise<{ lat: number, lng: number }>(resolve => {
+        if (typeof navigator === 'undefined' || !navigator.geolocation) {
+          locationStatus.value = 'FALLBACK'
+          resolve({ lat: -33.9249, lng: 18.4241 })
+          return
+        }
+        navigator.geolocation.getCurrentPosition(
+          pos => {
+            locationStatus.value = 'SYNCED'
+            resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude })
+          },
+          () => {
+            locationStatus.value = 'FALLBACK'
+            resolve({ lat: -33.9249, lng: 18.4241 })
+          },
+          { timeout: 5000, enableHighAccuracy: false }
+        )
+      })
+
+      lat.value = loc.lat
+      lng.value = loc.lng
 
       // ── Illumination ──────────────────────────────────────────────────
       const illum = SunCalc.getMoonIllumination(now)
@@ -132,27 +156,17 @@ export function useMoonData() {
       age.value = parseFloat((illum.phase * LUNAR_MONTH).toFixed(1))
 
       // ── Next Full Moon & New Moon: Meeus JDE formula ──────────────────────
-      // Based on Meeus "Astronomical Algorithms" ch.49. This gives times
-      // accurate to within a few minutes, matching almanac data exactly.
-      // JDE₀ = 2451550.09766 + 29.530588861 × k
-      // k is integer for New Moon, k+0.5 for Full Moon.
       function nextPhaseJDE(targetPhase: 0 | 0.5): Date {
-        // k approximation: current JDE, then round to the nearest target phase
         const jde = (now.getTime() / 86400000) + 2440587.5
         const k0 = (jde - 2451550.09766) / 29.530588861
-        let k = Math.floor(k0) + targetPhase
-        // Step forward until JDE is in the future
-        while (k + targetPhase - Math.floor(k0) < 0) k += 1
-        // Find the first k that gives a JDE strictly after now
         let kk = Math.ceil(k0 - targetPhase) + targetPhase
         for (let attempt = 0; attempt < 30; attempt++) {
           const jdeK = 2451550.09766 + 29.530588861 * kk
-          // Convert JDE to JS Date (JDE 2440587.5 = 1970-01-01 00:00 UTC)
           const msUtc = (jdeK - 2440587.5) * 86400000
           if (msUtc > now.getTime()) return new Date(msUtc)
           kk += 1
         }
-        return new Date(now.getTime() + 30 * 86400000) // fallback
+        return new Date(now.getTime() + 30 * 86400000)
       }
 
       const fullMoonDate = nextPhaseJDE(0.5)
@@ -164,14 +178,8 @@ export function useMoonData() {
       daysToFullMoon.value = Math.round(rawDaysToFull)
       daysToNewMoon.value = Math.round(rawDaysToNew)
 
-      // Format in the user's LOCAL timezone so SA gets 1 May not 2 May
       nextFullMoon.value = fullMoonDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
       nextNewMoon.value = newMoonDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
-
-      // ── Position ──────────────────────────────────────────────────────
-      const loc = await resolveLatLng()
-      lat.value = loc.lat
-      lng.value = loc.lng
 
       const pos = SunCalc.getMoonPosition(now, loc.lat, loc.lng)
       // Switch to Geocentric Distance to match User/Google standards
@@ -328,6 +336,7 @@ export function useMoonData() {
     subLunarPoint,
     ra, dec,
     nextPerigee, nextApogee,
-    zodiac, zodiacSymbol
+    zodiac, zodiacSymbol,
+    locationStatus
   }
 }

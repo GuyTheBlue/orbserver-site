@@ -16,7 +16,8 @@ const {
   moonrise, moonset,
   apparentDiameter, apparentDiameterRatio, apparentVsMean,
   velocity, lightTravelTime, subLunarPoint,
-  ra, dec, nextPerigee, nextApogee, zodiac, zodiacSymbol
+  ra, dec, nextPerigee, nextApogee, zodiac, zodiacSymbol,
+  locationStatus
 } = useMoonData()
 
 const showHandRule = ref(false)
@@ -64,7 +65,8 @@ const terminalTelemetry = computed(() => ({
   dist: distFormatted.value,
   alt: altStr.value,
   az: azStr.value,
-  rot: Math.round(textureRotation.value || 0).toString()
+  rot: Math.round(textureRotation.value || 0).toString(),
+  locStatus: locationStatus.value === 'FALLBACK' ? 'SIGNAL_LOSS // IP_DEFAULT' : 'SYNCED'
 }))
 
 const { termLines, termCursor } = useMoonTerminal(lunar?.terminal ?? [], terminalTelemetry)
@@ -531,9 +533,14 @@ const { termLines, termCursor } = useMoonTerminal(lunar?.terminal ?? [], termina
             <div class="border-b border-white/5 sm:border-0 pb-4 sm:pb-0"><span class="font-mono text-[10px] sm:text-[11px] text-white/20 uppercase tracking-[0.4em] block mb-2 sm:mb-4">LATITUDE</span><span class="font-orbitron font-black text-2xl sm:text-4xl xl:text-6xl text-white">{{ latStr }}</span></div>
             <div><span class="font-mono text-[10px] sm:text-[11px] text-white/20 uppercase tracking-[0.4em] block mb-2 sm:mb-4">LONGITUDE</span><span class="font-orbitron font-black text-2xl sm:text-4xl xl:text-6xl text-white">{{ lngStr }}</span></div>
           </div>
-          <div class="relative z-10 mt-10 flex items-center gap-4 px-6 py-4 border border-hud-accent/20 bg-hud-accent/5">
-            <div class="w-3 h-3 rounded-full bg-[#28c840] animate-pulse shadow-[0_0_12px_rgba(40,200,64,1)]" />
-            <span class="font-mono text-[11px] text-hud-accent tracking-[0.4em] uppercase">SH_CALIBRATION: ACTIVE // FEED: SYNCED</span>
+          <div class="relative z-10 mt-10 flex items-center gap-4 px-6 py-4 border bg-opacity-5 transition-colors duration-1000"
+               :class="locationStatus === 'FALLBACK' ? 'border-red-500/30 bg-red-500/5' : 'border-hud-accent/20 bg-hud-accent/5'">
+            <div class="w-3 h-3 rounded-full animate-pulse transition-all duration-1000"
+                 :class="locationStatus === 'FALLBACK' ? 'bg-[#ff3e3e] shadow-[0_0_12px_rgba(255,62,62,1)]' : 'bg-[#28c840] shadow-[0_0_12px_rgba(40,200,64,1)]'" />
+            <span class="font-mono text-[11px] tracking-[0.4em] uppercase transition-colors duration-1000"
+                  :class="locationStatus === 'FALLBACK' ? 'text-red-400' : 'text-hud-accent'">
+              SH_CALIBRATION: {{ locationStatus === 'FALLBACK' ? 'SIGNAL_LOSS // IP_DEFAULT' : 'ACTIVE // FEED: SYNCED' }}
+            </span>
           </div>
         </div>
 
