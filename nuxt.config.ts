@@ -3,7 +3,8 @@ export default defineNuxtConfig({
   modules: [
     '@nuxt/eslint',
     '@nuxt/ui',
-    '@nuxtjs/google-fonts'
+    '@nuxtjs/google-fonts',
+    '@nuxt/image'
   ],
 
   devtools: {
@@ -44,5 +45,10 @@ export default defineNuxtConfig({
     display: 'swap',
     prefetch: true,
     preconnect: true
+  },
+
+  image: {
+    provider: process.env.NETLIFY ? 'netlify' : 'ipx',
+    format: ['webp', 'avif']
   }
 })

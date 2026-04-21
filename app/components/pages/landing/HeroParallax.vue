@@ -32,12 +32,12 @@ const moonRotation = computed(() => `${textureRotation.value}deg`)
           <!-- Bug Bio-Lens / HUD Overlay -->
           <div class="absolute inset-0 z-[64] vr-lens mix-blend-overlay opacity-80" />
 
-          <img
+          <NuxtImg
             src="/images/hero_layers/night_sky.png"
             class="absolute top-0 left-0 w-full h-[55%] object-cover object-bottom z-10"
             :style="{ transform: backgroundTransform }"
             alt="Sky"
-          >
+          />
 
           <!-- Moon Layer (Full Disc - No Shadow) -->
           <div
@@ -48,30 +48,30 @@ const moonRotation = computed(() => `${textureRotation.value}deg`)
             <div class="absolute -inset-12 md:-inset-16 rounded-full bg-cyan-100/40 blur-[70px] md:blur-[90px]" />
             <div class="absolute inset-0 rounded-full bg-white/60 blur-3xl opacity-50" />
 
-            <img
+            <NuxtImg
               src="/images/hero_layers/moon.png"
               class="relative w-full block z-10"
               alt="Moon"
-            >
+            />
           </div>
 
-          <img
+          <NuxtImg
             src="/images/hero_layers/sea.png"
             class="absolute bottom-0 left-0 w-full h-[45%] object-cover object-top z-30"
             :style="{ transform: backgroundTransform }"
             alt="Sea"
-          >
+          />
 
           <!-- Dune -->
           <div
             class="absolute bottom-0 w-full z-50 origin-bottom"
             :style="{ transform: duneTransform }"
           >
-            <img
+            <NuxtImg
               src="/images/hero_layers/dunes.png"
               class="w-full h-[35vh] xl:h-[45vh] object-cover object-top block"
               alt="Dune"
-            >
+            />
             <div class="absolute bottom-0 left-0 w-full h-[30%] bg-gradient-to-t from-black to-transparent pointer-events-none" />
             <div class="absolute top-full left-0 w-full h-[200vh] bg-black" />
           </div>
@@ -81,11 +81,11 @@ const moonRotation = computed(() => `${textureRotation.value}deg`)
             class="absolute left-0 -bottom-[10%] sm:-bottom-[2%] md:-bottom-[10%] w-[80vw] sm:w-[50vw] md:w-[60vw] lg:w-[40vw] xl:w-[50vw] max-w-none origin-bottom-left z-60"
             :style="{ transform: rockTransform }"
           >
-            <img
+            <NuxtImg
               src="/images/hero_layers/fore_front_rock.png"
               class="w-full object-cover origin-bottom-left block"
               alt="Foreground Rock"
-            >
+            />
             <div class="absolute bottom-0 left-0 w-full h-[25%] bg-gradient-to-t from-black to-transparent pointer-events-none" />
             <div class="absolute top-full left-0 w-full h-[200vh] bg-black" />
           </div>

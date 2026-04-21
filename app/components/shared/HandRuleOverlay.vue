@@ -61,11 +61,11 @@ const model = defineModel<boolean>()
           <!-- Technical Illustration -->
           <div class="space-y-4">
             <div class="relative aspect-square border border-hud-accent/30 rounded-lg overflow-hidden">
-              <img
+              <NuxtImg
                 :src="imageUrl"
                 alt="Hand Rule Illustration"
                 class="w-full h-full object-cover"
-              >
+              />
               <div class="absolute inset-0 bg-hud-accent/5 mix-blend-overlay" />
             </div>
             <p class="text-[9px] text-hud-accent/40 text-center uppercase tracking-[0.3em]">

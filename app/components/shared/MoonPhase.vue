@@ -71,7 +71,7 @@ const glowSpread = computed(() => `${40 + props.fraction * 60}px`)
       style="width: 100%; aspect-ratio: 1;"
     >
       <!-- The full-disc moon photograph: Rotated to coordinate with Zenith/Horizon -->
-      <img
+      <NuxtImg
         src="/images/hero_layers/moon.png"
         alt="Moon"
         class="block w-full h-full object-cover select-none"
@@ -80,7 +80,7 @@ const glowSpread = computed(() => `${40 + props.fraction * 60}px`)
           transform: `rotate(${props.textureRotation ?? 0}deg)`,
           transition: 'transform 2s cubic-bezier(0.16, 1, 0.3, 1)'
         }"
-      >
+      />
 
       <!-- SVG shadow overlay — covers the unlit portion of the moon -->
       <svg
