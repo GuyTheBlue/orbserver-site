@@ -1,8 +1,13 @@
 <script setup lang="ts">
 import { useTitleParser } from '~/composables/useTitleParser'
 
+interface BriefingFactoid {
+  label: string
+  text: string
+}
+
 defineProps<{
-  data: any[] // landingData.lunar.briefing
+  data: BriefingFactoid[]
 }>()
 </script>
 

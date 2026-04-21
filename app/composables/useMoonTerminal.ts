@@ -12,7 +12,13 @@ export interface TerminalTelemetry {
   rot: string
 }
 
-export function useMoonTerminal(scriptData: any[], telemetry: ComputedRef<TerminalTelemetry>) {
+export interface TerminalScriptEntry {
+  t?: string
+  cmd?: boolean
+  blank?: boolean
+}
+
+export function useMoonTerminal(scriptData: TerminalScriptEntry[], telemetry: ComputedRef<TerminalTelemetry>) {
   const termLines = ref<Array<{ text: string, cls: string }>>([])
   const termCursor = ref(true)
   let alive = false

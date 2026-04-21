@@ -1,8 +1,13 @@
 <script setup lang="ts">
 import { useTitleParser } from '~/composables/useTitleParser'
 
+interface EtymologyData {
+  perigee: string
+  apogee: string
+}
+
 defineProps<{
-  data: any // landingData.lunar.etymology
+  data: EtymologyData
 }>()
 </script>
 

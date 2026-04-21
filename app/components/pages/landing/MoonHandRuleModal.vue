@@ -1,10 +1,28 @@
 <script setup lang="ts">
 import { useTitleParser } from '~/composables/useTitleParser'
 
-const props = defineProps<{
+interface HandRuleStep {
+  title: string
+  desc: string
+}
+
+interface HandRuleData {
+  intro: string
+  establishmentHeading: {
+    title: string
+    description: string
+  }
+  measureAltitude: {
+    title: string
+    description: string
+  }
+  steps: HandRuleStep[]
+}
+
+defineProps<{
   show: boolean
   lat: number
-  data: any // lunar.handRule
+  data: HandRuleData
 }>()
 
 const emit = defineEmits(['close'])

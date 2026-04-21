@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import { useIntersectionObserver } from '@vueuse/core'
 import { landingData } from '~/utils/landingData'
 import MoonHandRuleModal from './MoonHandRuleModal.vue'
@@ -811,30 +811,102 @@ const { termLines, termCursor } = useMoonTerminal(lunar?.terminal ?? [], termina
 </template>
 
 <style scoped>
-.custom-scrollbar::-webkit-scrollbar { width: 4px; }
-.custom-scrollbar::-webkit-scrollbar-track { background: rgba(var(--hud-accent-rgb), 0.05); }
-.custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(var(--hud-accent-rgb), 0.3); border-radius: 10px; }
-.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(var(--hud-accent-rgb), 0.5); }
-
-.rotate-ring { animation: rotate-slow 90s linear infinite; }
-@keyframes rotate-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-.ticker-wrap { mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent); }
-.ticker-content { display: inline-block; animation: ticker 40s linear infinite; }
-@keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-
-.celestial-system-anim { animation: earth-orbit 60s linear infinite; }
-.moon-orbit-anim { animation: moon-orbit 10s linear infinite; }
-@keyframes earth-orbit {
-  from { transform: translate(100px, 60px) rotate(0deg) translateX(90px) scaleY(0.4) rotate(0deg); }
-  to { transform: translate(100px, 60px) rotate(360deg) translateX(90px) scaleY(0.4) rotate(-360deg); }
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
 }
-@keyframes moon-orbit { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(var(--hud-accent-rgb), 0.05);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(var(--hud-accent-rgb), 0.3);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(var(--hud-accent-rgb), 0.5);
+}
+
+.rotate-ring {
+  animation: rotate-slow 90s linear infinite;
+}
+
+@keyframes rotate-slow {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.ticker-wrap {
+  mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+}
+
+.ticker-content {
+  display: inline-block;
+  animation: ticker 40s linear infinite;
+}
+
+@keyframes ticker {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.celestial-system-anim {
+  animation: earth-orbit 60s linear infinite;
+}
+
+.moon-orbit-anim {
+  animation: moon-orbit 10s linear infinite;
+}
+
+@keyframes earth-orbit {
+  from {
+    transform: translate(100px, 60px) rotate(0deg) translateX(90px) scaleY(0.4) rotate(0deg);
+  }
+
+  to {
+    transform: translate(100px, 60px) rotate(360deg) translateX(90px) scaleY(0.4) rotate(-360deg);
+  }
+}
+
+@keyframes moon-orbit {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 .card-scan {
-  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
   background: linear-gradient(to right, transparent, var(--hud-accent), transparent);
-  opacity: 0.1; animation: scan 4s linear infinite;
+  opacity: 0.1;
+  animation: scan 4s linear infinite;
 }
-@keyframes scan { from { top: 0; } to { top: 100%; } }
+
+@keyframes scan {
+  from {
+    top: 0;
+  }
+
+  to {
+    top: 100%;
+  }
+}
 </style>
