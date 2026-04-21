@@ -121,10 +121,11 @@ const style = computed(() => themeMap[currentTheme.value] || themeMap.cyan)
               href="https://www.instagram.com/thelittleblueguy/"
               target="_blank"
               rel="noopener noreferrer"
-              class="group/btn relative inline-flex items-center gap-4 px-10 py-4 border rounded-2xl transition-all duration-300 overflow-hidden w-full max-w-[320px] justify-center"
+              class="group/btn relative inline-flex items-center gap-4 px-10 py-4 border rounded-2xl transition-all duration-300 overflow-hidden w-full max-w-[320px] justify-center animate-anomaly-pulse"
               :style="{
                 backgroundColor: `rgba(${style.rgb}, 0.1)`,
-                borderColor: `rgba(${style.rgb}, 0.4)`
+                borderColor: `rgba(${style.rgb}, 0.4)`,
+                boxShadow: `0 0 15px rgba(${style.rgb}, 0.3)`
               }"
               @mouseenter="$event.currentTarget.style.backgroundColor = style.hex"
               @mouseleave="$event.currentTarget.style.backgroundColor = `rgba(${style.rgb}, 0.1)`"
@@ -133,12 +134,16 @@ const style = computed(() => themeMap[currentTheme.value] || themeMap.cyan)
                 class="absolute inset-0 w-full h-full -translate-x-full group-hover/btn:translate-x-0 transition-transform duration-500"
                 :style="{ backgroundColor: `rgba(${style.rgb}, 0.2)` }"
               />
-              <span class="relative z-10 font-orbitron font-black text-xs sm:text-sm tracking-[0.4em] uppercase italic group-hover:text-black transition-colors">
+              <span
+                class="relative z-10 font-orbitron font-black text-xs sm:text-sm tracking-[0.4em] uppercase italic transition-colors animate-text-flicker group-hover:text-black"
+                :style="{ color: style.hex }"
+              >
                 FOLLOW THE STORY
               </span>
               <UIcon
                 name="i-lucide-instagram"
-                class="relative z-10 w-5 h-5 group-hover/btn:scale-110 transition-transform group-hover:text-black transition-colors"
+                class="relative z-10 w-5 h-5 group-hover/btn:scale-110 transition-transform transition-colors animate-text-flicker group-hover:text-black"
+                :style="{ color: style.hex }"
               />
             </a>
           </div>
@@ -163,5 +168,22 @@ const style = computed(() => themeMap[currentTheme.value] || themeMap.cyan)
 </style>
 
 <style scoped>
-/* Any local glitch animations specific to this banner */
+@keyframes anomaly-pulse {
+  0% { box-shadow: 0 0 10px rgba(var(--anomaly-rgb), 0.2); transform: scale(1); }
+  50% { box-shadow: 0 0 30px rgba(var(--anomaly-rgb), 0.5); transform: scale(1.02); }
+  100% { box-shadow: 0 0 10px rgba(var(--anomaly-rgb), 0.2); transform: scale(1); }
+}
+
+.animate-anomaly-pulse {
+  animation: anomaly-pulse 3s infinite ease-in-out;
+}
+
+@keyframes text-flicker {
+  0%, 88%, 92%, 96%, 100% { color: var(--anomaly-color); filter: brightness(1); }
+  90%, 94%, 98% { color: white; filter: brightness(2); text-shadow: 0 0 10px white; }
+}
+
+.animate-text-flicker {
+  animation: text-flicker 5s infinite step-end;
+}
 </style>
