@@ -348,7 +348,7 @@ const { termLines, termCursor } = useMoonTerminal(lunar?.terminal ?? [], termina
                 </div>
               </div>
 
-              <div class="hidden xl:flex items-center justify-center relative overflow-hidden min-h-[160px] opacity-90 border border-white/5 rounded-lg bg-white/[0.02]">
+              <div class="flex md:col-start-2 xl:col-start-auto items-center justify-center relative overflow-hidden min-h-[160px] opacity-90 border border-white/5 rounded-lg bg-white/[0.02]">
                 <div class="absolute inset-0 z-0 panel-grid-mesh opacity-40" />
                 <svg
                   class="relative z-10 w-full h-full max-w-[280px]"
