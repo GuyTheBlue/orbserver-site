@@ -7,6 +7,7 @@ const { y } = useWindowScroll()
 // Parallax transforms
 const backgroundTransform = computed(() => `translateY(-${y.value * 0.2}px)`)
 const duneTransform = computed(() => `scale(${1 + y.value * 0.0005}) translateY(-${y.value * 0.6}px)`)
+const figureTransform = computed(() => `scale(${1 + y.value * 0.0005}) translateY(-${y.value * 0.8}px)`)
 const rockTransform = computed(() => `scale(${1 + y.value * 0.0005}) translateY(-${y.value * 1.0}px)`)
 
 // The overall space transitions to pitch black/void as you sink
@@ -74,6 +75,18 @@ const moonRotation = computed(() => `${textureRotation.value}deg`)
             />
             <div class="absolute bottom-0 left-0 w-full h-[30%] bg-gradient-to-t from-black to-transparent pointer-events-none" />
             <div class="absolute top-full left-0 w-full h-[200vh] bg-black" />
+          </div>
+          
+          <!-- Cloaked Figure (z-55) -->
+          <div
+            class="absolute left-[15%] bottom-[18%] w-[16vw] min-w-[156px] max-w-[260px] z-[55] origin-bottom"
+            :style="{ transform: figureTransform }"
+          >
+            <NuxtImg
+              src="/images/hero_layers/cloaked_figure.png"
+              class="w-full h-auto block drop-shadow-[0_0_15px_rgba(0,0,0,0.8)]"
+              alt="Cloaked Figure"
+            />
           </div>
 
           <!-- Foreground rock -->
