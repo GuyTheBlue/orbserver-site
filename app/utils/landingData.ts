@@ -100,7 +100,7 @@ export const landingData = {
         'Regolith: The surface is covered in a layer of pulverized rock and dust created by billions of years of impacts.',
         'Exosphere: The Moon has a vanishingly thin atmosphere where gas molecules rarely collide with each other.',
         'Apollo 8: In 1968, this became the first crewed mission to leave Earth\'s orbit and circle the Moon.',
-        'Baily\s Beads: During a solar eclipse, sunlight peeking through lunar valleys creates bright points of light.',
+        'Baily\'s Beads: During a solar eclipse, sunlight peeking through lunar valleys creates bright points of light.',
         'Spring Tides: These occur when the Sun and Moon align, combining their gravity to create exceptionally high tides.',
         'Mascons: High-density "mass concentrations" under the surface were found to alter the orbits of spacecraft.',
         'Apollo 17: Commander Eugene Cernan became the last person to walk on the lunar surface in December 1972.',

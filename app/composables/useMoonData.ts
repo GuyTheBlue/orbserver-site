@@ -31,7 +31,6 @@ function getPhaseGlyph(phase: number): string {
   return '🌘'
 }
 
-
 // ── High Precision Geocentric Lunar Distance (Meeus/ELP82) ──────────────────
 // This bypasses SunCalc's topocentric inaccuracies to match world standards.
 function getGeocentricDistance(date: Date): number {
