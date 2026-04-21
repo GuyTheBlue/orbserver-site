@@ -12,18 +12,18 @@ const isGlassy = computed(() => y.value > 50)
 useSeoMeta({
   title: 'ORBSERVER // Lunar Telemetry Dashboard',
   ogTitle: 'ORBSERVER // Lunar Telemetry Dashboard',
-  description: 'A high-fidelity, real-time lunar observation and orbital synchronization dashboard. Calibrated for Southern Hemisphere (SH) precision.',
-  ogDescription: 'A high-fidelity, real-time lunar observation and orbital synchronization dashboard. Calibrated for Southern Hemisphere (SH) precision.',
-  ogImage: 'https://orbserver.g-squared.co.za/social_orbserver.png',
+  description: 'A high-fidelity, real-time lunar observation and orbital synchronization dashboard. Uses your latitude.',
+  ogDescription: 'A high-fidelity, real-time lunar observation and orbital synchronization dashboard. Uses your latitude..',
+  ogImage: 'https://orbserver.g-squared.co.za/social_orbserver.jpg',
   ogUrl: 'https://orbserver.g-squared.co.za/',
   ogType: 'website',
   ogSiteName: 'Orbserver',
   twitterCard: 'summary_large_image',
   twitterTitle: 'ORBSERVER // Lunar Telemetry Dashboard',
   twitterDescription: 'A high-fidelity, real-time lunar observation and orbital synchronization dashboard.',
-  twitterImage: 'https://orbserver.g-squared.co.za/social_orbserver.png',
+  twitterImage: 'https://orbserver.g-squared.co.za/social_orbserver.jpg',
   themeColor: '#000000',
-  author: 'GSQUARED'
+  author: 'GSQUARED | Guy Meaker'
 })
 </script>
 
