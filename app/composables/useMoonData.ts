@@ -31,22 +31,6 @@ function getPhaseGlyph(phase: number): string {
   return '🌘'
 }
 
-// Attempts to resolve the user's geolocation, falls back to Cape Town, ZA (SH Priority)
-async function resolveLatLng(): Promise<{ lat: number, lng: number }> {
-  if (typeof navigator === 'undefined' || !navigator.geolocation) {
-    return { lat: -33.9249, lng: 18.4241 }
-  }
-  return new Promise((resolve) => {
-    navigator.geolocation.getCurrentPosition(
-      pos => resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
-      (err) => {
-        console.warn('Geolocation Error:', err.message, '| Defaulting to Cape Town (SH).')
-        resolve({ lat: -33.9249, lng: 18.4241 })
-      },
-      { timeout: 5000, enableHighAccuracy: false }
-    )
-  })
-}
 
 // ── High Precision Geocentric Lunar Distance (Meeus/ELP82) ──────────────────
 // This bypasses SunCalc's topocentric inaccuracies to match world standards.
