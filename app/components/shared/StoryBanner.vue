@@ -129,7 +129,7 @@ const style = computed(() => themeMap[currentTheme.value] || themeMap.cyan)
               </div>
 
               <div 
-                class="relative z-10 w-14 h-14 flex items-center justify-center rounded-full transition-all group-hover/btn:scale-110 shadow-lg group-hover/btn:-rotate-12"
+                class="relative z-10 w-14 h-14 flex-shrink-0 flex items-center justify-center rounded-full transition-all group-hover/btn:scale-110 shadow-lg group-hover/btn:-rotate-12"
                 :style="{ backgroundColor: style.hex, color: 'black' }"
               >
                 <UIcon

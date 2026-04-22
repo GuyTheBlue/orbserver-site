@@ -48,7 +48,7 @@ const style = computed(() => {
 
       <!-- Right side: The Terminal / CTA Block (Image + CTA) -->
       <div class="flex flex-col items-center lg:items-end gap-12 w-full lg:w-auto">
-        <!-- The Logo (Matches Bottom Banner Size) -->
+        <!-- The Logo -->
         <div class="relative w-64 sm:w-60 group-hover:scale-105 transition-all duration-700 p-8 bg-black rounded-[2rem] border border-hud-accent/50 overflow-hidden shadow-[0_0_60px_rgba(var(--hud-accent-rgb),0.2)]">
           <div class="absolute inset-0 panel-scanlines opacity-40 pointer-events-none z-10" />
           <NuxtImg
@@ -59,12 +59,12 @@ const style = computed(() => {
           />
         </div>
 
-        <!-- The CTA Button (Sharp & Glitched) -->
+        <!-- The CTA Button -->
         <a
           href="https://www.instagram.com/thelittleblueguy/"
           target="_blank"
           rel="noopener noreferrer"
-          class="group/btn relative inline-flex items-center justify-center gap-8 px-12 py-6 border rounded-sm transition-all duration-300 active:scale-95 shadow-2xl hover:shadow-[0_0_70px_rgba(var(--hud-accent-rgb),0.3)] w-full md:w-auto overflow-hidden animate-anomaly-pulse"
+          class="group/btn relative inline-flex items-center justify-center gap-8 px-10 sm:px-12 py-5 sm:py-6 border rounded-sm transition-all duration-300 active:scale-95 shadow-2xl hover:shadow-[0_0_70px_rgba(var(--hud-accent-rgb),0.3)] w-full md:w-auto overflow-hidden animate-anomaly-pulse"
           :style="{
             backgroundColor: `rgba(var(--hud-accent-rgb), 0.1)`,
             borderColor: `rgba(var(--hud-accent-rgb), 0.4)`
@@ -78,12 +78,12 @@ const style = computed(() => {
           </div>
 
           <div 
-            class="relative z-10 w-12 h-12 flex items-center justify-center rounded-full transition-all group-hover/btn:scale-110 shadow-lg group-hover/btn:-rotate-12"
+            class="relative z-10 w-14 h-14 flex-shrink-0 flex items-center justify-center rounded-full transition-all group-hover/btn:scale-110 shadow-lg group-hover/btn:-rotate-12"
             :style="{ backgroundColor: 'var(--hud-accent)', color: 'black' }"
           >
             <UIcon
               name="i-lucide-instagram"
-              class="w-6 h-6"
+              class="w-7 h-7"
             />
           </div>
         </a>
