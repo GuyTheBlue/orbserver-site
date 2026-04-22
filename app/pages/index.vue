@@ -10,6 +10,9 @@ import { landingData } from '~/utils/landingData'
       class="relative z-10"
     />
 
+    <!-- UMPH Promo Banner -->
+    <PagesLandingBanner class="relative z-10" />
+
     <!-- The Moon Observatory (z-0) -->
     <PagesLandingMoonSection class="relative z-0" />
 
