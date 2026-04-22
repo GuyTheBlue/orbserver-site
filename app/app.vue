@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useWindowScroll } from '@vueuse/core'
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 
 // Safely tracked scrolling coordinates for the dynamic transition
 const { y } = useWindowScroll()
@@ -66,63 +66,66 @@ async function installApp() {
 
 <template>
   <UApp>
-    <!-- Installation Guide Modal (Custom Teleport for Maximum Reliability) -->
-    <Teleport to="body">
-      <Transition
-        enter-active-class="transition duration-300 ease-out"
-        enter-from-class="opacity-0 scale-95"
-        enter-to-class="opacity-100 scale-100"
-        leave-active-class="transition duration-200 ease-in"
-        leave-from-class="opacity-100 scale-100"
-        leave-to-class="opacity-0 scale-95"
-      >
-        <div v-if="showInstallGuide" class="fixed inset-0 z-[2000] flex items-center justify-center p-6">
-          <div class="absolute inset-0 bg-black/90 backdrop-blur-md" @click="showInstallGuide = false" />
-          
-          <div class="relative w-full max-w-md bg-black border border-white/10 rounded-[2rem] overflow-hidden shadow-2xl bento-flicker">
-            <div class="panel-grid-mesh opacity-20" />
-            
-            <!-- Header -->
-            <div class="p-8 border-b border-white/10 flex items-center justify-between bg-white/[0.02]">
-              <div class="flex items-center gap-3">
-                <UIcon name="i-lucide-monitor-smartphone" class="text-hud-accent w-6 h-6 animate-pulse" />
-                <h3 class="font-orbitron font-black text-white uppercase tracking-[0.2em]">Install_System</h3>
-              </div>
-              <button @click="showInstallGuide = false" class="text-white/40 hover:text-white transition-colors">
-                <UIcon name="i-lucide-x" class="w-6 h-6" />
-              </button>
+    <!-- Installation Guide Modal (Nuxt UI) -->
+    <!-- Installation Guide Modal (Nuxt UI v4 API) -->
+    <UModal 
+      v-model:open="showInstallGuide" 
+      class="bg-[#020a14] border border-hud-accent/40 shadow-[0_0_120px_rgba(0,0,0,1)] ring-1 ring-hud-accent/30"
+      :ui="{ content: 'p-0 sm:p-0', header: 'p-4 md:p-8', body: 'p-4 md:p-8', footer: 'p-4 md:p-8' }"
+    >
+      <template #header>
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-4">
+            <div class="w-10 h-10 rounded-full bg-hud-accent/10 flex items-center justify-center">
+              <UIcon name="i-lucide-monitor-smartphone" class="text-hud-accent w-6 h-6 animate-pulse" />
             </div>
-
-            <!-- Content -->
-            <div class="p-8 space-y-8 relative z-10">
-              <div class="space-y-3">
-                <p class="font-mono text-[10px] text-hud-accent tracking-[0.4em] uppercase">PROCEDURE_01 // ANDROID_CHROME</p>
-                <p class="text-sm text-white/50 leading-relaxed font-mono">
-                  TAP THE BROWSER MENU <span class="text-white">[⋮]</span> AND SELECT <span class="text-hud-accent font-bold">"INSTALL APP"</span>.
-                </p>
-              </div>
-              
-              <div class="space-y-3 border-t border-white/5 pt-8">
-                <p class="font-mono text-[10px] text-pink-400 tracking-[0.4em] uppercase">PROCEDURE_02 // IOS_SAFARI</p>
-                <p class="text-sm text-white/50 leading-relaxed font-mono">
-                  TAP THE <span class="text-white font-bold">SHARE ICON</span> (SQUARE + ARROW), SCROLL DOWN, AND SELECT <span class="text-pink-400 font-bold">"ADD TO HOME SCREEN"</span>.
-                </p>
-              </div>
-            </div>
-
-            <!-- Footer -->
-            <div class="p-6 bg-white/[0.02] border-t border-white/5">
-              <button 
-                @click="showInstallGuide = false"
-                class="w-full py-4 font-mono text-[10px] text-white/40 tracking-[0.5em] uppercase hover:text-white hover:bg-white/5 transition-all"
-              >
-                CLOSE_TERMINAL [ESC]
-              </button>
+            <h3 class="font-orbitron font-black text-white uppercase tracking-[0.2em]">Install_System</h3>
+          </div>
+          <UButton
+            color="neutral"
+            variant="ghost"
+            icon="i-lucide-x"
+            class="rounded-full cursor-pointer"
+            @click="showInstallGuide = false"
+          />
+        </div>
+      </template>
+      
+      <template #body>
+        <div class="space-y-8 relative z-10">
+          <div class="space-y-4">
+            <p class="font-mono text-[10px] text-hud-accent tracking-[0.4em] uppercase">PROCEDURE_01 // ANDROID</p>
+            <div class="space-y-3">
+              <p class="text-sm text-white/50 leading-relaxed font-mono text-left">
+                <span class="text-white font-bold">CHROME:</span> TAP THE MENU <span class="text-white">[⋮]</span> AND SELECT <span class="text-hud-accent font-bold">"INSTALL APP"</span> OR <span class="text-hud-accent font-bold">"ADD TO HOME SCREEN"</span>.
+              </p>
+              <p class="text-sm text-white/50 leading-relaxed font-mono text-left">
+                <span class="text-white font-bold">NATIVE BROWSER:</span> TAP THE MENU <span class="text-white">[≡]</span> AND SELECT <span class="text-hud-accent font-bold">"ADD PAGE TO"</span> > <span class="text-hud-accent font-bold">"HOME SCREEN"</span>.
+              </p>
             </div>
           </div>
+          
+          <div class="space-y-3 border-t border-white/5 pt-8">
+            <p class="font-mono text-[10px] text-pink-400 tracking-[0.4em] uppercase">PROCEDURE_02 // IOS_SAFARI</p>
+            <p class="text-sm text-white/50 leading-relaxed font-mono text-left">
+              TAP THE <span class="text-white font-bold">SHARE ICON</span> (SQUARE + ARROW), SCROLL DOWN, AND SELECT <span class="text-pink-400 font-bold">"ADD TO HOME SCREEN"</span>.
+            </p>
+          </div>
         </div>
-      </Transition>
-    </Teleport>
+      </template>
+
+      <template #footer>
+        <UButton 
+          block
+          color="neutral"
+          variant="subtle"
+          class="font-mono text-[10px] tracking-[0.5em] uppercase py-4 rounded-2xl cursor-pointer"
+          @click="showInstallGuide = false"
+        >
+          CLOSE_TERMINAL [ESC]
+        </UButton>
+      </template>
+    </UModal>
 
     <!-- Custom Glassy SPA Navbar -->
     <ClientOnly>

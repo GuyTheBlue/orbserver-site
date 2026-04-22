@@ -1,8 +1,13 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useTerminalTheme } from '~/composables/useTerminalTheme'
 
 const { currentTheme } = useTerminalTheme()
+const isMounted = ref(false)
+
+onMounted(() => {
+  isMounted.value = true
+})
 
 const themeMap: Record<string, { hue: string }> = {
   cyan: { hue: '145deg' },
@@ -11,7 +16,11 @@ const themeMap: Record<string, { hue: string }> = {
   green: { hue: '95deg' }
 }
 
-const style = computed(() => themeMap[currentTheme.value] || themeMap.cyan)
+const style = computed(() => {
+  // Always return the same default (cyan) on server and initial client render
+  if (!isMounted.value) return themeMap.cyan
+  return themeMap[currentTheme.value] || themeMap.cyan
+})
 </script>
 
 <template>
