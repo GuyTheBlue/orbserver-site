@@ -68,11 +68,6 @@ a {
   50% { opacity: 0.12; transform: scale(1.05); }
 }
 
-@keyframes scanline-sweep {
-  0% { transform: translateY(-100%); }
-  100% { transform: translateY(800%); }
-}
-
 @keyframes erratic-line {
   0%, 100% { top: 10%; opacity: 0; }
   10% { top: 10%; opacity: 0.4; }
@@ -103,7 +98,6 @@ a {
 .broken-terminal-jitter { animation: glitch-jitter 12s infinite alternate; }
 .bento-flicker { animation: signal-flicker 4s infinite, red-glitch-alert 6s infinite; }
 .animate-footer-breathe { animation: footer-breathe 8s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
-.animate-scanline-sweep { animation: scanline-sweep 6s linear infinite; }
 .animate-erratic-line { animation: erratic-line 1.2s infinite; }
 .animate-sticky-line { animation: sticky-line 8s infinite ease-out; }
 

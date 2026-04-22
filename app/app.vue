@@ -224,13 +224,8 @@ async function installApp() {
         :style="{ background: `repeating-linear-gradient(0deg, rgba(var(--hud-accent-rgb), 0.3) 0px, rgba(var(--hud-accent-rgb), 0.3) 1px, transparent 1px, transparent 6px)` }"
       />
 
-      <!-- Animated Accent Sweep -->
-      <div class="absolute inset-0 z-[2] pointer-events-none overflow-hidden opacity-20">
-        <div 
-          class="absolute inset-x-0 h-[120px] animate-scanline-sweep"
-          :style="{ background: `linear-gradient(to bottom, transparent, var(--hud-accent), transparent)` }"
-        />
-      </div>
+      <!-- Autonomous Glitch Engine (Scanline) -->
+      <SharedBrokenScanline />
 
       <!-- Digital Artifacts (Erratic & Sticky) -->
       <div class="absolute inset-0 z-[3] pointer-events-none overflow-hidden opacity-20">
