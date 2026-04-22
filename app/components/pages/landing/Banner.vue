@@ -21,15 +21,18 @@ const style = computed(() => themeMap[currentTheme.value] || themeMap.cyan)
     <div class="absolute inset-0 z-0 panel-scanlines opacity-20" />
     
     <div class="relative z-10 max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-12 lg:gap-24">
-      <!-- Left side: The Logo (Bigger) -->
+      <!-- Left side: The Logo (Bigger & Tidied) -->
       <div class="flex-shrink-0 relative group/logo">
-        <div class="absolute -inset-4 bg-hud-accent/10 blur-2xl rounded-full opacity-0 group-hover/logo:opacity-100 transition-opacity duration-700" />
-        <NuxtImg
-          src="/images/umph.png"
-          alt="UMPH"
-          class="h-24 md:h-32 lg:h-40 w-auto object-contain transition-all duration-700 group-hover/logo:scale-110 relative z-10"
-          :style="{ filter: `sepia(1) saturate(5) hue-rotate(${style.hue}) brightness(1.2) contrast(1.2) drop-shadow(0 0 15px rgba(var(--hud-accent-rgb), 0.3))` }"
-        />
+        <div class="absolute -inset-6 bg-hud-accent/10 blur-3xl rounded-full opacity-0 group-hover/logo:opacity-100 transition-opacity duration-700" />
+        <div class="relative z-10 bg-black p-6 md:p-8 rounded-[2rem] border border-hud-accent/30 transition-all duration-700 group-hover/logo:scale-105 shadow-[0_0_40px_rgba(var(--hud-accent-rgb),0.1)] overflow-hidden">
+          <div class="absolute inset-0 panel-scanlines opacity-30 pointer-events-none" />
+          <NuxtImg
+            src="/images/umph.png"
+            alt="UMPH"
+            class="h-20 md:h-32 lg:h-40 w-auto object-contain transition-all duration-700"
+            :style="{ filter: `sepia(1) saturate(5) hue-rotate(${style.hue}) brightness(1.2) contrast(1.2)` }"
+          />
+        </div>
       </div>
 
       <!-- Center: The Wording (CTA Lingo) -->
