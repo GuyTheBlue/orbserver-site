@@ -108,5 +108,19 @@ export const landingData = {
         'Blue Moon: This term refers to the relatively rare occurrence of a second full moon within one calendar month.'
       ]
     }
+  },
+  banners: {
+    umph: {
+      label: 'SPONSORSHIP_DEALING // SYSTEM_RESOURCES',
+      title: 'This is an UMPH-sponsored application. Access is free. Always.',
+      description: 'The mission continues on social. Please support the development by following the Story of Umph for updates and lore.',
+      cta: 'FOLLOW THE STORY'
+    },
+    story: {
+      label: 'FIND THE SECRET. FIX THE GLITCH.',
+      status: 'Site status: Glitched.',
+      description: 'The fix requires clues. Follow The Story of Umph on Instagram to find the upcoming patches.',
+      cta: 'FOLLOW THE STORY'
+    }
   }
 }

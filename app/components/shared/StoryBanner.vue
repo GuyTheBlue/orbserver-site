@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useTerminalTheme } from '~/composables/useTerminalTheme'
+import { landingData } from '~/utils/landingData'
 
 const { currentTheme } = useTerminalTheme()
+const data = landingData.banners.story
 
 interface BannerStyle {
   color: string
@@ -68,19 +70,16 @@ const style = computed(() => themeMap[currentTheme.value] || themeMap.cyan)
               class="font-orbitron font-black tracking-[0.4em] uppercase text-[10px] sm:text-xs transition-colors duration-500"
               :style="{ color: style.hex }"
             >
-              FIND THE SECRET. FIX THE GLITCH.
+              {{ data.label }}
             </h2>
           </div>
 
           <div class="max-w-2xl text-center lg:text-left space-y-4">
             <p class="font-orbitron font-black text-3xl sm:text-5xl text-white tracking-wider leading-tight uppercase">
-              Site status: <span
-                class="transition-colors duration-500"
-                :style="{ color: style.hex, textShadow: `0 0 15px rgba(${style.rgb}, 0.5)` }"
-              >Glitched.</span>
+              <SharedGlitchText :text="data.status" />
             </p>
-            <p class="text-sm sm:text-xl text-white/50 leading-relaxed font-medium">
-              The fix requires clues. Follow <span class="text-white italic">The Story of Umph</span> on Instagram to find the upcoming patches.
+            <p class="text-sm sm:text-lg text-white/50 leading-relaxed font-medium">
+              {{ data.description }}
             </p>
           </div>
         </div>
@@ -124,7 +123,7 @@ const style = computed(() => themeMap[currentTheme.value] || themeMap.cyan)
                   class="font-orbitron font-black text-sm md:text-base tracking-[0.2em] uppercase transition-colors duration-300 animate-text-flicker group-hover/btn:text-black"
                   :style="{ color: style.hex }"
                 >
-                  FOLLOW THE STORY
+                  <SharedGlitchText :text="data.cta" />
                 </span>
               </div>
 

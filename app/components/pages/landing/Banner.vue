@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useTerminalTheme } from '~/composables/useTerminalTheme'
+import { landingData } from '~/utils/landingData'
 
 const { currentTheme } = useTerminalTheme()
 const isMounted = ref(false)
+const data = landingData.banners.umph
 
 onMounted(() => {
   isMounted.value = true
@@ -34,15 +36,14 @@ const style = computed(() => {
         <div class="flex items-center gap-3 justify-center lg:justify-start">
           <div class="w-2.5 h-2.5 animate-ping bg-hud-accent" style="box-shadow: 0 0 10px var(--hud-accent)" />
           <h3 class="font-mono text-[10px] md:text-[11px] text-hud-accent tracking-[0.8em] uppercase opacity-60">
-            SPONSORSHIP_DEALING // SYSTEM_RESOURCES
+            {{ data.label }}
           </h3>
         </div>
         <p class="font-orbitron font-black text-3xl sm:text-5xl text-white tracking-wider leading-tight uppercase">
-          This is an <span class="text-hud-accent">UMPH-sponsored</span> application. <br class="hidden lg:block">
-          Access is free. Always.
+          <SharedGlitchText :text="data.title" />
         </p>
         <p class="text-sm sm:text-lg text-white/50 leading-relaxed font-medium">
-          The mission continues on social. Please support the development by following <span class="text-white italic">The Story of Umph</span> for updates and lore.
+          {{ data.description }}
         </p>
       </div>
 
@@ -73,7 +74,7 @@ const style = computed(() => {
           <div class="flex flex-col items-start leading-none text-left relative z-10">
             <span class="font-mono text-[9px] text-white/40 tracking-[0.4em] uppercase mb-2">CONNECT_FEED</span>
             <span class="font-orbitron font-black text-sm md:text-base tracking-[0.2em] uppercase transition-colors duration-300 animate-text-flicker-cyan group-hover/btn:text-black">
-              FOLLOW THE STORY
+              <SharedGlitchText :text="data.cta" />
             </span>
           </div>
 
