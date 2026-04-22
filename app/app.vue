@@ -20,7 +20,7 @@ useSeoMeta({
   ogTitle: 'ORBSERVER // Lunar Telemetry Dashboard',
   description: 'A high-fidelity, real-time lunar observation and orbital synchronisation dashboard. Uses your latitude.',
   ogDescription: 'A high-fidelity, real-time lunar observation and orbital synchronisation dashboard. Uses your latitude.',
-  ogImage: 'https://orbserver.g-squared.co.za/social_orbserver_v2.jpg',
+  ogImage: 'https://orbserver.g-squared.co.za/social_orbserver_v2.png',
   ogImageAlt: 'ORBSERVER // Lunar Telemetry Dashboard - Real-time orbital visualization',
   ogUrl: 'https://orbserver.g-squared.co.za/',
   ogType: 'website',
@@ -28,7 +28,7 @@ useSeoMeta({
   twitterCard: 'summary_large_image',
   twitterTitle: 'ORBSERVER // Lunar Telemetry Dashboard',
   twitterDescription: 'A high-fidelity, real-time lunar observation and orbital synchronisation dashboard.',
-  twitterImage: 'https://orbserver.g-squared.co.za/social_orbserver_v2.jpg',
+  twitterImage: 'https://orbserver.g-squared.co.za/social_orbserver_v2.png',
   twitterImageAlt: 'ORBSERVER // Lunar Telemetry Dashboard - Real-time orbital visualization',
   themeColor: '#000000',
   author: 'GSQUARED | Guy Meaker'
