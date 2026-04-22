@@ -20,7 +20,7 @@ useSeoMeta({
   ogTitle: 'ORBSERVER // Lunar Telemetry Dashboard',
   description: 'A high-fidelity, real-time lunar observation and orbital synchronisation dashboard. Uses your latitude.',
   ogDescription: 'A high-fidelity, real-time lunar observation and orbital synchronisation dashboard. Uses your latitude.',
-  ogImage: 'https://orbserver.g-squared.co.za/social_orbserver.jpg',
+  ogImage: 'https://orbserver.g-squared.co.za/social_orbserver_v2.jpg',
   ogImageAlt: 'ORBSERVER // Lunar Telemetry Dashboard - Real-time orbital visualization',
   ogUrl: 'https://orbserver.g-squared.co.za/',
   ogType: 'website',
@@ -28,7 +28,7 @@ useSeoMeta({
   twitterCard: 'summary_large_image',
   twitterTitle: 'ORBSERVER // Lunar Telemetry Dashboard',
   twitterDescription: 'A high-fidelity, real-time lunar observation and orbital synchronisation dashboard.',
-  twitterImage: 'https://orbserver.g-squared.co.za/social_orbserver.jpg',
+  twitterImage: 'https://orbserver.g-squared.co.za/social_orbserver_v2.jpg',
   twitterImageAlt: 'ORBSERVER // Lunar Telemetry Dashboard - Real-time orbital visualization',
   themeColor: '#000000',
   author: 'GSQUARED | Guy Meaker'
@@ -77,9 +77,9 @@ async function installApp() {
     <!-- Installation Guide Modal (Nuxt UI v4 API) -->
     <UModal 
       v-model:open="showInstallGuide" 
-      :ui="{ 
+      :ui="{
         content: 'p-0 sm:p-0 bg-transparent shadow-none ring-0 border-0 max-w-4xl w-full',
-        overlay: 'backdrop-blur-md bg-black/60' 
+        overlay: 'backdrop-blur-md bg-black/60'
       }"
     >
       <template #content>
