@@ -169,7 +169,7 @@ const { termLines, termCursor } = useMoonTerminal(lunar?.terminal ?? [], termina
     </ClientOnly>
 
     <!-- ── 4. PANELS (z-10) ──────────────────────────────────────────────── -->
-    <div class="relative z-10 max-w-[1600px] mx-auto px-6 pt-24 pb-24 2xl:pt-32">
+    <div class="relative z-10 max-w-[1600px] mx-auto px-6 pt-32 pb-32 md:pt-48 md:pb-48 2xl:pt-64">
       <!-- STATUS BAR -->
       <div class="flex flex-col sm:flex-row items-center justify-between gap-6 font-mono text-[10px] text-hud-accent uppercase tracking-[0.2em] sm:tracking-[0.5em] mb-14 border-b border-white/10 pb-6 bento-flicker">
         <div class="flex flex-wrap items-center justify-center sm:justify-start gap-4 sm:gap-6">
@@ -194,7 +194,7 @@ const { termLines, termCursor } = useMoonTerminal(lunar?.terminal ?? [], termina
       </div>
 
       <!-- ── ROW 1: MOON + QUICK STATS SIDE ─────────────────────────────── -->
-      <div class="grid grid-cols-1 xl:grid-cols-12 gap-8 mb-8">
+      <div class="grid grid-cols-1 xl:grid-cols-12 gap-8 mb-16 md:mb-24">
         <!-- MOON PANEL -->
         <div class="xl:col-span-7 panel-card group flex flex-col items-center justify-center min-h-[580px] lg:min-h-[700px] p-12 rounded-2xl bento-flicker">
           <div class="panel-grid-mesh" />

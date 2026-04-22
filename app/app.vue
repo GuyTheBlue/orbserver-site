@@ -195,53 +195,81 @@ async function installApp() {
     <SharedStoryBanner />
 
     <!-- Deep-themed Terminal Footer -->
-    <UFooter class="bg-black border-t border-white/5 relative z-50 py-12 overflow-hidden">
-      <!-- subtle background scanlines in footer -->
-      <div class="absolute inset-0 opacity-[0.03] pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-0 bg-[length:100%_2px,3px_100%]" />
+    <UFooter class="bg-black border-t border-white/5 relative z-50 py-24 md:py-32 overflow-hidden">
+      <!-- Soft Static Accent Scanlines -->
+      <div 
+        class="absolute inset-0 opacity-[0.05] pointer-events-none z-[1]" 
+        :style="{ background: `repeating-linear-gradient(0deg, rgba(var(--hud-accent-rgb), 0.3) 0px, rgba(var(--hud-accent-rgb), 0.3) 1px, transparent 1px, transparent 6px)` }"
+      />
+
+      <!-- Animated Accent Sweep -->
+      <div class="absolute inset-0 z-[2] pointer-events-none overflow-hidden opacity-20">
+        <div 
+          class="absolute inset-x-0 h-[120px] animate-scanline-sweep"
+          :style="{ background: `linear-gradient(to bottom, transparent, var(--hud-accent), transparent)` }"
+        />
+      </div>
+
+      <!-- Digital Artifacts (Erratic & Sticky) -->
+      <div class="absolute inset-0 z-[3] pointer-events-none overflow-hidden opacity-20">
+        <!-- Rapid Jitter (Calmed) -->
+        <div class="absolute inset-x-0 h-[1px] bg-white/40 animate-erratic-line" style="top: 20%" />
+        
+        <!-- Sticky Persistence Line (Sticks then Fades) -->
+        <div 
+          class="absolute inset-x-0 h-[1px] animate-sticky-line" 
+          :style="{ backgroundColor: 'var(--hud-accent)', top: '45%' }" 
+        />
+        <div 
+          class="absolute inset-x-0 h-[1px] animate-sticky-line" 
+          :style="{ backgroundColor: 'var(--hud-accent)', top: '75%', animationDelay: '-4s' }" 
+        />
+      </div>
+
 
       <div class="relative z-10 max-w-7xl mx-auto px-6 w-full flex flex-col md:flex-row items-center justify-between gap-6">
-        <div class="flex flex-col items-center md:items-start gap-2">
-          <p class="font-mono text-[10px] text-white/20 tracking-[0.4em] uppercase">
+        <div class="flex flex-col items-center md:items-start gap-3">
+          <p class="font-mono text-[9px] text-white/20 tracking-[0.8em] uppercase">
             SYSTEM // ORBSERVER
           </p>
-          <p class="text-[11px] font-mono text-white/40 tracking-wider">
+          <p class="text-[10px] font-mono text-white/40 tracking-[0.2em] uppercase">
             Built with Nuxt 4 &bull; &copy; {{ new Date().getFullYear() }} <span class="text-white">ORBSERVER-SITE</span>
           </p>
         </div>
 
-        <div class="flex flex-col items-center gap-2">
-          <p class="font-mono text-[10px] text-hud-accent/60 tracking-[0.4em] uppercase">
-            DISTRIBUTION
+        <div class="flex flex-col items-center gap-4">
+          <p class="font-mono text-[9px] text-hud-accent/40 tracking-[0.8em] uppercase">
+            DEPLOYMENT
           </p>
           <button
             @click="showInstallBtn ? installApp() : showInstallGuide = true"
-            class="group flex items-center gap-3 px-6 py-3 bg-white/5 border border-white/10 rounded-xl hover:bg-hud-accent/20 hover:border-hud-accent/40 transition-all active:scale-95 shadow-lg"
+            class="group flex items-center gap-3 px-8 py-4 bg-white/5 border border-white/10 rounded-xl hover:bg-hud-accent/10 hover:border-hud-accent/30 transition-all active:scale-95"
           >
             <UIcon 
               :name="showInstallBtn ? 'i-lucide-download' : 'i-lucide-monitor-smartphone'" 
-              class="w-4 h-4 text-hud-accent group-hover:animate-bounce" 
+              class="w-4 h-4 text-hud-accent group-hover:animate-pulse" 
             />
-            <span class="font-orbitron text-[10px] text-white tracking-[0.2em] uppercase">
+            <span class="font-orbitron text-[9px] text-white tracking-[0.4em] uppercase">
               {{ showInstallBtn ? 'Install App' : 'Get App Info' }}
             </span>
           </button>
-          <div class="flex items-center gap-2 opacity-30">
-            <div class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-            <span class="font-mono text-[9px] text-white tracking-widest uppercase">System_Sync_Active</span>
+          <div class="flex items-center gap-2 opacity-20">
+            <div class="w-1.5 h-1.5 rounded-full bg-green-500" />
+            <span class="font-mono text-[8px] text-white tracking-[0.4em] uppercase">System_Sync_Active</span>
           </div>
         </div>
 
-        <div class="flex flex-col items-center md:items-end gap-2 text-center md:text-right">
-          <p class="font-mono text-[10px] text-cyan-400/60 tracking-[0.4em] uppercase">
+        <div class="flex flex-col items-center md:items-end gap-3 text-center md:text-right">
+          <p class="font-mono text-[9px] text-cyan-400/30 tracking-[0.8em] uppercase">
             CREATED BY
           </p>
           <a
             href="https://g-squared.co.za"
             target="_blank"
-            class="group flex items-center gap-3 transition-all hover:opacity-100 opacity-60"
+            class="group flex items-center gap-3 transition-all hover:opacity-100 opacity-40"
           >
-            <span class="font-orbitron text-xs text-white tracking-[0.2em] group-hover:text-cyan-400 transition-colors uppercase">gsquared</span>
-            <div class="w-2 h-2 rounded-full bg-cyan-400/50 shadow-[0_0_8px_rgba(0,255,255,0.8)] group-hover:animate-ping" />
+            <span class="font-orbitron text-[10px] text-white tracking-[0.3em] group-hover:text-cyan-400 transition-colors uppercase">gsquared</span>
+            <div class="w-2 h-2 rounded-full bg-cyan-400/50 shadow-[0_0_8px_rgba(0,255,255,0.8)]" />
           </a>
         </div>
       </div>

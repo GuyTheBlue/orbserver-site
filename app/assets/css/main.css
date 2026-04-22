@@ -63,6 +63,34 @@ a {
   2%   { opacity: 1; filter: contrast(1); }
 }
 
+@keyframes footer-breathe {
+  0%, 100% { opacity: 0.02; transform: scale(1); }
+  50% { opacity: 0.12; transform: scale(1.05); }
+}
+
+@keyframes scanline-sweep {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(800%); }
+}
+
+@keyframes erratic-line {
+  0%, 100% { top: 10%; opacity: 0; }
+  10% { top: 10%; opacity: 0.4; }
+  12% { top: 40%; opacity: 0; }
+  40% { top: 20%; opacity: 0.3; }
+  42% { top: 80%; opacity: 0; }
+  80% { top: 60%; opacity: 0.4; }
+  82% { top: 15%; opacity: 0; }
+}
+
+@keyframes sticky-line {
+  0% { opacity: 0; transform: translateY(0); }
+  5% { opacity: 1; transform: translateY(0); }
+  25% { opacity: 1; transform: translateY(0); }
+  50% { opacity: 0; transform: translateY(2px); }
+  100% { opacity: 0; }
+}
+
 @keyframes red-glitch-alert {
   0%, 88%, 100% {
     background: rgba(4, 12, 18, 0.25); border-color: rgba(0, 242, 255, 0.15);
@@ -74,6 +102,10 @@ a {
 
 .broken-terminal-jitter { animation: glitch-jitter 12s infinite alternate; }
 .bento-flicker { animation: signal-flicker 4s infinite, red-glitch-alert 6s infinite; }
+.animate-footer-breathe { animation: footer-breathe 8s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+.animate-scanline-sweep { animation: scanline-sweep 6s linear infinite; }
+.animate-erratic-line { animation: erratic-line 1.2s infinite; }
+.animate-sticky-line { animation: sticky-line 8s infinite ease-out; }
 
 /* ── OS THEME: CRT & HUD UTILITIES ── */
 .grid-overlay {
