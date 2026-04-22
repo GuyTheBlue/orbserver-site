@@ -5,6 +5,12 @@ import { ref, computed } from 'vue'
 // Safely tracked scrolling coordinates for the dynamic transition
 const { y } = useWindowScroll()
 
+// ── MOON DATA FOR FOOTER WASH ────────────────────────────────────────────────
+const { distance, lat, lng } = useMoonData()
+const distFormatted = computed(() => distance.value?.toLocaleString('en-GB') ?? '—')
+const latStr = computed(() => `${Math.abs(lat.value || 0).toFixed(4)}° ${lat.value >= 0 ? 'N' : 'S'}`)
+const lngStr = computed(() => `${Math.abs(lng.value || 0).toFixed(4)}° ${lng.value >= 0 ? 'E' : 'W'}`)
+
 // The navbar appears transparent natively, but becomes truly "glassy" once the user scrolls past 50px
 const isGlassy = computed(() => y.value > 50)
 
@@ -196,6 +202,22 @@ async function installApp() {
 
     <!-- Deep-themed Terminal Footer -->
     <UFooter class="bg-black border-t border-white/5 relative z-50 py-24 md:py-32 overflow-hidden">
+      <!-- Background Typography Wash -->
+      <div class="absolute inset-0 z-0 pointer-events-none select-none overflow-hidden opacity-30">
+        <div 
+          class="absolute -bottom-10 -left-10 font-orbitron font-black text-white/[0.04] whitespace-nowrap leading-none"
+          style="font-size: clamp(60px, 15vw, 240px); transform: rotate(-8deg);"
+        >
+          DIST_{{ distFormatted }}KM
+        </div>
+        <div 
+          class="absolute -top-10 -right-10 font-orbitron font-black text-hud-accent/[0.03] whitespace-nowrap leading-none text-right"
+          style="font-size: clamp(60px, 12vw, 200px); transform: rotate(5deg);"
+        >
+          {{ latStr }}<br>{{ lngStr }}
+        </div>
+      </div>
+
       <!-- Soft Static Accent Scanlines -->
       <div 
         class="absolute inset-0 opacity-[0.05] pointer-events-none z-[1]" 
