@@ -9,25 +9,26 @@ const LUNAR_MONTH = 29.530588853
 
 // Maps suncalc's 0–1 phase value to a Northern Hemisphere phase name
 function getPhaseName(phase: number): string {
-  if (phase < 0.0625 || phase >= 0.9375) return 'New Moon'
-  if (phase < 0.1875) return 'Waxing Crescent'
-  if (phase < 0.3125) return 'First Quarter'
-  if (phase < 0.4375) return 'Waxing Gibbous'
-  if (phase < 0.5625) return 'Full Moon'
-  if (phase < 0.6875) return 'Waning Gibbous'
-  if (phase < 0.8125) return 'Last Quarter'
+  // Tighten windows for major phases to +/- 2% (~14 hours) for higher fidelity
+  if (phase < 0.02 || phase >= 0.98) return 'New Moon'
+  if (phase < 0.23) return 'Waxing Crescent'
+  if (phase < 0.27) return 'First Quarter'
+  if (phase < 0.48) return 'Waxing Gibbous'
+  if (phase < 0.52) return 'Full Moon'
+  if (phase < 0.73) return 'Waning Gibbous'
+  if (phase < 0.77) return 'Last Quarter'
   return 'Waning Crescent'
 }
 
 // Returns an emoji glyph matching the current phase for display
 function getPhaseGlyph(phase: number): string {
-  if (phase < 0.0625 || phase >= 0.9375) return '🌑'
-  if (phase < 0.1875) return '🌒'
-  if (phase < 0.3125) return '🌓'
-  if (phase < 0.4375) return '🌔'
-  if (phase < 0.5625) return '🌕'
-  if (phase < 0.6875) return '🌖'
-  if (phase < 0.8125) return '🌗'
+  if (phase < 0.02 || phase >= 0.98) return '🌑'
+  if (phase < 0.23) return '🌒'
+  if (phase < 0.27) return '🌓'
+  if (phase < 0.48) return '🌔'
+  if (phase < 0.52) return '🌕'
+  if (phase < 0.73) return '🌖'
+  if (phase < 0.77) return '🌗'
   return '🌘'
 }
 
