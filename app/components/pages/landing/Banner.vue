@@ -64,14 +64,14 @@ const style = computed(() => {
           href="https://www.instagram.com/thelittleblueguy/"
           target="_blank"
           rel="noopener noreferrer"
-          class="group/btn relative inline-flex items-center justify-center gap-6 px-10 py-5 bg-hud-accent/10 border border-hud-accent/30 rounded-sm hover:bg-hud-accent/20 transition-all active:scale-95 shadow-[0_0_40px_rgba(var(--hud-accent-rgb),0.1)] hover:shadow-[0_0_50px_rgba(var(--hud-accent-rgb),0.2)] w-full md:w-auto"
+          class="group/btn relative inline-flex items-center justify-center gap-6 px-10 py-5 bg-hud-accent/10 border border-hud-accent/30 rounded-xl hover:bg-hud-accent/20 transition-all active:scale-95 shadow-[0_0_40px_rgba(var(--hud-accent-rgb),0.1)] hover:shadow-[0_0_50px_rgba(var(--hud-accent-rgb),0.2)] w-full md:w-auto"
         >
           <div class="flex flex-col items-start leading-none text-left">
-            <span class="font-mono text-[9px] text-hud-accent/60 tracking-widest uppercase mb-1">CONNECT_FEED</span>
+            <span class="font-mono text-[9px] text-hud-accent/60 tracking-[0.4em] uppercase mb-1">CONNECT_FEED</span>
             <span class="font-orbitron font-black text-sm md:text-base text-hud-accent tracking-[0.2em] uppercase">FOLLOW UMPH</span>
           </div>
-          <div class="w-12 h-12 flex items-center justify-center bg-hud-accent text-black rounded-full transition-all group-hover/btn:scale-110 shadow-[0_0_15px_rgba(var(--hud-accent-rgb),0.5)]">
-            <UIcon name="i-lucide-instagram" class="w-6 h-6 group-hover/btn:-rotate-12 transition-transform" />
+          <div class="w-12 h-12 flex items-center justify-center bg-hud-accent text-black rounded-full transition-all group-hover/btn:scale-110 shadow-[0_0_15px_rgba(var(--hud-accent-rgb),0.5)] group-hover/btn:-rotate-12">
+            <UIcon name="i-lucide-instagram" class="w-6 h-6" />
           </div>
         </a>
       </div>
