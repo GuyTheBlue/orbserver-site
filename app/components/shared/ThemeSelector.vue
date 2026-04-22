@@ -1,7 +1,10 @@
 <script setup lang="ts">
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useTerminalTheme, type TerminalTheme } from '~/composables/useTerminalTheme'
 
 const { currentTheme, setTheme } = useTerminalTheme()
+const isOpen = ref(false)
+const isMobile = ref(false)
 
 const themes: { id: TerminalTheme, label: string, color: string }[] = [
   { id: 'cyan', label: 'CYAN', color: '#00f2ff' },
@@ -9,37 +12,106 @@ const themes: { id: TerminalTheme, label: string, color: string }[] = [
   { id: 'pink', label: 'PINK', color: '#ec4899' },
   { id: 'green', label: 'GREEN', color: '#00dc82' }
 ]
+
+function checkMobile() {
+  isMobile.value = window.innerWidth < 640
+  if (!isMobile.value) isOpen.value = false
+}
+
+onMounted(() => {
+  checkMobile()
+  window.addEventListener('resize', checkMobile)
+})
+onUnmounted(() => window.removeEventListener('resize', checkMobile))
+
+function selectTheme(id: TerminalTheme) {
+  setTheme(id)
+  isOpen.value = false
+}
+
+// Close if clicked outside
+const container = ref<HTMLElement | null>(null)
+if (import.meta.client) {
+  window.addEventListener('click', (e) => {
+    if (container.value && !container.value.contains(e.target as Node)) {
+      isOpen.value = false
+    }
+  })
+}
+
+// Get the color for the currently active theme
+const activeColor = computed(() => themes.find(t => t.id === currentTheme.value)?.color || '#00f2ff')
 </script>
 
 <template>
-  <div class="flex flex-wrap items-center justify-center sm:justify-start gap-3 sm:gap-4 bg-black/60 border border-white/20 p-1.5 sm:p-2 rounded-lg pointer-events-auto shadow-2xl">
-    <div class="flex flex-wrap justify-center gap-2">
+  <div 
+    ref="container"
+    class="relative pointer-events-auto"
+  >
+    <!-- ── DESKTOP/TABLET: HORIZONTAL DISPLAY ── -->
+    <div class="hidden sm:flex items-center gap-3 bg-black/40 backdrop-blur-md p-1.5 rounded-lg">
       <button
         v-for="t in themes"
         :key="t.id"
-        class="group relative w-10 h-10 rounded-sm transition-all duration-300 overflow-hidden bento-flicker border border-white/10 cursor-pointer"
-        :title="t.label"
-        @click="setTheme(t.id)"
+        class="group relative w-7 h-7 rounded-sm overflow-hidden border-none cursor-pointer shrink-0 outline-none focus:outline-none"
+        @click="selectTheme(t.id)"
       >
-        <!-- Color Background -->
         <div
           class="absolute inset-0 transition-opacity duration-300"
-          :style="{ backgroundColor: t.color, opacity: currentTheme === t.id ? 1 : 0.3 }"
+          :style="{ 
+            backgroundColor: t.color, 
+            opacity: currentTheme === t.id ? 1 : 0.2 
+          }"
         />
-
-        <!-- CRT Texture Overlay -->
-        <div class="absolute inset-0 pointer-events-none opacity-25 panel-scanlines" />
-
-        <!-- Selection Highlight -->
-        <div
+        <div class="absolute inset-0 pointer-events-none opacity-20 panel-scanlines" />
+        <div 
           v-if="currentTheme === t.id"
-          class="absolute inset-0 border-t-2 border-white/50 mix-blend-overlay"
-        />
-        <div
-          v-if="currentTheme === t.id"
-          class="absolute inset-0 bg-white/5"
+          class="absolute inset-0 bg-white/20 animate-pulse pointer-events-none"
         />
       </button>
+    </div>
+
+    <!-- ── MOBILE (XS): GHOST STACK ── -->
+    <div class="flex sm:hidden relative items-center justify-end w-8 h-8">
+      <!-- 1. THE ANCHOR BLOCK -->
+      <button 
+        @click.stop="isOpen = !isOpen"
+        class="relative w-8 h-8 rounded-sm overflow-hidden border-none cursor-pointer z-10 outline-none focus:outline-none"
+      >
+        <div class="absolute inset-0" :style="{ backgroundColor: activeColor }" />
+        <div class="absolute inset-0 pointer-events-none opacity-20 panel-scanlines" />
+      </button>
+
+      <!-- 2. THE GHOST OVERLAY (Gap included, but Zero Container Padding/Offset) -->
+      <transition
+        enter-active-class="transition duration-300 ease-out"
+        enter-from-class="opacity-0 translate-y-[-4px]"
+        enter-to-class="opacity-100 translate-y-0"
+        leave-active-class="transition duration-200 ease-in"
+        leave-from-class="opacity-100 translate-y-0"
+        leave-to-class="opacity-0 translate-y-[-4px]"
+      >
+        <div 
+          v-if="isOpen"
+          class="absolute top-0 right-0 z-[100] flex flex-col gap-2"
+        >
+          <button
+            v-for="t in themes"
+            :key="t.id"
+            class="relative w-8 h-8 rounded-sm overflow-hidden border-none cursor-pointer shrink-0 outline-none focus:outline-none"
+            @click.stop="selectTheme(t.id)"
+          >
+            <div
+              class="absolute inset-0"
+              :style="{ 
+                backgroundColor: t.color, 
+                opacity: currentTheme === t.id ? 1 : 0.6 
+              }"
+            />
+            <div class="absolute inset-0 pointer-events-none opacity-20 panel-scanlines" />
+          </button>
+        </div>
+      </transition>
     </div>
   </div>
 </template>

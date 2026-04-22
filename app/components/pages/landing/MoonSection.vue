@@ -187,9 +187,6 @@ const { termLines, termCursor } = useMoonTerminal(lunar?.terminal ?? [], termina
               GEOGRAPHIC_PARALLAX_SYNC // SUNCALC_FEED // SOUTHERN_HEMISPHERE_CALIBRATED
             </div>
           </div>
-          <ClientOnly>
-            <SharedThemeSelector />
-          </ClientOnly>
         </div>
       </div>
 

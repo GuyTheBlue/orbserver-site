@@ -181,14 +181,26 @@ async function installApp() {
     <!-- Custom Glassy SPA Navbar -->
     <ClientOnly>
       <header
-        class="fixed top-0 left-0 right-0 z-[100] transition-all duration-500 border-b"
-        :class="isGlassy ? 'bg-black/50 backdrop-blur-xl border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.5)] pt-4 pb-2' : 'bg-transparent border-transparent pt-6 pb-2'"
+        class="fixed top-0 left-0 right-0 z-[100] transition-all duration-500"
+        :class="isGlassy ? 'bg-black/50 backdrop-blur-xl border-none shadow-[0_4px_30px_rgba(0,0,0,0.5)] pt-4 pb-2' : 'bg-transparent border-transparent pt-6 pb-2'"
       >
         <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
           <NuxtLink to="/">
             <!-- Our massive highly-kerned Orbserver logo -->
             <SharedAppLogo class="w-auto h-8 md:h-10 shrink-0 transition-transform hover:scale-105 drop-shadow-md" />
           </NuxtLink>
+
+          <!-- The New Accordion Accent Selector (Dashboard Mode Only) -->
+          <transition 
+            enter-active-class="transition-opacity duration-1000 ease-out"
+            enter-from-class="opacity-0"
+            enter-to-class="opacity-100"
+            leave-active-class="transition-opacity duration-500 ease-in"
+            leave-from-class="opacity-100"
+            leave-to-class="opacity-0"
+          >
+            <SharedThemeSelector v-if="y > 300" />
+          </transition>
         </div>
       </header>
     </ClientOnly>
