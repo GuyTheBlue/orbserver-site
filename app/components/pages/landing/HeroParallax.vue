@@ -12,7 +12,11 @@ const rockTransform = computed(() => `scale(${1 + y.value * 0.0005}) translateY(
 
 // The overall space transitions to pitch black/void as you sink
 // The environment fades out while the dashboard reveals behind it
-const voidOpacity = computed(() => Math.min(y.value / 400, 1))
+const voidOpacity = computed(() => {
+  // Reveal much faster on mobile to accommodate the shorter scroll height
+  const threshold = (typeof window !== 'undefined' && window.innerWidth < 640) ? 150 : 400
+  return Math.min(y.value / threshold, 1)
+})
 const environmentOpacity = computed(() => 1 - voidOpacity.value)
 
 // Real-time geographic rotation
@@ -31,7 +35,7 @@ const accentColor = computed(() => themeMap[currentTheme.value] || themeMap.cyan
 </script>
 
 <template>
-  <div class="relative h-[140vh] w-full">
+  <div class="relative h-[105vh] sm:h-[140vh] w-full">
     <ClientOnly>
       <!-- The camera frame: locks to the screen while you scroll down the track -->
       <div class="sticky top-0 h-screen w-full overflow-hidden bg-transparent flex flex-col justify-end">
@@ -157,7 +161,7 @@ const accentColor = computed(() => themeMap[currentTheme.value] || themeMap.cyan
 
         <!-- ── 80s CRT BRIDGE LAYER (REVEALS ON SINK) ── -->
         <div
-          class="absolute inset-0 z-[5] bg-black flex items-center justify-center pointer-events-none overflow-hidden"
+          class="absolute inset-0 z-[5] bg-black flex items-end justify-center sm:items-center pb-[15vh] sm:pb-0 px-6 pointer-events-none overflow-hidden"
           :style="{ opacity: voidOpacity }"
         >
           <!-- 80s Noise & Scanline Overlay -->
