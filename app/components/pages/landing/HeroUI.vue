@@ -135,7 +135,7 @@ onMounted(() => {
     <ClientOnly>
       <SharedGlitchSystem
         :z-index="500"
-        :density="5.0"
+        :density="2.5"
         :min-size="48"
         :max-size="120"
       />

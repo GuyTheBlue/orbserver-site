@@ -35,7 +35,7 @@ useSeoMeta({
     <ClientOnly>
       <header
         class="fixed top-0 left-0 right-0 z-[100] transition-all duration-500 border-b"
-        :class="isGlassy ? 'bg-black/50 backdrop-blur-xl border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.5)] py-2' : 'bg-transparent border-transparent py-4'"
+        :class="isGlassy ? 'bg-black/50 backdrop-blur-xl border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.5)] pt-4 pb-2' : 'bg-transparent border-transparent pt-6 pb-2'"
       >
         <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
           <NuxtLink to="/">
