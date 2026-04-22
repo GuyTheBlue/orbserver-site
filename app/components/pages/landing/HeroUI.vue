@@ -126,8 +126,8 @@ onMounted(() => {
 <template>
   <div class="absolute inset-0 pointer-events-none overflow-hidden broken-terminal-jitter">
     <!-- 1. ADVANCED DIGITAL MATRIX WASH (Behind all layers) -->
-    <div class="absolute inset-0 opacity-[0.7] select-none pointer-events-none bento-flicker overflow-hidden">
-      <div class="font-mono text-[10px] text-hud-accent/30 whitespace-pre leading-[0.85] p-10">
+    <div class="absolute inset-y-0 right-0 w-1/4 sm:inset-0 sm:w-full opacity-[0.7] select-none pointer-events-none bento-flicker overflow-hidden">
+      <div class="font-mono text-[8px] sm:text-[10px] text-hud-accent/30 whitespace-pre leading-[0.85] p-4 sm:p-10">
         {{ dataWash.repeat(10) }}
       </div>
     </div>
@@ -221,7 +221,7 @@ onMounted(() => {
     </div>
 
     <!-- 4. BOTTOM-RIGHT FACTOID AR (Integrated Dash Style) -->
-    <div class="absolute bottom-[10%] right-[10%] max-w-sm pointer-events-auto hidden md:block">
+    <div class="absolute bottom-[5%] right-[5%] md:bottom-[10%] md:right-[10%] max-w-[85vw] sm:max-w-sm pointer-events-auto block">
       <div class="panel-card p-6 rounded-xl border-white/5 bento-flicker backdrop-blur-md">
         <div class="panel-grid-mesh opacity-10" /><div class="panel-scanlines opacity-20" />
         <div class="relative z-10">
