@@ -173,8 +173,8 @@ const accentColor = computed(() => themeMap[currentTheme.value] || themeMap.cyan
             class="relative z-30 transition-transform duration-700"
             :style="{ transform: `translateY(${50 - y * 0.05}px) scale(${0.95 + y * 0.0001})` }"
           >
-            <div class="font-orbitron font-black text-4xl md:text-7xl text-center space-y-4 tracking-[-0.05em] uppercase">
-              <div class="text-white/20 blur-[1px] flex items-center justify-center">
+            <div class="font-orbitron font-black text-4xl md:text-7xl text-center space-y-4 tracking-[-0.05em] uppercase transition-all duration-1000" :class="voidOpacity > 0.8 ? 'blur-0' : 'blur-[2px]'">
+              <div class="text-white/20 flex items-center justify-center">
                 M
                 <div
                   class="w-7 h-7 md:w-14 md:h-14 mx-1 md:mx-2"
@@ -194,7 +194,7 @@ const accentColor = computed(() => themeMap[currentTheme.value] || themeMap.cyan
                 O
                 N
               </div>
-              <div class="text-white/40 blur-[2px]">
+              <div class="text-white/40">
                 TELEMETRY
               </div>
               <div class="font-bold tracking-widest animate-random-pulse">

@@ -78,7 +78,8 @@ const { termLines, termCursor } = useMoonTerminal(lunar?.terminal ?? [], termina
 <template>
   <section
     ref="sectionEl"
-    class="relative bg-[#010810] overflow-hidden broken-terminal-jitter"
+    class="relative bg-[#010810] overflow-hidden broken-terminal-jitter transition-all duration-[2s] ease-out"
+    :class="isVisible ? 'blur-0 opacity-100' : 'blur-md opacity-80'"
     style="min-height: 120vh;"
   >
     <!-- ── 1. BACKGROUND TERMINAL (z-0, absolute, full section) ─────────── -->
