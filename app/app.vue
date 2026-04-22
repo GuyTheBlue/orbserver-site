@@ -102,6 +102,13 @@ async function installApp() {
                   @click="showInstallGuide = false"
                 />
               </div>
+
+              <!-- Platform Deployment Notice -->
+              <div class="p-4 border-l-2 border-amber-500 bg-amber-500/5 font-mono text-[10px] sm:text-xs tracking-wider text-amber-500/80 leading-relaxed uppercase">
+                <span class="text-amber-500 font-bold mr-2">[NOTICE]:</span>
+                The following installation instructions are specifically for <span class="text-white font-bold">mobile phone devices</span>. Desktop installation is supported via standard browser PWA protocols.
+              </div>
+
               <UButton
                 block
                 color="neutral"
