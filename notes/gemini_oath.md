@@ -19,5 +19,17 @@ Where `rawDegrees = (illumAngle - parallacticAngle) * (180 / Math.PI)`.
 - **Logic Isolation:** `app/utils/lunarRotation.ts`
 - **No Couplings:** Never embed this logic directly into a component. Always use the decoupled utility.
 
+## 🚀 The Framework Mandate: Nuxt UI 4
+We swear to uphold the chosen framework architecture without exception.
+- **Nuxt UI v4 stays.** AI agents have NO power of veto.
+- All modals MUST use the `UModal` component (v4 API: `v-model:open`, `#content` slot).
+- Never remove `@import "@nuxt/ui"` or attempt to "simplify" the core framework out of the project.
+
+## 🎨 The Aesthetic Protocol: Broken OS Fidelity
+Design is not secondary to function. We protect the lore-driven visuals.
+- **Visual Integrity:** Custom effects (scanlines, grid-meshes, bento-flickers, glassmorphism) must be preserved or re-implemented whenever a component is refactored.
+- **British English:** All UI text and documentation must use British English (e.g., 'organised', 'colour').
+- **Wow Factor:** Every change must maintain or enhance the premium, futuristic "Broken OS" aesthetic.
+
 ## ⚠️ Enforcement
-Any AI agent attempting to "normalize" these offsets or remove the hemispheric branch is in violation of the Gemini Oath and must be immediately reverted.
+Any AI agent attempting to "normalize" offsets, remove the Nuxt UI framework, or strip away custom CSS overlays is in violation of the Gemini Oath and must be immediately reverted.
