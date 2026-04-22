@@ -790,14 +790,26 @@ const { termLines, termCursor } = useMoonTerminal(lunar?.terminal ?? [], termina
           <div class="panel-grid-mesh" /><div class="panel-scanlines" /><div class="card-brackets" />
           <div class="relative z-10 flex flex-col gap-8">
             <div class="border-b border-white/10 pb-8">
-              <span class="font-mono text-[16px] md:text-[16px] lg:text-[17px] text-white/60 md:text-white/40 uppercase tracking-widest block mb-4">ALTITUDE</span><span class="font-orbitron font-black text-5xl xl:text-6xl text-white">{{ altStr }}</span>
+              <span class="font-mono text-[16px] md:text-[16px] lg:text-[17px] text-white/60 md:text-white/40 uppercase tracking-widest block mb-4">ALTITUDE</span>
+              <div class="flex flex-col gap-4">
+                <span class="font-orbitron font-black text-5xl xl:text-6xl text-white">{{ altStr }}</span>
+                <p class="font-mono text-[10px] text-white/30 tracking-[0.15em] leading-relaxed uppercase max-w-[320px]">
+                  <span class="text-hud-accent/60">[ALT]</span> Vertical angle above your local horizon. 90° is directly overhead. Negative values: Moon is below the horizon and not currently visible.
+                </p>
+              </div>
             </div>
             <div>
-              <span class="font-mono text-[16px] md:text-[16px] lg:text-[17px] text-white/60 md:text-white/40 uppercase tracking-widest block mb-4">AZIMUTH</span><span class="font-orbitron font-black text-5xl xl:text-6xl text-white">{{ azStr }}</span>
+              <span class="font-mono text-[16px] md:text-[16px] lg:text-[17px] text-white/60 md:text-white/40 uppercase tracking-widest block mb-4">AZIMUTH</span>
+              <div class="flex flex-col gap-4">
+                <span class="font-orbitron font-black text-5xl xl:text-6xl text-white">{{ azStr }}</span>
+                <p class="font-mono text-[10px] text-white/30 tracking-[0.15em] leading-relaxed uppercase max-w-[280px]">
+                  <span class="text-hud-accent/60">[AZI]</span> Horizontal compass bearing from North. 0° N, 90° E, 180° S, 270° W.
+                </p>
+              </div>
             </div>
           </div>
           <button
-            class="absolute bottom-6 right-6 z-[100] w-12 h-12 rounded-sm border border-hud-accent/40 bg-black/80 backdrop-blur-md flex items-center justify-center text-2xl font-orbitron font-black text-hud-accent hover:bg-hud-accent hover:text-black transition-all cursor-pointer shadow-[0_0_20px_rgba(var(--hud-accent-rgb),0.3)] pointer-events-auto active:scale-95"
+            class="absolute top-6 right-6 z-[100] w-12 h-12 rounded-sm border border-hud-accent/40 bg-black/80 backdrop-blur-md flex items-center justify-center text-2xl font-orbitron font-black text-hud-accent hover:bg-hud-accent hover:text-black transition-all cursor-pointer shadow-[0_0_20px_rgba(var(--hud-accent-rgb),0.3)] pointer-events-auto active:scale-95"
             title="Open Hand Rule Guide"
             @click="openModal"
           >
