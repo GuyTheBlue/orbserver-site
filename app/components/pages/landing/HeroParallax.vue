@@ -187,7 +187,7 @@ const moonRotation = computed(() => `${textureRotation.value}deg`)
               <div class="text-white/40 blur-[2px]">
                 TELEMETRY
               </div>
-              <div class="text-hud-accent/80 drop-shadow-[var(--hud-accent-glow)] animate-focus-pulse">
+              <div class="font-bold tracking-widest animate-random-pulse">
                 DASHBOARD
               </div>
             </div>
@@ -220,21 +220,22 @@ const moonRotation = computed(() => `${textureRotation.value}deg`)
 </template>
 
 <style scoped>
-@keyframes focus-pulse {
-
-  0%,
-  100% {
-    filter: blur(0px);
-    opacity: 0.8;
+@keyframes random-white-pulse {
+  0%, 88%, 100% {
+    color: rgba(var(--hud-accent-rgb), 0.8);
+    filter: drop-shadow(0 0 10px rgba(var(--hud-accent-rgb), 0.5));
   }
-
-  50% {
-    filter: blur(8px);
-    opacity: 0.4;
+  90%, 96% {
+    color: #ffffff;
+    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.8));
+  }
+  93% {
+    color: rgba(var(--hud-accent-rgb), 0.4);
+    filter: none;
   }
 }
 
-.animate-focus-pulse {
-  animation: focus-pulse 5s ease-in-out infinite;
+.animate-random-pulse {
+  animation: random-white-pulse 5.5s infinite;
 }
 </style>
