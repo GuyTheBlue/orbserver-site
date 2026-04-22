@@ -128,12 +128,12 @@ const style = computed(() => themeMap[currentTheme.value] || themeMap.cyan)
               </div>
 
               <div 
-                class="relative z-10 w-14 h-14 flex-shrink-0 flex items-center justify-center rounded-full transition-all group-hover/btn:scale-110 shadow-lg group-hover/btn:-rotate-12"
+                class="relative z-10 w-14 h-14 flex-shrink-0 flex items-center justify-center rounded-full transition-all group-hover/btn:scale-110 shadow-lg group-hover/btn:-rotate-12 overflow-hidden"
                 :style="{ backgroundColor: style.hex, color: 'black' }"
               >
                 <UIcon
                   name="i-lucide-instagram"
-                  class="w-7 h-7"
+                  class="w-7 h-7 animate-icon-glitch"
                 />
               </div>
             </a>
@@ -178,5 +178,17 @@ const style = computed(() => themeMap[currentTheme.value] || themeMap.cyan)
   animation: none !important;
   color: #000000 !important;
   text-shadow: none !important;
+}
+
+@keyframes icon-glitch {
+  0%, 90%, 100% { transform: translate(0) scale(1); filter: none; opacity: 1; }
+  92% { transform: translate(-3px, 2px) scale(1.1); filter: hue-rotate(90deg) contrast(2) invert(0.1); opacity: 0.8; }
+  94% { transform: translate(3px, -2px) scale(0.9); filter: hue-rotate(-90deg) contrast(3) sepia(1); opacity: 0.9; }
+  96% { transform: translate(-1px, -1px) scale(1.05); filter: brightness(2) saturate(5); opacity: 1; }
+  98% { transform: translate(1px, 1px) scale(1.2); filter: invert(1); opacity: 0.7; }
+}
+
+.animate-icon-glitch {
+  animation: icon-glitch 4s infinite step-end;
 }
 </style>
