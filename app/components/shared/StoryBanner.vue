@@ -24,7 +24,7 @@ const style = computed(() => themeMap[currentTheme.value] || themeMap.cyan)
 <template>
   <ClientOnly>
     <div
-      class="relative w-full border-t-2 border-b transition-all duration-500 overflow-hidden group py-8 sm:py-16 broken-terminal-jitter bento-flicker"
+      class="relative w-full border-t-2 border-b transition-all duration-500 overflow-hidden group py-16 sm:py-24 broken-terminal-jitter bento-flicker"
       :style="{
         borderColor: `rgba(${style.rgb}, 0.3)`,
         backgroundColor: `rgba(${style.rgb}, 0.03)`,
@@ -56,7 +56,7 @@ const style = computed(() => themeMap[currentTheme.value] || themeMap.cyan)
         />
       </div>
 
-      <div class="relative z-20 max-w-7xl mx-auto px-6 h-full flex flex-col lg:flex-row items-center gap-12 lg:gap-24 justify-between">
+      <div class="relative z-20 max-w-7xl mx-auto px-6 h-full flex flex-col lg:flex-row items-center gap-16 lg:gap-24 justify-between">
         <!-- The Anomaly Identity -->
         <div class="flex flex-col items-center lg:items-start gap-6">
           <div class="flex items-center gap-3">
@@ -79,18 +79,18 @@ const style = computed(() => themeMap[currentTheme.value] || themeMap.cyan)
                 :style="{ color: style.hex, textShadow: `0 0 15px rgba(${style.rgb}, 0.5)` }"
               >Glitched.</span>
             </p>
-            <p class="text-sm sm:text-lg text-white/50 leading-relaxed font-medium">
+            <p class="text-sm sm:text-xl text-white/50 leading-relaxed font-medium">
               The fix requires clues. Follow <span class="text-white italic">The Story of Umph</span> on Instagram to find the upcoming patches.
             </p>
           </div>
         </div>
 
         <!-- The Terminal / CTA Block -->
-        <div class="flex flex-col items-center lg:items-end gap-10 w-full lg:w-auto">
+        <div class="flex flex-col items-center lg:items-end gap-12 w-full lg:w-auto">
           
-          <!-- IMAGE SECTION -->
+          <!-- IMAGE SECTION (Bigger in Stacked Mode) -->
           <div
-            class="relative w-40 sm:w-60 group-hover:scale-105 transition-all duration-700 p-6 bg-black rounded-3xl border overflow-hidden"
+            class="relative w-64 sm:w-60 group-hover:scale-105 transition-all duration-700 p-8 bg-black rounded-[2rem] border overflow-hidden"
             :style="{ borderColor: `rgba(${style.rgb}, 0.5)` }"
           >
             <div class="absolute inset-0 panel-scanlines opacity-40 pointer-events-none z-10" />
@@ -103,34 +103,25 @@ const style = computed(() => themeMap[currentTheme.value] || themeMap.cyan)
           </div>
 
           <!-- CRYPTO TYPOGRAPHY AND INPUT CONSOLE -->
-          <div class="flex flex-col items-center lg:items-end gap-4 w-full">
+          <div class="flex flex-col items-center lg:items-end gap-6 w-full">
             <div class="font-mono text-[9px] tracking-[0.6em] text-white/30 uppercase">
               sha256(clues) = <span :style="{ color: style.hex }">patch_ref_0x7c</span>
-            </div>
-
-            <!-- Decorative Input Box -->
-            <div 
-              class="w-full max-w-[320px] bg-black border h-10 px-4 flex items-center gap-3 opacity-60 pointer-events-none"
-              :style="{ borderColor: `rgba(${style.rgb}, 0.2)` }"
-            >
-              <div class="w-1.5 h-1.5 rounded-full animate-pulse" :style="{ backgroundColor: style.hex }" />
-              <span class="font-mono text-[10px] text-white/20 tracking-wider">ENTER_PATCH_KEY...</span>
             </div>
 
             <a
               href="https://www.instagram.com/thelittleblueguy/"
               target="_blank"
               rel="noopener noreferrer"
-              class="group/btn relative inline-flex items-center justify-center gap-6 px-10 py-5 border rounded-xl transition-all duration-300 active:scale-95 shadow-2xl hover:shadow-[0_0_50px_rgba(var(--anomaly-rgb),0.3)] w-full md:w-auto overflow-hidden animate-anomaly-pulse"
+              class="group/btn relative inline-flex items-center justify-center gap-8 px-12 py-6 border rounded-sm transition-all duration-300 active:scale-95 shadow-2xl hover:shadow-[0_0_70px_rgba(var(--anomaly-rgb),0.3)] w-full md:w-auto overflow-hidden animate-anomaly-pulse"
               :style="{
                 backgroundColor: `rgba(${style.rgb}, 0.1)`,
                 borderColor: `rgba(${style.rgb}, 0.4)`
               }"
             >
               <div class="flex flex-col items-start leading-none text-left relative z-10">
-                <span class="font-mono text-[9px] text-white/40 tracking-[0.4em] uppercase mb-1">CONNECT_FEED</span>
+                <span class="font-mono text-[9px] text-white/40 tracking-[0.4em] uppercase mb-2">CONNECT_FEED</span>
                 <span 
-                  class="font-orbitron font-black text-sm md:text-base tracking-[0.2em] uppercase transition-colors duration-300 group-hover/btn:text-black"
+                  class="font-orbitron font-black text-sm md:text-base tracking-[0.2em] uppercase transition-colors duration-300 animate-text-flicker group-hover/btn:text-black"
                   :style="{ color: style.hex }"
                 >
                   FOLLOW THE STORY
@@ -138,12 +129,12 @@ const style = computed(() => themeMap[currentTheme.value] || themeMap.cyan)
               </div>
 
               <div 
-                class="relative z-10 w-12 h-12 flex items-center justify-center rounded-full transition-all group-hover/btn:scale-110 shadow-lg group-hover/btn:-rotate-12"
+                class="relative z-10 w-14 h-14 flex items-center justify-center rounded-full transition-all group-hover/btn:scale-110 shadow-lg group-hover/btn:-rotate-12"
                 :style="{ backgroundColor: style.hex, color: 'black' }"
               >
                 <UIcon
                   name="i-lucide-instagram"
-                  class="w-6 h-6"
+                  class="w-7 h-7"
                 />
               </div>
             </a>
@@ -184,7 +175,6 @@ const style = computed(() => themeMap[currentTheme.value] || themeMap.cyan)
   animation: text-flicker 5s infinite step-end;
 }
 
-/* Force text to black on hover to remain visible against solid background */
 .group\/btn:hover .animate-text-flicker {
   animation: none !important;
   color: #000000 !important;
