@@ -79,7 +79,7 @@ const moonRotation = computed(() => `${textureRotation.value}deg`)
           
           <!-- Cloaked Figure (z-55) -->
           <div
-            class="absolute bottom-[18%] z-[55] origin-bottom left-[25%] w-[19vw] min-w-[187px] max-w-[312px] sm:left-1/2 sm:-translate-x-1/2 sm:w-[30vw] md:left-[35%] md:translate-x-0 md:w-[22vw] lg:left-[25%] lg:w-[19vw]"
+            class="absolute bottom-[18%] z-[55] origin-bottom left-[20%] w-[21vw] min-w-[205px] max-w-[360px] sm:left-1/2 sm:-translate-x-1/2 sm:w-[30vw] md:left-[35%] md:translate-x-0 md:w-[22vw] lg:left-[25%] lg:w-[25vw]"
             :style="{ transform: figureTransform }"
           >
             <NuxtImg
