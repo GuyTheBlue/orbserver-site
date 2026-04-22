@@ -32,8 +32,12 @@ const emit = defineEmits(['close'])
   <UModal 
     :open="show" 
     @update:open="(val) => { if (!val) emit('close') }"
-    class="bg-[#020a14] border border-hud-accent/40 shadow-[0_0_120px_rgba(0,0,0,1)] ring-1 ring-hud-accent/30"
-    :ui="{ content: 'p-0', header: 'p-4 md:p-8' }"
+    class="bg-[#020a14] border border-hud-accent/40 shadow-[0_0_120px_rgba(0,0,0,1)] ring-1 ring-hud-accent/30 overflow-hidden"
+    :ui="{ 
+      content: 'p-0', 
+      header: 'p-4 md:p-8',
+      overlay: 'backdrop-blur-md bg-black/60'
+    }"
   >
     <!-- Header -->
     <template #header>

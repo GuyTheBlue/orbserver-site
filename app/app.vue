@@ -68,13 +68,24 @@ async function installApp() {
   <UApp>
     <!-- Installation Guide Modal (Nuxt UI) -->
     <!-- Installation Guide Modal (Nuxt UI v4 API) -->
+    <!-- Installation Guide Modal (Nuxt UI v4 API) -->
     <UModal 
       v-model:open="showInstallGuide" 
-      class="bg-[#020a14] border border-hud-accent/40 shadow-[0_0_120px_rgba(0,0,0,1)] ring-1 ring-hud-accent/30"
-      :ui="{ content: 'p-0 sm:p-0', header: 'p-4 md:p-8', body: 'p-4 md:p-8', footer: 'p-4 md:p-8' }"
+      class="bg-[#020a14] border border-hud-accent/40 shadow-[0_0_120px_rgba(0,0,0,1)] ring-1 ring-hud-accent/30 overflow-hidden"
+      :ui="{ 
+        content: 'p-0 sm:p-0 relative', 
+        header: 'p-4 md:p-8', 
+        body: 'p-4 md:p-8', 
+        footer: 'p-4 md:p-8',
+        overlay: 'backdrop-blur-md bg-black/60' 
+      }"
     >
+      <!-- Broken OS Aesthetic Overlays -->
+      <div class="absolute inset-0 opacity-20 scanline-overlay pointer-events-none z-0" />
+      <div class="absolute inset-0 opacity-10 grid-overlay pointer-events-none z-0" />
+
       <template #header>
-        <div class="flex items-center justify-between">
+        <div class="flex items-center justify-between relative z-20">
           <div class="flex items-center gap-4">
             <div class="w-10 h-10 rounded-full bg-hud-accent/10 flex items-center justify-center">
               <UIcon name="i-lucide-monitor-smartphone" class="text-hud-accent w-6 h-6 animate-pulse" />
@@ -85,15 +96,19 @@ async function installApp() {
             color="neutral"
             variant="ghost"
             icon="i-lucide-x"
-            class="rounded-full cursor-pointer"
+            class="rounded-full cursor-pointer hover:bg-white/10"
             @click="showInstallGuide = false"
           />
         </div>
       </template>
       
       <template #body>
-        <div class="space-y-8 relative z-10">
-          <div class="space-y-4">
+        <div class="relative z-10 space-y-8 bento-flicker">
+          <!-- Broken OS Aesthetic Overlays -->
+          <div class="absolute inset-0 opacity-20 scanline-overlay pointer-events-none -m-8" />
+          <div class="absolute inset-0 opacity-10 grid-overlay pointer-events-none -m-8" />
+
+          <div class="space-y-4 relative z-10">
             <p class="font-mono text-[10px] text-hud-accent tracking-[0.4em] uppercase">PROCEDURE_01 // ANDROID</p>
             <div class="space-y-3">
               <p class="text-sm text-white/50 leading-relaxed font-mono text-left">
@@ -105,7 +120,7 @@ async function installApp() {
             </div>
           </div>
           
-          <div class="space-y-3 border-t border-white/5 pt-8">
+          <div class="space-y-3 border-t border-white/5 pt-8 relative z-10">
             <p class="font-mono text-[10px] text-pink-400 tracking-[0.4em] uppercase">PROCEDURE_02 // IOS_SAFARI</p>
             <p class="text-sm text-white/50 leading-relaxed font-mono text-left">
               TAP THE <span class="text-white font-bold">SHARE ICON</span> (SQUARE + ARROW), SCROLL DOWN, AND SELECT <span class="text-pink-400 font-bold">"ADD TO HOME SCREEN"</span>.
@@ -115,15 +130,17 @@ async function installApp() {
       </template>
 
       <template #footer>
-        <UButton 
-          block
-          color="neutral"
-          variant="subtle"
-          class="font-mono text-[10px] tracking-[0.5em] uppercase py-4 rounded-2xl cursor-pointer"
-          @click="showInstallGuide = false"
-        >
-          CLOSE_TERMINAL [ESC]
-        </UButton>
+        <div class="relative z-20 w-full">
+          <UButton 
+            block
+            color="neutral"
+            variant="subtle"
+            class="font-mono text-[10px] tracking-[0.5em] uppercase py-4 rounded-2xl cursor-pointer hover:bg-hud-accent/10 border border-white/5"
+            @click="showInstallGuide = false"
+          >
+            CLOSE_TERMINAL [ESC]
+          </UButton>
+        </div>
       </template>
     </UModal>
 
