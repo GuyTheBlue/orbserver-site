@@ -18,6 +18,16 @@ const environmentOpacity = computed(() => 1 - voidOpacity.value)
 // Real-time geographic rotation
 const { textureRotation } = useMoonData()
 const moonRotation = computed(() => `${textureRotation.value}deg`)
+
+// Theme reactive logo
+const { currentTheme } = useTerminalTheme()
+const themeMap = {
+  cyan: '#00f2ff',
+  amber: '#ffb000',
+  pink: '#ec4899',
+  green: '#00dc82'
+}
+const accentColor = computed(() => themeMap[currentTheme.value] || themeMap.cyan)
 </script>
 
 <template>
@@ -162,27 +172,23 @@ const moonRotation = computed(() => `${textureRotation.value}deg`)
             <div class="font-orbitron font-black text-4xl md:text-7xl text-center space-y-4 tracking-[-0.05em] uppercase">
               <div class="text-white/20 blur-[1px] flex items-center justify-center">
                 M
-                <span class="relative inline-flex items-center justify-center mx-2 sm:mx-4">
-                  <!-- Solid Glowing Orb -->
-                  <span class="w-8 h-8 md:w-16 md:h-16 rounded-full bg-white shadow-[0_0_30px_rgba(255,255,255,1)]" />
-                  <!-- Orbit Line -->
-                  <svg
-                    class="absolute w-[200%] h-[200%] pointer-events-none opacity-40"
-                    viewBox="0 0 100 100"
-                  >
-                    <ellipse
-                      cx="50"
-                      cy="50"
-                      rx="48"
-                      ry="12"
-                      fill="none"
-                      stroke="white"
-                      stroke-width="1.2"
-                      transform="rotate(-20 50 50)"
-                    />
-                  </svg>
-                </span>
-                ON
+                <div
+                  class="w-7 h-7 md:w-14 md:h-14 mx-1 md:mx-2"
+                  :style="{ 
+                    backgroundColor: accentColor,
+                    maskImage: 'url(/images/logo_orb.png)',
+                    maskSize: 'contain',
+                    maskRepeat: 'no-repeat',
+                    maskPosition: 'center',
+                    WebkitMaskImage: 'url(/images/logo_orb.png)',
+                    WebkitMaskSize: 'contain',
+                    WebkitMaskRepeat: 'no-repeat',
+                    WebkitMaskPosition: 'center',
+                    filter: `drop-shadow(0 0 12px ${accentColor}80)`
+                  }"
+                />
+                O
+                N
               </div>
               <div class="text-white/40 blur-[2px]">
                 TELEMETRY
