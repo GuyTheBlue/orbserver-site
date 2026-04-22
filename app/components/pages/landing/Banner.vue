@@ -55,8 +55,11 @@ const style = computed(() => {
           <NuxtImg
             src="/images/umph.png"
             alt="UMPH"
-            class="relative z-0 w-full h-auto object-contain transition-all duration-700"
-            :style="{ filter: `sepia(1) saturate(10) hue-rotate(${style.hue}) brightness(1.1) contrast(1.4)` }"
+            class="relative z-0 w-full h-auto object-contain transition-all duration-700 animate-image-glitch"
+            :style="{ 
+              '--base-filter': `sepia(1) saturate(10) hue-rotate(${style.hue}) brightness(1.1) contrast(1.4)`,
+              filter: `var(--base-filter)`
+            }"
           />
         </div>
 
@@ -139,5 +142,17 @@ const style = computed(() => {
 
 .animate-icon-glitch {
   animation: icon-glitch 4s infinite step-end;
+}
+
+@keyframes image-glitch {
+  0%, 90%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); filter: var(--base-filter); }
+  91% { clip-path: inset(20% 0 50% 0); transform: translate(-10px, 5px); filter: brightness(2) saturate(10) hue-rotate(-50deg) sepia(1); }
+  92% { clip-path: inset(10% 0 80% 0); transform: translate(10px, -5px); filter: brightness(1.5) saturate(10) hue-rotate(-50deg) sepia(1); }
+  93% { clip-path: inset(60% 0 5% 0); transform: translate(-5px, 10px); filter: brightness(3) saturate(10) hue-rotate(-50deg) sepia(1); }
+  94% { clip-path: inset(0 0 0 0); transform: translate(0); filter: var(--base-filter); }
+}
+
+.animate-image-glitch {
+  animation: image-glitch 5s infinite step-end;
 }
 </style>
