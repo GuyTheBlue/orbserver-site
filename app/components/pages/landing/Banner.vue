@@ -23,54 +23,68 @@ const style = computed(() => {
 </script>
 
 <template>
-  <div class="relative w-full border-y border-hud-accent/20 bg-hud-accent/[0.03] overflow-hidden group py-16 md:py-24 transition-all duration-500">
+  <div class="relative w-full border-y border-hud-accent/20 bg-hud-accent/[0.03] overflow-hidden group py-16 sm:py-24 transition-all duration-500">
     <!-- Background elements -->
     <div class="absolute inset-0 z-0 panel-grid-mesh opacity-[0.15]" />
     <div class="absolute inset-0 z-0 panel-scanlines opacity-20" />
     
-    <div class="relative z-10 max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-16 lg:gap-24">
-      <!-- Left side: The Logo (Bigger in Stacked Mode) -->
-      <div class="flex-shrink-0 relative group/logo w-full md:w-auto flex justify-center">
-        <div class="absolute -inset-10 bg-hud-accent/10 blur-3xl rounded-full opacity-0 group-hover/logo:opacity-100 transition-opacity duration-700" />
-        <div class="relative z-10 bg-black p-8 md:p-10 rounded-[2rem] border border-hud-accent/50 transition-all duration-700 group-hover/logo:scale-105 shadow-[0_0_60px_rgba(var(--hud-accent-rgb),0.2)] overflow-hidden">
-          <div class="absolute inset-0 panel-scanlines opacity-40 pointer-events-none" />
-          <NuxtImg
-            src="/images/umph.png"
-            alt="UMPH"
-            class="h-48 md:h-40 lg:h-48 w-auto object-contain transition-all duration-700"
-            :style="{ filter: `sepia(1) saturate(10) hue-rotate(${style.hue}) brightness(1.1) contrast(1.4)` }"
-          />
+    <div class="relative z-10 max-w-7xl mx-auto px-6 flex flex-col lg:flex-row items-center justify-between gap-16 lg:gap-24">
+      <!-- Left side: The Wording -->
+      <div class="flex-col items-center lg:items-start gap-6 flex-1 text-center lg:text-left space-y-6">
+        <div class="flex items-center gap-3 justify-center lg:justify-start">
+          <div class="w-2.5 h-2.5 animate-ping bg-hud-accent" style="box-shadow: 0 0 10px var(--hud-accent)" />
+          <h3 class="font-mono text-[10px] md:text-[11px] text-hud-accent tracking-[0.8em] uppercase opacity-60">
+            SPONSORSHIP_DEALING // SYSTEM_RESOURCES
+          </h3>
         </div>
-      </div>
-
-      <!-- Center: The Wording -->
-      <div class="flex-1 text-center md:text-left space-y-6">
-        <h3 class="font-mono text-[10px] md:text-[11px] text-hud-accent tracking-[0.8em] uppercase opacity-60">
-          SPONSORSHIP_DEALING // SYSTEM_RESOURCES
-        </h3>
-        <p class="font-orbitron font-black text-3xl md:text-3xl lg:text-5xl text-white tracking-tight uppercase leading-[1.1]">
+        <p class="font-orbitron font-black text-3xl sm:text-5xl text-white tracking-wider leading-tight uppercase">
           This is an <span class="text-hud-accent">UMPH-sponsored</span> application. <br class="hidden lg:block">
           Access is free. Always.
         </p>
-        <p class="font-mono text-[11px] md:text-[13px] text-white/40 tracking-widest uppercase max-w-2xl leading-relaxed">
-          The mission continues on social. Please support the development by following the <span class="text-white font-bold">Story of Umph</span> for updates and lore.
+        <p class="text-sm sm:text-lg text-white/50 leading-relaxed font-medium">
+          The mission continues on social. Please support the development by following <span class="text-white italic">The Story of Umph</span> for updates and lore.
         </p>
       </div>
 
-      <!-- Right side: The CTA Button (Sharp Corners & Glitch) -->
-      <div class="flex-shrink-0 w-full md:w-auto">
+      <!-- Right side: The Terminal / CTA Block (Image + CTA) -->
+      <div class="flex flex-col items-center lg:items-end gap-12 w-full lg:w-auto">
+        <!-- The Logo (Matches Bottom Banner Size) -->
+        <div class="relative w-64 sm:w-60 group-hover:scale-105 transition-all duration-700 p-8 bg-black rounded-[2rem] border border-hud-accent/50 overflow-hidden shadow-[0_0_60px_rgba(var(--hud-accent-rgb),0.2)]">
+          <div class="absolute inset-0 panel-scanlines opacity-40 pointer-events-none z-10" />
+          <NuxtImg
+            src="/images/umph.png"
+            alt="UMPH"
+            class="relative z-0 w-full h-auto object-contain transition-all duration-700"
+            :style="{ filter: `sepia(1) saturate(10) hue-rotate(${style.hue}) brightness(1.1) contrast(1.4)` }"
+          />
+        </div>
+
+        <!-- The CTA Button (Sharp & Glitched) -->
         <a
           href="https://www.instagram.com/thelittleblueguy/"
           target="_blank"
           rel="noopener noreferrer"
-          class="group/btn relative inline-flex items-center justify-center gap-8 px-12 py-6 bg-hud-accent/10 border border-hud-accent/40 rounded-sm hover:bg-hud-accent/20 transition-all active:scale-95 shadow-[0_0_50px_rgba(var(--hud-accent-rgb),0.2)] hover:shadow-[0_0_70px_rgba(var(--hud-accent-rgb),0.3)] w-full md:w-auto overflow-hidden"
+          class="group/btn relative inline-flex items-center justify-center gap-8 px-12 py-6 border rounded-sm transition-all duration-300 active:scale-95 shadow-2xl hover:shadow-[0_0_70px_rgba(var(--hud-accent-rgb),0.3)] w-full md:w-auto overflow-hidden animate-anomaly-pulse"
+          :style="{
+            backgroundColor: `rgba(var(--hud-accent-rgb), 0.1)`,
+            borderColor: `rgba(var(--hud-accent-rgb), 0.4)`
+          }"
         >
-          <div class="flex flex-col items-start leading-none text-left">
-            <span class="font-mono text-[9px] text-hud-accent/60 tracking-[0.4em] uppercase mb-2">CONNECT_FEED</span>
-            <span class="font-orbitron font-black text-base md:text-lg text-hud-accent tracking-[0.2em] uppercase animate-text-flicker-cyan">FOLLOW UMPH</span>
+          <div class="flex flex-col items-start leading-none text-left relative z-10">
+            <span class="font-mono text-[9px] text-white/40 tracking-[0.4em] uppercase mb-2">CONNECT_FEED</span>
+            <span class="font-orbitron font-black text-sm md:text-base tracking-[0.2em] uppercase transition-colors duration-300 animate-text-flicker-cyan group-hover/btn:text-black">
+              FOLLOW THE STORY
+            </span>
           </div>
-          <div class="w-14 h-14 flex items-center justify-center bg-hud-accent text-black rounded-full transition-all group-hover/btn:scale-110 shadow-[0_0_20px_rgba(var(--hud-accent-rgb),0.6)] group-hover/btn:-rotate-12">
-            <UIcon name="i-lucide-instagram" class="w-7 h-7" />
+
+          <div 
+            class="relative z-10 w-12 h-12 flex items-center justify-center rounded-full transition-all group-hover/btn:scale-110 shadow-lg group-hover/btn:-rotate-12"
+            :style="{ backgroundColor: 'var(--hud-accent)', color: 'black' }"
+          >
+            <UIcon
+              name="i-lucide-instagram"
+              class="w-6 h-6"
+            />
           </div>
         </a>
       </div>
@@ -96,6 +110,16 @@ const style = computed(() => {
 
 .animate-text-flicker-cyan {
   animation: text-flicker-cyan 5s infinite step-end;
+}
+
+@keyframes anomaly-pulse {
+  0% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.02); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.8; }
+}
+
+.animate-anomaly-pulse {
+  animation: anomaly-pulse 3s infinite ease-in-out;
 }
 
 .group\/btn:hover .animate-text-flicker-cyan {
