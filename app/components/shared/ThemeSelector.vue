@@ -71,7 +71,7 @@ const activeColor = computed(() => themes.find(t => t.id === currentTheme.value)
       </button>
     </div>
 
-    <!-- ── MOBILE (XS): GHOST STACK ── -->
+    <!-- ── MOBILE (XS): ALIGNED ACCORDION ── -->
     <div class="flex sm:hidden relative items-center justify-end w-8 h-8">
       <!-- 1. THE ANCHOR BLOCK -->
       <button 
@@ -82,18 +82,18 @@ const activeColor = computed(() => themes.find(t => t.id === currentTheme.value)
         <div class="absolute inset-0 pointer-events-none opacity-20 panel-scanlines" />
       </button>
 
-      <!-- 2. THE GHOST OVERLAY (Gap included, but Zero Container Padding/Offset) -->
+      <!-- 2. THE PREMIUM OVERLAY (Compensated Offset) -->
       <transition
         enter-active-class="transition duration-300 ease-out"
-        enter-from-class="opacity-0 translate-y-[-4px]"
-        enter-to-class="opacity-100 translate-y-0"
+        enter-from-class="opacity-0 scale-95"
+        enter-to-class="opacity-100 scale-100"
         leave-active-class="transition duration-200 ease-in"
-        leave-from-class="opacity-100 translate-y-0"
-        leave-to-class="opacity-0 translate-y-[-4px]"
+        leave-from-class="opacity-100 scale-100"
+        leave-to-class="opacity-0 scale-95"
       >
         <div 
           v-if="isOpen"
-          class="absolute top-0 right-0 z-[100] flex flex-col gap-2"
+          class="absolute top-[-8px] right-[-8px] z-[100] flex flex-col gap-2 p-2 bg-black/70 backdrop-blur-xl rounded-xl shadow-[0_15px_50px_rgba(0,0,0,0.9)]"
         >
           <button
             v-for="t in themes"
@@ -105,7 +105,7 @@ const activeColor = computed(() => themes.find(t => t.id === currentTheme.value)
               class="absolute inset-0"
               :style="{ 
                 backgroundColor: t.color, 
-                opacity: currentTheme === t.id ? 1 : 0.6 
+                opacity: currentTheme === t.id ? 1 : 0.5 
               }"
             />
             <div class="absolute inset-0 pointer-events-none opacity-20 panel-scanlines" />
