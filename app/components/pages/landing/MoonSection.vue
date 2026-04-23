@@ -147,7 +147,7 @@ const { termLines, termCursor } = useMoonTerminal(lunar?.terminal ?? [], termina
         class="absolute bottom-[5%] -right-[5%] font-orbitron font-black text-white/[0.02] whitespace-nowrap leading-none"
         style="font-size: clamp(80px, 16vw, 240px); transform: rotate(2deg);"
       >
-        LUNAR_OBS
+        {{ lunar.labels.lunarObs }}
       </div>
       <div
         v-if="zodiac"
@@ -178,13 +178,13 @@ const { termLines, termCursor } = useMoonTerminal(lunar?.terminal ?? [], termina
             <span class="w-2.5 h-2.5 rounded-full bg-hud-accent opacity-60" />
             <span class="w-2.5 h-2.5 rounded-full bg-hud-accent opacity-30" />
           </div>
-          <span class="text-white drop-shadow-[var(--hud-accent-glow)]">OBSERVER::ACTIVE_LINK</span>
+          <span class="text-white drop-shadow-[var(--hud-accent-glow)]">{{ lunar.labels.activeLink }}</span>
           <span class="opacity-50 hidden md:inline">LOC_DATA: {{ latStr }} / {{ lngStr }}</span>
         </div>
         <div class="flex items-center justify-center sm:justify-end gap-6 w-full sm:w-auto">
           <div class="overflow-hidden whitespace-nowrap ticker-wrap w-48 opacity-40 hidden xl:block">
             <div class="ticker-content font-mono text-[9px]">
-              GEOGRAPHIC_PARALLAX_SYNC // SUNCALC_FEED // SOUTHERN_HEMISPHERE_CALIBRATED
+              {{ lunar.labels.ticker }}
             </div>
           </div>
         </div>
@@ -270,15 +270,15 @@ const { termLines, termCursor } = useMoonTerminal(lunar?.terminal ?? [], termina
             </h2>
             <div class="mt-8 flex flex-wrap items-center justify-center gap-y-8">
               <div class="flex flex-col items-center px-6 sm:px-10 border-r border-white/10 last:border-r-0">
-                <span class="font-mono text-[13px] text-hud-accent/60 tracking-[0.5em] uppercase mb-2">Age</span>
+                <span class="font-mono text-[13px] text-hud-accent/60 tracking-[0.5em] uppercase mb-2">{{ lunar.labels.age }}</span>
                 <span class="font-orbitron font-black text-3xl sm:text-5xl text-white">{{ age }}<span class="text-lg text-white/20 ml-1">d</span></span>
               </div>
               <div class="flex flex-col items-center px-6 sm:px-10 border-r border-white/10 last:border-r-0">
-                <span class="font-mono text-[13px] text-hud-accent/60 tracking-[0.5em] uppercase mb-2">Illum</span>
+                <span class="font-mono text-[13px] text-hud-accent/60 tracking-[0.5em] uppercase mb-2">{{ lunar.labels.illum }}</span>
                 <span class="font-orbitron font-black text-3xl sm:text-5xl text-white">{{ illuminationPct }}<span class="text-lg text-white/20 ml-1">%</span></span>
               </div>
               <div class="flex flex-col items-center px-6 sm:px-10 border-r-0 sm:border-r last:border-r-0">
-                <span class="font-mono text-[13px] text-hud-accent/60 tracking-[0.5em] uppercase mb-2">Rot</span>
+                <span class="font-mono text-[13px] text-hud-accent/60 tracking-[0.5em] uppercase mb-2">{{ lunar.labels.rot }}</span>
                 <span class="font-orbitron font-black text-3xl sm:text-5xl text-hud-accent">{{ Math.round(textureRotation) }}<span class="text-lg text-white/20 ml-1">°</span></span>
               </div>
             </div>
@@ -289,65 +289,65 @@ const { termLines, termCursor } = useMoonTerminal(lunar?.terminal ?? [], termina
 
               <div>
                 <p class="font-mono text-[12px] md:text-[11px] lg:text-[12px] text-hud-accent/80 md:text-hud-accent/70 tracking-[0.5em] uppercase mb-3">
-                  ORBITAL // VELOCITY
+                  {{ lunar.labels.velocity }}
                 </p>
                 <div class="space-y-4">
                   <div class="flex flex-col sm:flex-row sm:justify-between border-b border-white/5 pb-2">
-                    <span class="font-mono text-[12px] sm:text-[14px] md:text-[12px] lg:text-[13px] text-white/60 md:text-white/40 tracking-wider">V_ORB</span>
+                    <span class="font-mono text-[12px] sm:text-[14px] md:text-[12px] lg:text-[13px] text-white/60 md:text-white/40 tracking-wider">{{ lunar.labels.vOrb }}</span>
                     <span class="font-orbitron font-black text-white text-[12px] sm:text-base">{{ velocity.toFixed(3) }} <small class="text-[11px] md:text-[10px] opacity-60 md:opacity-50">KM/S</small></span>
                   </div>
                   <div class="flex flex-col sm:flex-row sm:justify-between border-b border-white/5 pb-2">
-                    <span class="font-mono text-[12px] sm:text-[14px] md:text-[12px] lg:text-[13px] text-white/60 md:text-white/40 tracking-wider">SIG_DELAY</span>
+                    <span class="font-mono text-[12px] sm:text-[14px] md:text-[12px] lg:text-[13px] text-white/60 md:text-white/40 tracking-wider">{{ lunar.labels.sigDelay }}</span>
                     <span class="font-orbitron font-black text-white text-[12px] sm:text-base">{{ lightTravelTime.toFixed(2) }} <small class="text-[11px] md:text-[10px] opacity-60 md:opacity-50">MS</small></span>
                   </div>
                   <div class="flex flex-col sm:flex-row sm:justify-between">
-                    <span class="font-mono text-[12px] sm:text-[14px] md:text-[12px] lg:text-[13px] text-white/60 md:text-white/40 tracking-wider">SUB_LUNA</span>
+                    <span class="font-mono text-[12px] sm:text-[14px] md:text-[12px] lg:text-[13px] text-white/60 md:text-white/40 tracking-wider">{{ lunar.labels.subLuna }}</span>
                     <span class="font-orbitron font-black text-hud-accent text-[12px] md:text-[10px] sm:text-xs">{{ subLunarPoint.lat > 0 ? subLunarPoint.lat + 'N' : Math.abs(subLunarPoint.lat) + 'S' }}, {{ subLunarPoint.lng > 0 ? subLunarPoint.lng + 'E' : Math.abs(subLunarPoint.lng) + 'W' }}</span>
                   </div>
                 </div>
               </div>
               <div>
                 <p class="font-mono text-[12px] md:text-[11px] lg:text-[12px] text-hud-accent/80 md:text-hud-accent/70 tracking-[0.5em] uppercase mb-3">
-                  COORDINATES // RA_DEC
+                  {{ lunar.labels.raDec }}
                 </p>
                 <div class="space-y-4">
                   <div class="flex flex-col sm:flex-row sm:justify-between border-b border-white/5 pb-2">
-                    <span class="font-mono text-[12px] sm:text-[14px] md:text-[12px] lg:text-[13px] text-white/60 md:text-white/40 tracking-wider">R_ASCENSION</span>
+                    <span class="font-mono text-[12px] sm:text-[14px] md:text-[12px] lg:text-[13px] text-white/60 md:text-white/40 tracking-wider">{{ lunar.labels.rAscension }}</span>
                     <span class="font-orbitron font-black text-white text-[12px] sm:text-base">{{ ra }}</span>
                   </div>
                   <div class="flex flex-col sm:flex-row sm:justify-between border-b border-white/5 pb-2">
-                    <span class="font-mono text-[12px] sm:text-[14px] md:text-[12px] lg:text-[13px] text-white/60 md:text-white/40 tracking-wider">DECLINATION</span>
+                    <span class="font-mono text-[12px] sm:text-[14px] md:text-[12px] lg:text-[13px] text-white/60 md:text-white/40 tracking-wider">{{ lunar.labels.declination }}</span>
                     <span class="font-orbitron font-black text-white text-[12px] sm:text-base">{{ dec }}</span>
                   </div>
                   <div class="flex flex-col sm:flex-row sm:justify-between border-b border-white/5 pb-2">
-                    <span class="font-mono text-[12px] sm:text-[14px] md:text-[12px] lg:text-[13px] text-white/60 md:text-white/40 tracking-wider uppercase">ZODIAC_SIGN</span>
+                    <span class="font-mono text-[12px] sm:text-[14px] md:text-[12px] lg:text-[13px] text-white/60 md:text-white/40 tracking-wider uppercase">{{ lunar.labels.zodiacSign }}</span>
                     <span class="font-orbitron font-black text-hud-accent text-[12px] sm:text-base uppercase underline decoration-hud-accent/20">{{ zodiac }}</span>
                   </div>
                   <div class="flex flex-col sm:flex-row sm:justify-between">
-                    <span class="font-mono text-[12px] sm:text-[14px] md:text-[12px] lg:text-[13px] text-white/60 md:text-white/40 tracking-wider uppercase">CONSTELLATION</span>
+                    <span class="font-mono text-[12px] sm:text-[14px] md:text-[12px] lg:text-[13px] text-white/60 md:text-white/40 tracking-wider uppercase">{{ lunar.labels.constellation }}</span>
                     <span class="font-orbitron font-black text-white text-[12px] sm:text-base uppercase">{{ constellation }}</span>
                   </div>
                 </div>
               </div>
               <div>
                 <p class="font-mono text-[12px] md:text-[11px] lg:text-[12px] text-hud-accent/80 md:text-hud-accent/70 tracking-[0.5em] uppercase mb-3">
-                  ORBITAL // EVENTS
+                  {{ lunar.labels.events }}
                 </p>
                 <div class="space-y-4">
                   <div class="flex justify-between border-b border-white/5 pb-2">
-                    <span class="font-mono text-[12px] sm:text-[14px] md:text-[12px] lg:text-[13px] text-white/60 md:text-white/40 tracking-wider">NEXT_PERIGEE</span>
+                    <span class="font-mono text-[12px] sm:text-[14px] md:text-[12px] lg:text-[13px] text-white/60 md:text-white/40 tracking-wider">{{ lunar.labels.nextPerigee }}</span>
                     <span class="font-orbitron font-black text-hud-accent ml-2 uppercase text-[12px] md:text-[12px] lg:text-[13px] text-right">{{ nextPerigee }}</span>
                   </div>
                   <div class="flex justify-between border-b border-white/5 pb-2">
-                    <span class="font-mono text-[12px] sm:text-[14px] md:text-[12px] lg:text-[13px] text-white/60 md:text-white/40 tracking-wider">NEXT_APOGEE</span>
+                    <span class="font-mono text-[12px] sm:text-[14px] md:text-[12px] lg:text-[13px] text-white/60 md:text-white/40 tracking-wider">{{ lunar.labels.nextApogee }}</span>
                     <span class="font-orbitron font-black text-white/60 md:text-white/40 ml-2 uppercase text-[12px] md:text-[12px] lg:text-[13px] text-right">{{ nextApogee }}</span>
                   </div>
                   <div class="flex flex-col sm:flex-row sm:justify-between border-b border-white/5 pb-2">
-                    <span class="font-mono text-[12px] sm:text-[14px] md:text-[12px] lg:text-[13px] text-white/60 md:text-white/40 tracking-wider">GRAVITY</span>
+                    <span class="font-mono text-[12px] sm:text-[14px] md:text-[12px] lg:text-[13px] text-white/60 md:text-white/40 tracking-wider">{{ lunar.labels.gravity }}</span>
                     <span class="font-orbitron font-black text-white text-[12px] sm:text-base">1.62 <small class="text-[11px] md:text-[10px] opacity-60 md:opacity-50">M/S²</small></span>
                   </div>
                   <div class="flex flex-col sm:flex-row sm:justify-between">
-                    <span class="font-mono text-[12px] sm:text-[14px] md:text-[12px] lg:text-[13px] text-white/60 md:text-white/40 tracking-wider">ESCAPE_V</span>
+                    <span class="font-mono text-[12px] sm:text-[14px] md:text-[12px] lg:text-[13px] text-white/60 md:text-white/40 tracking-wider">{{ lunar.labels.escapeV }}</span>
                     <span class="font-orbitron font-black text-white text-[12px] sm:text-base">2.38 <small class="text-[11px] md:text-[10px] opacity-60 md:opacity-50">KM/S</small></span>
                   </div>
                 </div>
@@ -419,7 +419,7 @@ const { termLines, termCursor } = useMoonTerminal(lunar?.terminal ?? [], termina
                   </g>
                 </svg>
                 <p class="absolute bottom-2 left-1/2 -translate-x-1/2 font-mono text-[8px] text-white/30 tracking-[0.5em] uppercase pointer-events-none">
-                  simulation::orbital_sync
+                  {{ lunar.labels.orbitalSync }}
                 </p>
               </div>
             </div>
@@ -602,7 +602,7 @@ const { termLines, termCursor } = useMoonTerminal(lunar?.terminal ?? [], termina
                 font-size="6"
                 fill="rgba(var(--hud-accent-rgb), 0.25)"
                 letter-spacing="3"
-              >ORBITAL PATH — SUNCALC LIVE</text>
+              >{{ lunar.labels.orbitalPath }}</text>
             </svg>
 
             <div class="relative z-10 mt-6 border-t border-hud-accent/10 pt-6 space-y-4">
@@ -610,8 +610,8 @@ const { termLines, termCursor } = useMoonTerminal(lunar?.terminal ?? [], termina
               <div class="flex items-center gap-3 pt-2 border-t border-white/5">
                 <span class="w-1.5 h-1.5 rounded-full bg-hud-accent animate-pulse shadow-[var(--hud-accent-glow)]" />
                 <span class="font-mono text-[11px] md:text-[11px] lg:text-[12px] text-hud-accent/80 md:text-hud-accent/70 tracking-[0.3em] uppercase">
-                  CURRENT_DIST: <span class="text-white/80">{{ distFormatted }} KM</span>
-                  &nbsp;//&nbsp; {{ movingTowardPerigee ? 'APPROACHING PERIGEE' : 'RECEDING → APOGEE' }}
+                  {{ lunar.labels.currentDist }}: <span class="text-white/80">{{ distFormatted }} KM</span>
+                  &nbsp;//&nbsp; {{ movingTowardPerigee ? lunar.labels.approachingPerigee : lunar.labels.recedingApogee }}
                 </span>
               </div>
             </div>
@@ -625,11 +625,11 @@ const { termLines, termCursor } = useMoonTerminal(lunar?.terminal ?? [], termina
                 <label class="font-mono text-[14px] md:text-[13px] lg:text-[14px] text-hud-accent tracking-[0.5em] uppercase block mb-6">{{ lunar.labels.riseSet }}</label>
                 <div class="space-y-6 mb-8">
                   <div>
-                    <span class="block font-mono text-[12px] md:text-[11px] lg:text-[12px] text-white/60 md:text-white/50 uppercase tracking-[0.3em] mb-1">Rise</span>
+                    <span class="block font-mono text-[12px] md:text-[11px] lg:text-[12px] text-white/60 md:text-white/50 uppercase tracking-[0.3em] mb-1">{{ lunar.labels.rise }}</span>
                     <span class="font-orbitron font-black text-4xl text-white">{{ moonrise }}</span>
                   </div>
                   <div>
-                    <span class="block font-mono text-[12px] md:text-[11px] lg:text-[12px] text-white/60 md:text-white/50 uppercase tracking-[0.3em] mb-1">Set</span>
+                    <span class="block font-mono text-[12px] md:text-[11px] lg:text-[12px] text-white/60 md:text-white/50 uppercase tracking-[0.3em] mb-1">{{ lunar.labels.set }}</span>
                     <span class="font-orbitron font-black text-4xl text-white">{{ moonset }}</span>
                   </div>
                 </div>
@@ -775,12 +775,12 @@ const { termLines, termCursor } = useMoonTerminal(lunar?.terminal ?? [], termina
             stroke="currentColor"
             stroke-width="1"
           /></svg>
-          <label class="relative z-10 font-mono text-[14px] md:text-[13px] lg:text-[14px] text-hud-accent tracking-[0.5em] uppercase block mb-10">LOC_SYSLOG::COORDS</label>
+          <label class="relative z-10 font-mono text-[14px] md:text-[13px] lg:text-[14px] text-hud-accent tracking-[0.5em] uppercase block mb-10">{{ lunar.labels.coords }}</label>
           <div class="relative z-10 grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
             <div class="border-b border-white/5 sm:border-0 pb-4 sm:pb-0">
-              <span class="font-mono text-[12px] sm:text-[14px] md:text-[13px] lg:text-[14px] text-white/60 md:text-white/40 uppercase tracking-[0.4em] block mb-2 sm:mb-4">LATITUDE</span><span class="font-orbitron font-black text-2xl sm:text-4xl xl:text-6xl text-white">{{ latStr }}</span>
+              <span class="font-mono text-[12px] sm:text-[14px] md:text-[13px] lg:text-[14px] text-white/60 md:text-white/40 uppercase tracking-[0.4em] block mb-2 sm:mb-4">{{ lunar.labels.latitude }}</span><span class="font-orbitron font-black text-2xl sm:text-4xl xl:text-6xl text-white">{{ latStr }}</span>
             </div>
-            <div><span class="font-mono text-[12px] sm:text-[14px] md:text-[13px] lg:text-[14px] text-white/60 md:text-white/40 uppercase tracking-[0.4em] block mb-2 sm:mb-4">LONGITUDE</span><span class="font-orbitron font-black text-2xl sm:text-4xl xl:text-6xl text-white">{{ lngStr }}</span></div>
+            <div><span class="font-mono text-[12px] sm:text-[14px] md:text-[13px] lg:text-[14px] text-white/60 md:text-white/40 uppercase tracking-[0.4em] block mb-2 sm:mb-4">{{ lunar.labels.longitude }}</span><span class="font-orbitron font-black text-2xl sm:text-4xl xl:text-6xl text-white">{{ lngStr }}</span></div>
           </div>
           <div
             class="relative z-10 mt-10 flex items-center gap-4 px-6 py-4 border bg-opacity-5 transition-colors duration-1000"
@@ -794,7 +794,7 @@ const { termLines, termCursor } = useMoonTerminal(lunar?.terminal ?? [], termina
               class="font-mono text-[11px] tracking-[0.4em] uppercase transition-colors duration-1000"
               :class="locationStatus === 'FALLBACK' ? 'text-red-400' : 'text-hud-accent'"
             >
-              SH_CALIBRATION: {{ locationStatus === 'FALLBACK' ? 'SIGNAL_LOSS // IP_DEFAULT' : 'ACTIVE // FEED: SYNCED' }}
+              {{ lunar.labels.shCalibration }}: {{ locationStatus === 'FALLBACK' ? lunar.labels.signalLoss : lunar.labels.activeSynced }}
             </span>
           </div>
         </div>
@@ -806,27 +806,27 @@ const { termLines, termCursor } = useMoonTerminal(lunar?.terminal ?? [], termina
           <div class="panel-grid-mesh" /><div class="panel-scanlines" /><div class="card-brackets" />
           <div class="relative z-10 flex flex-col gap-8">
             <div class="border-b border-white/10 pb-8">
-              <span class="font-mono text-[16px] md:text-[16px] lg:text-[17px] text-white/60 md:text-white/40 uppercase tracking-widest block mb-4">ALTITUDE</span>
+              <span class="font-mono text-[16px] md:text-[16px] lg:text-[17px] text-white/60 md:text-white/40 uppercase tracking-widest block mb-4">{{ lunar.labels.altitude }}</span>
               <div class="flex flex-col gap-4">
                 <span class="font-orbitron font-black text-5xl xl:text-6xl text-white">{{ altStr }}</span>
                 <p class="font-mono text-[10px] text-white/30 tracking-[0.15em] leading-relaxed uppercase max-w-[320px]">
-                  <span class="text-hud-accent/60">[ALT]</span> Vertical angle above your local horizon. 90° is directly overhead. Negative values: Moon is below the horizon and not currently visible.
+                  <span class="text-hud-accent/60">[ALT]</span> {{ lunar.labels.altDesc }}
                 </p>
               </div>
             </div>
             <div>
-              <span class="font-mono text-[16px] md:text-[16px] lg:text-[17px] text-white/60 md:text-white/40 uppercase tracking-widest block mb-4">AZIMUTH</span>
+              <span class="font-mono text-[16px] md:text-[16px] lg:text-[17px] text-white/60 md:text-white/40 uppercase tracking-widest block mb-4">{{ lunar.labels.azimuth }}</span>
               <div class="flex flex-col gap-4">
                 <span class="font-orbitron font-black text-5xl xl:text-6xl text-white">{{ azStr }}</span>
                 <p class="font-mono text-[10px] text-white/30 tracking-[0.15em] leading-relaxed uppercase max-w-[280px]">
-                  <span class="text-hud-accent/60">[AZI]</span> Horizontal compass bearing from North. 0° N, 90° E, 180° S, 270° W.
+                  <span class="text-hud-accent/60">[AZI]</span> {{ lunar.labels.azDesc }}
                 </p>
               </div>
             </div>
           </div>
           <button
             class="absolute top-6 right-6 z-[100] w-12 h-12 rounded-sm border border-hud-accent/40 bg-black/80 backdrop-blur-md flex items-center justify-center text-2xl font-orbitron font-black text-hud-accent hover:bg-hud-accent hover:text-black transition-all cursor-pointer shadow-[0_0_20px_rgba(var(--hud-accent-rgb),0.3)] pointer-events-auto active:scale-95"
-            title="Open Hand Rule Guide"
+            :title="lunar.labels.handRuleGuide"
             @click="openModal"
           >
             ?
