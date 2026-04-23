@@ -8,7 +8,17 @@ export const landingData = {
       visualPrimary: 'LOC_SYSLOG::VISUAL_FEED',
       distRadar: 'ORBITAL_RADAR::DIST_FEED',
       riseSet: 'CELENTIAL_TIMING::RISE_SET',
-      diameter: 'ANGULAR_DIAMETER::SIZE_VAR'
+      diameter: 'ANGULAR_DIAMETER::SIZE_VAR',
+      nextFull: 'NEXT_FULL',
+      nextNew: 'NEXT_NEW'
+    },
+    nextFullFactoid: {
+      label: 'OPPOSITION // LUM',
+      text: 'Analysis detects #h#solar opposition#/h# state.'
+    },
+    nextNewFactoid: {
+      label: 'CONJUNCTION // DARK',
+      text: 'Orbital alignment at #h#conjunction#/h# state.'
     },
     terminal: [
       { t: 'INITIALIZING LUNAR_OBSERVER PROTOCOL...', cmd: true },

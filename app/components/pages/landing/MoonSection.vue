@@ -695,7 +695,7 @@ const { termLines, termCursor } = useMoonTerminal(lunar?.terminal ?? [], termina
             >
               <div class="panel-grid-mesh" /><div class="panel-scanlines" /><div class="card-brackets" />
               <div class="relative z-10 h-full flex flex-col">
-                <label class="font-mono text-[14px] md:text-[13px] lg:text-[14px] text-hud-accent tracking-[0.5em] uppercase block mb-6">NEXT_FULL</label>
+                <label class="font-mono text-[14px] md:text-[13px] lg:text-[14px] text-hud-accent tracking-[0.5em] uppercase block mb-6">{{ lunar.labels.nextFull }}</label>
                 <div class="font-orbitron font-black text-5xl xl:text-6xl text-white mb-2">
                   {{ daysToFullMoon }}<span class="text-2xl text-white/20 ml-2">d</span>
                 </div>
@@ -704,10 +704,19 @@ const { termLines, termCursor } = useMoonTerminal(lunar?.terminal ?? [], termina
                 </p>
                 <div class="mt-auto pt-6 border-t border-white/5">
                   <p class="font-mono text-[9px] text-hud-accent/50 tracking-[0.5em] uppercase mb-2">
-                    OPPOSITION // LUM
+                    {{ lunar.nextFullFactoid.label }}
                   </p>
                   <p class="font-mono text-[10px] text-hud-accent/60 leading-relaxed uppercase tracking-wider">
-                    Analysis detects #h#solar opposition#/h# state.
+                    <template
+                      v-for="part in useTitleParser(lunar.nextFullFactoid.text)"
+                      :key="part.id"
+                    >
+                      <span
+                        v-if="part.type === 'highlight'"
+                        class="text-white drop-shadow-[0_0_6px_white]"
+                      >{{ part.content }}</span>
+                      <span v-else>{{ part.content }}</span>
+                    </template>
                   </p>
                 </div>
               </div>
@@ -720,7 +729,7 @@ const { termLines, termCursor } = useMoonTerminal(lunar?.terminal ?? [], termina
             >
               <div class="panel-grid-mesh" /><div class="panel-scanlines" /><div class="card-brackets" />
               <div class="relative z-10 h-full flex flex-col">
-                <label class="font-mono text-[14px] md:text-[13px] lg:text-[14px] text-hud-accent tracking-[0.5em] uppercase block mb-6">NEXT_NEW</label>
+                <label class="font-mono text-[14px] md:text-[13px] lg:text-[14px] text-hud-accent tracking-[0.5em] uppercase block mb-6">{{ lunar.labels.nextNew }}</label>
                 <div class="font-orbitron font-black text-5xl xl:text-6xl text-hud-accent mb-2">
                   {{ daysToNewMoon }}<span class="text-2xl text-white/20 ml-2">d</span>
                 </div>
@@ -729,10 +738,19 @@ const { termLines, termCursor } = useMoonTerminal(lunar?.terminal ?? [], termina
                 </p>
                 <div class="mt-auto pt-6 border-t border-white/5">
                   <p class="font-mono text-[9px] text-hud-accent/50 tracking-[0.5em] uppercase mb-2">
-                    CONJUNCTION // DARK
+                    {{ lunar.nextNewFactoid.label }}
                   </p>
                   <p class="font-mono text-[10px] text-hud-accent/60 leading-relaxed uppercase tracking-wider">
-                    Orbital alignment at #h#conjunction#/h# state.
+                    <template
+                      v-for="part in useTitleParser(lunar.nextNewFactoid.text)"
+                      :key="part.id"
+                    >
+                      <span
+                        v-if="part.type === 'highlight'"
+                        class="text-white drop-shadow-[0_0_6px_white]"
+                      >{{ part.content }}</span>
+                      <span v-else>{{ part.content }}</span>
+                    </template>
                   </p>
                 </div>
               </div>
