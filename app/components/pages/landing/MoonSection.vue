@@ -839,6 +839,8 @@ const { termLines, termCursor } = useMoonTerminal(lunar?.terminal ?? [], termina
     <MoonHandRuleModal
       :show="showHandRule"
       :lat="lat"
+      :azimuth="azimuth"
+      :altitude="altitude"
       :data="lunar?.handRule"
       @close="showHandRule = false"
     />

@@ -103,7 +103,18 @@ export const landingData = {
         { title: 'The Horizon Line', desc: 'Align the #h#bottom#/h# of your first fist with the visible horizon.' },
         { title: 'The Ladder', desc: 'Stack your #h#second hand#/h# directly on top of the first (20° Altitude).' },
         { title: 'The Target', desc: 'The Moon should appear at the #h#top knuckle#/h# of the third fist (30° Altitude).' }
-      ]
+      ],
+      azimuthManual: {
+        north: 'In the Northern Hemisphere, the Moon is primarily in the #h#Southern Sky#/h#. Stand with the Sunset (West) on your right shoulder to face South.',
+        south: 'In the Southern Hemisphere, the Moon is primarily in the #h#Northern Sky#/h#. Stand with the Sunset (West) on your left shoulder to face North.',
+        equator: 'At the Equator, the Moon can pass directly #h#Overhead#/h#. Determine its current sector by its relationship to the Sunset/Sunrise line.'
+      },
+      quadrants: {
+        q1: 'North-East Sector (0° - 90°)',
+        q2: 'South-East Sector (90° - 180°)',
+        q3: 'South-West Sector (180° - 270°)',
+        q4: 'North-West Sector (270° - 360°)'
+      }
     }
   },
   heroUI: {

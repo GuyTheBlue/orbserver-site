@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useTitleParser } from '~/composables/useTitleParser'
+import MoonManualTelemetryDiagram from './MoonManualTelemetryDiagram.vue'
 
 interface HandRuleStep {
   title: string
@@ -17,13 +19,58 @@ interface HandRuleData {
     description: string
   }
   steps: HandRuleStep[]
+  azimuthManual: {
+    north: string
+    south: string
+    equator: string
+  }
+  quadrants: {
+    q1: string
+    q2: string
+    q3: string
+    q4: string
+  }
 }
 
-defineProps<{
+const props = defineProps<{
   show: boolean
   lat: number
+  azimuth: number
+  altitude: number
   data: HandRuleData
 }>()
+
+const quadrantLabel = computed(() => {
+  const az = props.azimuth
+  if (az >= 0 && az < 90) return props.data.quadrants.q1
+  if (az >= 90 && az < 180) return props.data.quadrants.q2
+  if (az >= 180 && az < 270) return props.data.quadrants.q3
+  return props.data.quadrants.q4
+})
+
+const hemisphereManualText = computed(() => {
+  if (props.lat > 5) return props.data.azimuthManual.north
+  if (props.lat < -5) return props.data.azimuthManual.south
+  return props.data.azimuthManual.equator
+})
+
+const orientationGuide = computed(() => {
+  if (props.lat > 5) return 'Stand with the sunset point on your #h#Right#/h# shoulder.'
+  if (props.lat < -5) return 'Stand with the sunset point on your #h#Left#/h# shoulder.'
+  return 'Align with the #h#East-West#/h# axis (Sunset/Sunrise).'
+})
+
+const targetSky = computed(() => {
+  if (props.lat > 5) return 'Southern Sky'
+  if (props.lat < -5) return 'Northern Sky'
+  return 'Zenith Sector'
+})
+
+const targetBearing = computed(() => {
+  if (props.lat > 5) return 'South (180°)'
+  if (props.lat < -5) return 'North (0°)'
+  return 'Optimal Bearing (Live)'
+})
 
 const emit = defineEmits(['close'])
 </script>
@@ -107,7 +154,13 @@ const emit = defineEmits(['close'])
                     </div>
                     <div class="space-y-6">
                       <p class="text-lg sm:text-2xl text-white font-bold leading-tight">
-                        Target Sector: <span class="text-hud-accent uppercase">{{ lat >= 0 ? 'Southern' : 'Northern' }} Sky</span>
+                        Target Sector: <span class="text-hud-accent uppercase">{{ targetSky }}</span>
+                      </p>
+                      <p class="text-base sm:text-xl text-white/70">
+                        <template v-for="part in useTitleParser(hemisphereManualText)" :key="part.id">
+                          <span v-if="part.type === 'highlight'" class="text-hud-accent font-bold">{{ part.content }}</span>
+                          <span v-else>{{ part.content }}</span>
+                        </template>
                       </p>
                       <div class="bg-black/60 p-6 rounded border border-white/5 font-mono text-left">
                         <p class="text-[11px] text-hud-accent font-black tracking-widest uppercase mb-4 border-b border-white/10 pb-2">
@@ -115,8 +168,16 @@ const emit = defineEmits(['close'])
                         </p>
                         <ul class="space-y-4 list-disc pl-6 text-sm sm:text-lg text-white/70 leading-relaxed">
                           <li>Identify where the <span class="text-white">Sunset</span> point was today (West).</li>
-                          <li>Stand with the sunset point on your <span class="text-hud-accent font-bold">{{ lat >= 0 ? 'Right' : 'Left' }}</span> shoulder.</li>
-                          <li>You are now facing <span class="text-white font-bold">{{ lat >= 0 ? 'South (180°)' : 'North (0°)' }}</span>.</li>
+                          <li>
+                            <template v-for="part in useTitleParser(orientationGuide)" :key="part.id">
+                              <span v-if="part.type === 'highlight'" class="text-hud-accent font-bold">{{ part.content }}</span>
+                              <span v-else>{{ part.content }}</span>
+                            </template>
+                          </li>
+                          <li>You are now facing <span class="text-white font-bold">{{ targetBearing }}</span>.</li>
+                          <li class="pt-2 border-t border-white/5">
+                            Active Target: <span class="text-hud-accent">{{ quadrantLabel }}</span>
+                          </li>
                         </ul>
                       </div>
                     </div>
@@ -137,44 +198,11 @@ const emit = defineEmits(['close'])
                 </p>
 
                 <!-- Technical Illustration -->
-                <div class="relative w-full max-w-lg mx-auto py-12 px-6 border border-hud-accent/10 rounded-2xl bg-hud-accent/[0.02]">
-                  <div class="panel-grid-mesh opacity-10 absolute inset-0 rounded-2xl" />
-                  <svg
-                    viewBox="0 0 400 300"
-                    class="w-full h-auto text-hud-accent"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <defs>
-                      <linearGradient id="beamGrad" x1="0%" y1="100%" x2="0%" y2="0%">
-                        <stop offset="0%" stop-color="currentColor" stop-opacity="0.2" />
-                        <stop offset="100%" stop-color="currentColor" stop-opacity="0.05" />
-                      </linearGradient>
-                    </defs>
-                    <line x1="40" y1="260" x2="360" y2="260" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4" opacity="0.3" />
-                    <text x="40" y="275" font-family="monospace" font-size="8" fill="currentColor" opacity="0.5">REF_HORIZON // 000°_ALT</text>
-                    <rect x="180" y="60" width="40" height="200" fill="url(#beamGrad)" />
-                    <g opacity="0.8">
-                      <rect x="185" y="215" width="30" height="40" rx="4" fill="none" stroke="currentColor" stroke-width="1.5" />
-                      <text x="225" y="240" font-family="monospace" font-size="10" fill="currentColor">+ 10°</text>
-                    </g>
-                    <g opacity="0.8">
-                      <rect x="185" y="170" width="30" height="40" rx="4" fill="none" stroke="currentColor" stroke-width="1.5" />
-                      <text x="225" y="195" font-family="monospace" font-size="10" fill="currentColor">+ 20°</text>
-                    </g>
-                    <g class="animate-pulse">
-                      <rect x="185" y="125" width="30" height="40" rx="4" fill="currentColor" fill-opacity="0.1" stroke="currentColor" stroke-width="2" />
-                      <text x="225" y="150" font-family="monospace" font-size="10" fill="currentColor" font-weight="bold">+ 30° [TARGET]</text>
-                    </g>
-                    <path d="M185 235 L120 235" stroke="currentColor" stroke-width="0.5" opacity="0.4" />
-                    <text x="60" y="235" font-family="monospace" font-size="7" fill="currentColor" opacity="0.6">FIST_BASE_SYNC</text>
-                    <path d="M215 125 L280 80" stroke="currentColor" stroke-width="0.5" opacity="0.4" />
-                    <text x="285" y="75" font-family="monospace" font-size="7" fill="white" opacity="0.8">LUNAR_INTERSECT</text>
-                    <circle cx="215" cy="125" r="6" fill="white" class="animate-pulse" />
-                  </svg>
-                  <p class="mt-6 text-center text-[10px] text-hud-accent/40 font-mono tracking-[0.4em] uppercase">
-                    Fig_01 // Angular_Altitude_Ladder
-                  </p>
-                </div>
+                <MoonManualTelemetryDiagram
+                  :lat="lat"
+                  :azimuth="azimuth"
+                  :altitude="altitude"
+                />
               </section>
 
               <!-- Protocol Steps -->
