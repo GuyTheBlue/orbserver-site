@@ -72,6 +72,33 @@ const targetBearing = computed(() => {
   return 'Optimal Bearing (Live)'
 })
 
+const dynamicSteps = computed(() => {
+  if (!props.data?.steps) return []
+  const steps = props.data.steps.map(s => ({ ...s }))
+  const count = Math.ceil(Math.abs(props.altitude) / 10)
+  const direction = props.altitude >= 0 ? 'UP' : 'DOWN'
+  const isBelow = props.altitude < 0
+
+  // Step 2: Horizon Line (index 1)
+  if (steps[1]) {
+    if (isBelow) {
+      steps[1].desc = `Align the #h#top#/h# of your first fist with the visible horizon. [REMINDER: Target is currently #h#below#/h# the horizon].`
+    } else {
+      steps[1].desc = `Align the #h#bottom#/h# of your first fist with the visible horizon.`
+    }
+  }
+
+  // Step 3: The Ladder (index 2)
+  if (steps[2]) {
+    steps[2].desc = `Stack your hands sequentially from the horizon line. Based on live telemetry, you need to count #h#${count} total fist-units#/h# to reach the target vector.`
+  }
+  // Step 4: The Target (index 3)
+  if (steps[3]) {
+    steps[3].desc = `The Moon center-point is currently #h#${count} fists ${direction}#/h# from the horizon. The disk should align with the knuckle of your final hand position.`
+  }
+  return steps
+})
+
 const emit = defineEmits(['close'])
 </script>
 
@@ -207,11 +234,11 @@ const emit = defineEmits(['close'])
 
               <!-- Protocol Steps -->
               <section class="bg-hud-accent/5 p-6 sm:p-10 border border-hud-accent/30 rounded-xl text-left">
-                <h5 class="text-xs sm:text-base text-hud-accent tracking-[0.4em] uppercase font-black mb-12 text-center">
-                  EXECUTION_PROTOCOL // MANUAL_TRACKING
+                <h5 class="text-xs sm:text-base text-hud-accent tracking-[0.2em] sm:tracking-[0.4em] uppercase font-black mb-12 text-center">
+                  How to Locate altitude of moon [{{ altitude.toFixed(1) }}°]
                 </h5>
                 <div class="flex flex-col gap-12 w-full">
-                  <div v-for="(step, i) in data.steps" :key="i" class="flex flex-col w-full text-left">
+                  <div v-for="(step, i) in dynamicSteps" :key="i" class="flex flex-col w-full text-left">
                     <div class="h-[1px] w-full bg-hud-accent/30 mb-8" />
                     <div class="font-orbitron font-black text-hud-accent text-sm sm:text-xl tracking-[0.4em] mb-4">
                       {{ (i + 1).toString().padStart(2, '0') }}

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useTitleParser } from '~/composables/useTitleParser'
 
 const props = defineProps<{
   lat: number
@@ -219,16 +220,21 @@ const quadrant = computed(() => {
       </div>
       <div class="space-y-3">
         <label class="font-mono text-[10px] text-hud-accent uppercase tracking-widest font-black">Altitude Calibration</label>
-        <p class="text-xs text-white/60 leading-relaxed uppercase">
+        <div class="text-xs text-white/60 leading-relaxed uppercase">
           The Moon's altitude is <span class="text-hud-accent font-bold">{{ altitudeDisplay }}°</span>. 
           <span v-if="isVisible">
-            Measure #h#{{ Math.ceil(altitude / 10) }} fists UP#/h# from the horizon to find the center of the lunar disk.
+            <template v-for="part in useTitleParser(`Measure #h#${Math.ceil(altitude / 10)} fists UP#/h# from the horizon to find the center of the lunar disk.`)" :key="part.id">
+              <span v-if="part.type === 'highlight'" class="text-white drop-shadow-[0_0_6px_white] font-bold">{{ part.content }}</span>
+              <span v-else>{{ part.content }}</span>
+            </template>
           </span>
           <span v-else>
-            Current coordinates are <span class="text-red-400/80 font-bold">below the horizon</span>. 
-            Measure #h#{{ Math.ceil(Math.abs(altitude) / 10) }} fists DOWN#/h# from the horizon to locate its hidden position.
+            <template v-for="part in useTitleParser(`Current coordinates are #h#below the horizon#/h#. Measure #h#${Math.ceil(Math.abs(altitude) / 10)} fists DOWN#/h# from the horizon to locate its hidden position.`)" :key="part.id">
+              <span v-if="part.type === 'highlight'" class="text-white drop-shadow-[0_0_6px_white] font-bold">{{ part.content }}</span>
+              <span v-else>{{ part.content }}</span>
+            </template>
           </span>
-        </p>
+        </div>
       </div>
     </div>
   </div>
