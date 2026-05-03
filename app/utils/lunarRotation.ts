@@ -3,27 +3,29 @@ export interface LunarRotation {
   limbRotation: number
 }
 
+/**
+ * Calculates the rotation of the moon texture and limb.
+ * SunCalc's parallacticAngle already accounts for the observer's latitude
+ * (Zenith-relative orientation), so no manual hemisphere flip is required.
+ */
 export function calculateLunarRotation(
   illumAngle: number,
-  parallacticAngle: number,
-  latitude: number
+  parallacticAngle: number
 ): LunarRotation {
   const pDeg = parallacticAngle * (180 / Math.PI)
   const iDeg = (illumAngle * (180 / Math.PI))
 
-  // 1. Asset Calibration (Tycho is at -30 deg from vertical in image)
+  // 1. Asset Calibration
+  // Tycho is at approx -30 deg from vertical in the raw image asset.
+  // This offset aligns the image to the celestial North Pole.
   const assetOffset = 30
-  const textureBase = (latitude < 0 ? assetOffset : 180 + assetOffset)
 
   // 2. TEXTURE ROTATION (Craters)
-  // Using +pDeg correctly rotates -110 (rise) + 30 = -80 (or 280)
-  // BUT if your UI needs 140, we must consistently invert the parallactic shift.
-  const textureRotation = (((pDeg + textureBase) % 360) + 360) % 360
+  // pDeg naturally handles the 180° flip between Northern and Southern hemispheres.
+  const textureRotation = (((pDeg + assetOffset) % 360) + 360) % 360
 
   // 3. LIMB ROTATION (Shadow)
-  // To keep the shadow aligned with the rotated texture,
-  // we must also switch to +pDeg here.
-  const limbRotation = (((iDeg + pDeg + textureBase) % 360) + 360) % 360
+  const limbRotation = (((iDeg + pDeg + assetOffset) % 360) + 360) % 360
 
   return { textureRotation, limbRotation }
 }

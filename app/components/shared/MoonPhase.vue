@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   fraction: number // 0 (new) → 1 (full)
   phase: number // 0–1 position across the full lunation cycle
   textureRotation?: number // Degrees for the craters/image
   limbRotation?: number // Degrees for the shadow/light
-}>()
+  showShadow?: boolean // Whether to render the unlit overlay
+}>(), {
+  showShadow: true
+})
 
 function getMoonShadowPath(phase: number): string {
   const R = 50
@@ -84,7 +87,7 @@ const glowSpread = computed(() => `${40 + props.fraction * 60}px`)
 
       <!-- SVG shadow overlay — covers the unlit portion of the moon -->
       <svg
-        v-if="shadowPath"
+        v-if="shadowPath && props.showShadow"
         class="absolute inset-0 w-full h-full pointer-events-none"
         viewBox="0 0 100 100"
         xmlns="http://www.w3.org/2000/svg"
