@@ -1,6 +1,6 @@
 <template>
   <ClientOnly>
-    <div class="min-h-screen bg-[#010810] text-white font-mono p-4 md:p-8 selection:bg-cyan-500/30">
+    <div class="min-h-screen bg-[#010810] text-white font-mono p-4 md:p-8 pt-24 md:pt-32 selection:bg-cyan-500/30">
       <!-- HUD Header -->
       <header class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-12 border-b border-white/10 pb-6">
         <div class="broken-terminal-jitter">
