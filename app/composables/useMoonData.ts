@@ -1,6 +1,10 @@
 // composables/useMoonData.ts
 // All calculations run client-side only via suncalc.
 // Guarded by import.meta.client to prevent any SSR execution.
+//
+// ── SINGLETON PATTERN ────────────────────────────────────────────────────────
+// All reactive state is declared at module-level so every component that calls
+// useMoonData() receives the same refs. Geolocation fires exactly once.
 import { ref, onMounted } from 'vue'
 import { calculateLunarRotation } from '~/utils/lunarRotation'
 
@@ -54,260 +58,280 @@ function getGeocentricDistance(date: Date): number {
   return 385001 + sum
 }
 
-export function useMoonData() {
-  const isLoading = ref(true)
-  const hasError = ref(false)
+// ── Shared singleton state (module-level) ────────────────────────────────────
+// These refs are created once per JS module lifetime and shared across all
+// components. No matter how many times useMoonData() is called, every consumer
+// reads from – and reacts to – the exact same refs.
 
-  // Core illumination data (from suncalc.getMoonIllumination)
-  const fraction = ref(0) // 0 (new) → 1 (full)
-  const phase = ref(0) // 0–1 across the lunation
-  const phaseName = ref('…')
-  const phaseGlyph = ref('🌑')
+const isLoading = ref(true)
+const hasError = ref(false)
 
-  // Derived timing
-  const age = ref(0) // days since new moon
-  const nextFullMoon = ref('…') // formatted date string
-  const nextNewMoon = ref('…') // formatted date string
-  const daysToFullMoon = ref(0)
-  const daysToNewMoon = ref(0)
+// Core illumination data (from suncalc.getMoonIllumination)
+const fraction = ref(0) // 0 (new) → 1 (full)
+const phase = ref(0) // 0–1 across the lunation
+const phaseName = ref('…')
+const phaseGlyph = ref('🌑')
 
-  // Position data (requires lat/lng; from suncalc.getMoonPosition)
-  const distance = ref(0) // km
-  const altitude = ref(0) // degrees above/below horizon
-  const azimuth = ref(0) // degrees, 0° = North, clockwise
-  const lat = ref(-33.9249) // SH Priority Fallback (Cape Town)
-  const lng = ref(18.4241)
-  const librationAngle = ref(0) // Position angle of the bright limb
-  const textureRotation = ref(0) // Rotation of craters relative to zenith
-  const limbRotation = ref(0) // Rotation of the light relative to zenith
-  const movingTowardPerigee = ref(false) // true = distance shrinking (toward perigee)
-  const moonrise = ref<string>('—')
-  const moonset = ref<string>('—')
-  // Apparent Angular Diameter
-  const apparentDiameter = ref(0) // arcminutes
-  const apparentDiameterRatio = ref(0) // 0-100: position between apogee (29.4') → perigee (33.5')
-  const apparentVsMean = ref(0) // % vs mean distance (positive = larger)
-  const velocity = ref(0) // km/s
-  const lightTravelTime = ref(0) // ms
-  const subLunarPoint = ref({ lat: 0, lng: 0 })
-  const ra = ref('—')
-  const dec = ref('—')
-  const nextPerigee = ref('—')
-  const nextApogee = ref('—')
-  const zodiac = ref('—')
-  const zodiacSymbol = ref('—')
-  const constellation = ref('—')
-  const locationStatus = ref<'ACQUIRING' | 'SYNCED' | 'FALLBACK'>('ACQUIRING')
+// Derived timing
+const age = ref(0) // days since new moon
+const nextFullMoon = ref('…') // formatted date string
+const nextNewMoon = ref('…') // formatted date string
+const daysToFullMoon = ref(0)
+const daysToNewMoon = ref(0)
 
-  onMounted(async () => {
-    if (!import.meta.client) return
+// Position data (requires lat/lng; from suncalc.getMoonPosition)
+const distance = ref(0) // km
+const altitude = ref(0) // degrees above/below horizon
+const azimuth = ref(0) // degrees, 0° = North, clockwise
+const lat = ref(-33.9249) // SH Priority Fallback (Cape Town) — overwritten by geolocation
+const lng = ref(18.4241)
+const librationAngle = ref(0) // Position angle of the bright limb
+const textureRotation = ref(0) // Rotation of craters relative to zenith
+const limbRotation = ref(0) // Rotation of the light relative to zenith
+const movingTowardPerigee = ref(false) // true = distance shrinking (toward perigee)
+const moonrise = ref<string>('—')
+const moonset = ref<string>('—')
+// Apparent Angular Diameter
+const apparentDiameter = ref(0) // arcminutes
+const apparentDiameterRatio = ref(0) // 0-100: position between apogee (29.4') → perigee (33.5')
+const apparentVsMean = ref(0) // % vs mean distance (positive = larger)
+const velocity = ref(0) // km/s
+const lightTravelTime = ref(0) // ms
+const subLunarPoint = ref({ lat: 0, lng: 0 })
+const ra = ref('—')
+const dec = ref('—')
+const nextPerigee = ref('—')
+const nextApogee = ref('—')
+const zodiac = ref('—')
+const zodiacSymbol = ref('—')
+const constellation = ref('—')
+const locationStatus = ref<'ACQUIRING' | 'SYNCED' | 'FALLBACK'>('ACQUIRING')
 
-    try {
-      const SunCalc = (await import('suncalc')).default
-      const now = new Date()
+// Guard: ensures the async initialisation only runs once across all consumers
+let _initialized = false
 
-      // ── Position / Geolocation ──────────────────────────────────────────
-      const loc = await new Promise<{ lat: number, lng: number }>((resolve) => {
-        if (typeof navigator === 'undefined' || !navigator.geolocation) {
+async function initMoonData() {
+  if (_initialized) return
+  _initialized = true
+
+  try {
+    const SunCalc = (await import('suncalc')).default
+    const now = new Date()
+
+    // ── Position / Geolocation ──────────────────────────────────────────
+    const loc = await new Promise<{ lat: number, lng: number }>((resolve) => {
+      if (typeof navigator === 'undefined' || !navigator.geolocation) {
+        locationStatus.value = 'FALLBACK'
+        resolve({ lat: -33.9249, lng: 18.4241 })
+        return
+      }
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          locationStatus.value = 'SYNCED'
+          resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude })
+        },
+        () => {
           locationStatus.value = 'FALLBACK'
           resolve({ lat: -33.9249, lng: 18.4241 })
-          return
-        }
-        navigator.geolocation.getCurrentPosition(
-          (pos) => {
-            locationStatus.value = 'SYNCED'
-            resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude })
-          },
-          () => {
-            locationStatus.value = 'FALLBACK'
-            resolve({ lat: -33.9249, lng: 18.4241 })
-          },
-          { timeout: 5000, enableHighAccuracy: false }
-        )
-      })
+        },
+        { timeout: 5000, enableHighAccuracy: false }
+      )
+    })
 
-      lat.value = loc.lat
-      lng.value = loc.lng
+    // Update the shared lat/lng refs with the user's real position
+    lat.value = loc.lat
+    lng.value = loc.lng
 
-      // ── Illumination ──────────────────────────────────────────────────
-      const illum = SunCalc.getMoonIllumination(now)
-      fraction.value = illum.fraction
-      phase.value = illum.phase
-      phaseName.value = getPhaseName(illum.phase)
-      phaseGlyph.value = getPhaseGlyph(illum.phase)
-      librationAngle.value = illum.angle // radians
+    // ── Illumination ──────────────────────────────────────────────────
+    const illum = SunCalc.getMoonIllumination(now)
+    fraction.value = illum.fraction
+    phase.value = illum.phase
+    phaseName.value = getPhaseName(illum.phase)
+    phaseGlyph.value = getPhaseGlyph(illum.phase)
+    librationAngle.value = illum.angle // radians
 
-      // Age in days...
-      age.value = parseFloat((illum.phase * LUNAR_MONTH).toFixed(1))
+    // Age in days...
+    age.value = parseFloat((illum.phase * LUNAR_MONTH).toFixed(1))
 
-      // ── Next Full Moon & New Moon: Meeus JDE formula ──────────────────────
-      function nextPhaseJDE(targetPhase: 0 | 0.5): Date {
-        const jde = (now.getTime() / 86400000) + 2440587.5
-        const k0 = (jde - 2451550.09766) / 29.530588861
-        let kk = Math.ceil(k0 - targetPhase) + targetPhase
-        for (let attempt = 0; attempt < 30; attempt++) {
-          const jdeK = 2451550.09766 + 29.530588861 * kk
-          const msUtc = (jdeK - 2440587.5) * 86400000
-          if (msUtc > now.getTime()) return new Date(msUtc)
-          kk += 1
-        }
-        return new Date(now.getTime() + 30 * 86400000)
+    // ── Next Full Moon & New Moon: Meeus JDE formula ──────────────────────
+    function nextPhaseJDE(targetPhase: 0 | 0.5): Date {
+      const jde = (now.getTime() / 86400000) + 2440587.5
+      const k0 = (jde - 2451550.09766) / 29.530588861
+      let kk = Math.ceil(k0 - targetPhase) + targetPhase
+      for (let attempt = 0; attempt < 30; attempt++) {
+        const jdeK = 2451550.09766 + 29.530588861 * kk
+        const msUtc = (jdeK - 2440587.5) * 86400000
+        if (msUtc > now.getTime()) return new Date(msUtc)
+        kk += 1
       }
-
-      const fullMoonDate = nextPhaseJDE(0.5)
-      const newMoonDate = nextPhaseJDE(0)
-
-      const rawDaysToFull = (fullMoonDate.getTime() - now.getTime()) / 86400000
-      const rawDaysToNew = (newMoonDate.getTime() - now.getTime()) / 86400000
-
-      daysToFullMoon.value = Math.round(rawDaysToFull)
-      daysToNewMoon.value = Math.round(rawDaysToNew)
-
-      nextFullMoon.value = fullMoonDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
-      nextNewMoon.value = newMoonDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
-
-      const pos = SunCalc.getMoonPosition(now, loc.lat, loc.lng)
-      // Switch to Geocentric Distance to match User/Google standards
-      distance.value = Math.round(getGeocentricDistance(now))
-
-      altitude.value = parseFloat((pos.altitude * (180 / Math.PI)).toFixed(1))
-      azimuth.value = parseFloat((((pos.azimuth * (180 / Math.PI)) + 180 + 360) % 360).toFixed(1))
-
-      // ── Orbital Direction ─────────────────────────────────────────────────
-      // Symmetric 12h window using Geocentric distance for absolute accuracy
-      const pastDist = getGeocentricDistance(new Date(now.getTime() - 6 * 60 * 60 * 1000))
-      const futureDist = getGeocentricDistance(new Date(now.getTime() + 6 * 60 * 60 * 1000))
-      movingTowardPerigee.value = futureDist < pastDist
-
-      // ── Deep Telemetry ──────────────────────────────────────────────────
-      velocity.value = Math.abs(futureDist - pastDist) / (12 * 3600) + 1.022 // base avg orbital v + delta
-      lightTravelTime.value = (distance.value / 299792.458) * 1000 // distance / c in ms
-
-      // Sub-lunar Point: Latitude is Moon's declination, Longitude depends on GHA
-      // We approximate using Altitude/Azimuth + Observer location
-      subLunarPoint.value = {
-        lat: parseFloat((pos.altitude * (180 / Math.PI) * 0.1 + loc.lat * 0.9).toFixed(2)), // crude approximation
-        lng: parseFloat(((loc.lng - (now.getUTCHours() + now.getUTCMinutes() / 60) * 15 + 360) % 360 - 180).toFixed(2))
-      }
-
-      // ── RA / DEC — proper ecliptic → equatorial conversion ────────────────
-      // Uses the same simplified Moon coordinates as getGeocentricDistance().
-      // l = ecliptic longitude, b = ecliptic latitude, ε = obliquity
-      {
-        const d2 = (now.getTime() / 1000 - 946728000) / 86400 // J2000 days
-        const rad = Math.PI / 180
-        const Mprime = (134.963 + 13.064993 * d2) * rad
-        const F = (93.272 + 13.229350 * d2) * rad
-        const L = (218.316 + 13.176396 * d2) * rad
-        const l = L + 6.289 * rad * Math.sin(Mprime) // ecliptic longitude
-        const b = 5.128 * rad * Math.sin(F) // ecliptic latitude
-        const eps = (23.439 - 0.0000004 * d2) * rad // obliquity of ecliptic
-        // Equatorial coordinates
-        const raRad = Math.atan2(Math.sin(l) * Math.cos(eps) - Math.tan(b) * Math.sin(eps), Math.cos(l))
-        const decRad = Math.asin(Math.sin(b) * Math.cos(eps) + Math.cos(b) * Math.sin(eps) * Math.sin(l))
-        // Format RA as HH h MM m
-        const raHours = ((raRad * 180 / Math.PI) / 15 + 24) % 24
-        const raH = Math.floor(raHours)
-        const raM = Math.floor((raHours - raH) * 60)
-        ra.value = `${raH}h ${String(raM).padStart(2, '0')}m`
-        // Format Dec as ±DD° MM'
-        const decDeg = decRad * 180 / Math.PI
-        const decAbs = Math.abs(decDeg)
-        const decD = Math.floor(decAbs)
-        const decM = Math.floor((decAbs - decD) * 60)
-        dec.value = `${decDeg >= 0 ? '+' : '-'}${decD}° ${String(decM).padStart(2, '0')}m`
-
-        // ── Zodiac (Astrology — Tropical) ──────────────────────────────────
-        const lDeg = ((l * 180 / Math.PI) % 360 + 360) % 360
-        const zodiacIdx = Math.floor(lDeg / 30)
-        const ZODIAC_DATA = [
-          { name: 'Aries', sym: '[ARI]' }, { name: 'Taurus', sym: '[TAU]' },
-          { name: 'Gemini', sym: '[GEM]' }, { name: 'Cancer', sym: '[CAN]' },
-          { name: 'Leo', sym: '[LEO]' }, { name: 'Virgo', sym: '[VIR]' },
-          { name: 'Libra', sym: '[LIB]' }, { name: 'Scorpio', sym: '[SCO]' },
-          { name: 'Sagittarius', sym: '[SAG]' }, { name: 'Capricorn', sym: '[CAP]' },
-          { name: 'Aquarius', sym: '[AQU]' }, { name: 'Pisces', sym: '[PIS]' }
-        ]
-        const zodiacEntry = ZODIAC_DATA[zodiacIdx]
-        if (zodiacEntry) {
-          zodiac.value = zodiacEntry.name
-          zodiacSymbol.value = zodiacEntry.sym
-        }
-
-        // ── Constellation (Astronomy — Actual IAU Boundaries) ──────────────
-        const getConstellation = (long: number) => {
-          // Precise IAU ecliptic boundaries (approx. J2000)
-          if (long < 28.5) return 'Pisces'
-          if (long < 53.5) return 'Aries'
-          if (long < 90.3) return 'Taurus'
-          if (long < 118.1) return 'Gemini'
-          if (long < 138.2) return 'Cancer'
-          if (long < 173.9) return 'Leo'
-          if (long < 218.0) return 'Virgo'
-          if (long < 241.0) return 'Libra'
-          if (long < 247.7) return 'Scorpio'
-          if (long < 266.6) return 'Ophiuchus'
-          if (long < 300.0) return 'Sagittarius'
-          if (long < 327.9) return 'Capricorn'
-          if (long < 352.0) return 'Aquarius'
-          return 'Pisces'
-        }
-        constellation.value = getConstellation(lDeg)
-      }
-
-      // ── Next Perigee / Apogee — ephemeris scan ────────────────────────────
-      // Scan forward in 6h steps; local min = perigee, local max = apogee.
-      {
-        const STEP_MS = 6 * 60 * 60 * 1000
-        const MAX_STEPS = Math.ceil(35 * 24 / 6)
-        let foundPerigee = false
-        let foundApogee = false
-        for (let i = 1; i < MAX_STEPS - 1 && (!foundPerigee || !foundApogee); i++) {
-          const ta = new Date(now.getTime() + (i - 1) * STEP_MS)
-          const tb = new Date(now.getTime() + i * STEP_MS)
-          const tc = new Date(now.getTime() + (i + 1) * STEP_MS)
-          const da = getGeocentricDistance(ta)
-          const db = getGeocentricDistance(tb)
-          const dc = getGeocentricDistance(tc)
-          if (!foundPerigee && db < da && db < dc) {
-            nextPerigee.value = tb.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })
-            foundPerigee = true
-          }
-          if (!foundApogee && db > da && db > dc) {
-            nextApogee.value = tb.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })
-            foundApogee = true
-          }
-        }
-      }
-
-      // ── Apparent Angular Diameter ─────────────────────────────────────────
-      // θ = 2 × arcsin(R_moon / distance), R_moon = 1737.4 km
-      {
-        const R_MOON = 1737.4
-        const APOGEE_D = 29.38
-        const PERIGEE_D = 33.53
-        const MEAN_D = 31.08
-        const thetaRad = 2 * Math.asin(R_MOON / distance.value)
-        const arcmin = thetaRad * (180 / Math.PI) * 60
-        apparentDiameter.value = parseFloat(arcmin.toFixed(2))
-        apparentDiameterRatio.value = Math.round(Math.min(100, Math.max(0, (arcmin - APOGEE_D) / (PERIGEE_D - APOGEE_D) * 100)))
-        apparentVsMean.value = parseFloat(((arcmin / MEAN_D - 1) * 100).toFixed(1))
-      }
-
-      // ── Moonrise / Moonset ────────────────────────────────────────────────
-      const times = SunCalc.getMoonTimes(now, loc.lat, loc.lng)
-      moonrise.value = times.rise ? times.rise.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) : 'N/A'
-      moonset.value = times.set ? times.set.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) : 'N/A'
-
-      // Uses the calibrated, decoupled utility for astronomical fidelity (V2).
-      const rotations = calculateLunarRotation(illum.angle, pos.parallacticAngle, lat.value)
-      textureRotation.value = rotations.textureRotation
-      limbRotation.value = rotations.limbRotation
-    } catch {
-      hasError.value = true
-    } finally {
-      isLoading.value = false
+      return new Date(now.getTime() + 30 * 86400000)
     }
+
+    const fullMoonDate = nextPhaseJDE(0.5)
+    const newMoonDate = nextPhaseJDE(0)
+
+    const rawDaysToFull = (fullMoonDate.getTime() - now.getTime()) / 86400000
+    const rawDaysToNew = (newMoonDate.getTime() - now.getTime()) / 86400000
+
+    daysToFullMoon.value = Math.round(rawDaysToFull)
+    daysToNewMoon.value = Math.round(rawDaysToNew)
+
+    nextFullMoon.value = fullMoonDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+    nextNewMoon.value = newMoonDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+
+    const pos = SunCalc.getMoonPosition(now, loc.lat, loc.lng)
+    // Switch to Geocentric Distance to match User/Google standards
+    distance.value = Math.round(getGeocentricDistance(now))
+
+    altitude.value = parseFloat((pos.altitude * (180 / Math.PI)).toFixed(1))
+    azimuth.value = parseFloat((((pos.azimuth * (180 / Math.PI)) + 180 + 360) % 360).toFixed(1))
+
+    // ── Orbital Direction ─────────────────────────────────────────────────
+    // Symmetric 12h window using Geocentric distance for absolute accuracy
+    const pastDist = getGeocentricDistance(new Date(now.getTime() - 6 * 60 * 60 * 1000))
+    const futureDist = getGeocentricDistance(new Date(now.getTime() + 6 * 60 * 60 * 1000))
+    movingTowardPerigee.value = futureDist < pastDist
+
+    // ── Deep Telemetry ──────────────────────────────────────────────────
+    velocity.value = Math.abs(futureDist - pastDist) / (12 * 3600) + 1.022 // base avg orbital v + delta
+    lightTravelTime.value = (distance.value / 299792.458) * 1000 // distance / c in ms
+
+    // Sub-lunar Point: Latitude is Moon's declination, Longitude depends on GHA
+    // We approximate using Altitude/Azimuth + Observer location
+    subLunarPoint.value = {
+      lat: parseFloat((pos.altitude * (180 / Math.PI) * 0.1 + loc.lat * 0.9).toFixed(2)), // crude approximation
+      lng: parseFloat(((loc.lng - (now.getUTCHours() + now.getUTCMinutes() / 60) * 15 + 360) % 360 - 180).toFixed(2))
+    }
+
+    // ── RA / DEC — proper ecliptic → equatorial conversion ────────────────
+    // Uses the same simplified Moon coordinates as getGeocentricDistance().
+    // l = ecliptic longitude, b = ecliptic latitude, ε = obliquity
+    {
+      const d2 = (now.getTime() / 1000 - 946728000) / 86400 // J2000 days
+      const rad = Math.PI / 180
+      const Mprime = (134.963 + 13.064993 * d2) * rad
+      const F = (93.272 + 13.229350 * d2) * rad
+      const L = (218.316 + 13.176396 * d2) * rad
+      const l = L + 6.289 * rad * Math.sin(Mprime) // ecliptic longitude
+      const b = 5.128 * rad * Math.sin(F) // ecliptic latitude
+      const eps = (23.439 - 0.0000004 * d2) * rad // obliquity of ecliptic
+      // Equatorial coordinates
+      const raRad = Math.atan2(Math.sin(l) * Math.cos(eps) - Math.tan(b) * Math.sin(eps), Math.cos(l))
+      const decRad = Math.asin(Math.sin(b) * Math.cos(eps) + Math.cos(b) * Math.sin(eps) * Math.sin(l))
+      // Format RA as HH h MM m
+      const raHours = ((raRad * 180 / Math.PI) / 15 + 24) % 24
+      const raH = Math.floor(raHours)
+      const raM = Math.floor((raHours - raH) * 60)
+      ra.value = `${raH}h ${String(raM).padStart(2, '0')}m`
+      // Format Dec as ±DD° MM'
+      const decDeg = decRad * 180 / Math.PI
+      const decAbs = Math.abs(decDeg)
+      const decD = Math.floor(decAbs)
+      const decM = Math.floor((decAbs - decD) * 60)
+      dec.value = `${decDeg >= 0 ? '+' : '-'}${decD}° ${String(decM).padStart(2, '0')}m`
+
+      // ── Zodiac (Astrology — Tropical) ──────────────────────────────────
+      const lDeg = ((l * 180 / Math.PI) % 360 + 360) % 360
+      const zodiacIdx = Math.floor(lDeg / 30)
+      const ZODIAC_DATA = [
+        { name: 'Aries', sym: '[ARI]' }, { name: 'Taurus', sym: '[TAU]' },
+        { name: 'Gemini', sym: '[GEM]' }, { name: 'Cancer', sym: '[CAN]' },
+        { name: 'Leo', sym: '[LEO]' }, { name: 'Virgo', sym: '[VIR]' },
+        { name: 'Libra', sym: '[LIB]' }, { name: 'Scorpio', sym: '[SCO]' },
+        { name: 'Sagittarius', sym: '[SAG]' }, { name: 'Capricorn', sym: '[CAP]' },
+        { name: 'Aquarius', sym: '[AQU]' }, { name: 'Pisces', sym: '[PIS]' }
+      ]
+      const zodiacEntry = ZODIAC_DATA[zodiacIdx]
+      if (zodiacEntry) {
+        zodiac.value = zodiacEntry.name
+        zodiacSymbol.value = zodiacEntry.sym
+      }
+
+      // ── Constellation (Astronomy — Actual IAU Boundaries) ──────────────
+      const getConstellation = (long: number) => {
+        // Precise IAU ecliptic boundaries (approx. J2000)
+        if (long < 28.5) return 'Pisces'
+        if (long < 53.5) return 'Aries'
+        if (long < 90.3) return 'Taurus'
+        if (long < 118.1) return 'Gemini'
+        if (long < 138.2) return 'Cancer'
+        if (long < 173.9) return 'Leo'
+        if (long < 218.0) return 'Virgo'
+        if (long < 241.0) return 'Libra'
+        if (long < 247.7) return 'Scorpio'
+        if (long < 266.6) return 'Ophiuchus'
+        if (long < 300.0) return 'Sagittarius'
+        if (long < 327.9) return 'Capricorn'
+        if (long < 352.0) return 'Aquarius'
+        return 'Pisces'
+      }
+      constellation.value = getConstellation(lDeg)
+    }
+
+    // ── Next Perigee / Apogee — ephemeris scan ────────────────────────────
+    // Scan forward in 6h steps; local min = perigee, local max = apogee.
+    {
+      const STEP_MS = 6 * 60 * 60 * 1000
+      const MAX_STEPS = Math.ceil(35 * 24 / 6)
+      let foundPerigee = false
+      let foundApogee = false
+      for (let i = 1; i < MAX_STEPS - 1 && (!foundPerigee || !foundApogee); i++) {
+        const ta = new Date(now.getTime() + (i - 1) * STEP_MS)
+        const tb = new Date(now.getTime() + i * STEP_MS)
+        const tc = new Date(now.getTime() + (i + 1) * STEP_MS)
+        const da = getGeocentricDistance(ta)
+        const db = getGeocentricDistance(tb)
+        const dc = getGeocentricDistance(tc)
+        if (!foundPerigee && db < da && db < dc) {
+          nextPerigee.value = tb.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })
+          foundPerigee = true
+        }
+        if (!foundApogee && db > da && db > dc) {
+          nextApogee.value = tb.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })
+          foundApogee = true
+        }
+      }
+    }
+
+    // ── Apparent Angular Diameter ─────────────────────────────────────────
+    // θ = 2 × arcsin(R_moon / distance), R_moon = 1737.4 km
+    {
+      const R_MOON = 1737.4
+      const APOGEE_D = 29.38
+      const PERIGEE_D = 33.53
+      const MEAN_D = 31.08
+      const thetaRad = 2 * Math.asin(R_MOON / distance.value)
+      const arcmin = thetaRad * (180 / Math.PI) * 60
+      apparentDiameter.value = parseFloat(arcmin.toFixed(2))
+      apparentDiameterRatio.value = Math.round(Math.min(100, Math.max(0, (arcmin - APOGEE_D) / (PERIGEE_D - APOGEE_D) * 100)))
+      apparentVsMean.value = parseFloat(((arcmin / MEAN_D - 1) * 100).toFixed(1))
+    }
+
+    // ── Moonrise / Moonset ────────────────────────────────────────────────
+    const times = SunCalc.getMoonTimes(now, loc.lat, loc.lng)
+    moonrise.value = times.rise ? times.rise.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) : 'N/A'
+    moonset.value = times.set ? times.set.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) : 'N/A'
+
+    // Uses the calibrated, decoupled utility for astronomical fidelity (V2).
+    // lat.value is now the user's real latitude (or fallback), never the initial default.
+    const rotations = calculateLunarRotation(illum.angle, pos.parallacticAngle, lat.value)
+    textureRotation.value = rotations.textureRotation
+    limbRotation.value = rotations.limbRotation
+  }
+  catch {
+    hasError.value = true
+  }
+  finally {
+    isLoading.value = false
+  }
+}
+
+export function useMoonData() {
+  // Trigger initialisation on the first component to mount.
+  // All subsequent callers find _initialized === true and skip straight to return.
+  onMounted(() => {
+    if (!import.meta.client) return
+    initMoonData()
   })
 
   return {
