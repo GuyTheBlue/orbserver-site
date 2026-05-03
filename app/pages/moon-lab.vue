@@ -193,6 +193,7 @@ watch([simLat, simLng, simTimeMinutes], () => {
 })
 
 const presets = [
+  { name: 'Looe', lat: 50.3562, lng: -4.4552 },
   { name: 'Cape Town', lat: -33.9249, lng: 18.4241 },
   { name: 'London', lat: 51.5074, lng: -0.1278 },
   { name: 'New York', lat: 40.7128, lng: -74.0060 },
