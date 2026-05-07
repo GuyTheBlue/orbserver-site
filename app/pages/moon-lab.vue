@@ -228,8 +228,72 @@
               </button>
             </div>
           </div>
+
+          <!-- Radar Manual Override (Lab Only) -->
+          <div class="p-8 border border-hud-accent/20 bg-hud-accent/5 rounded-2xl space-y-8 relative overflow-hidden">
+            <div class="absolute top-0 right-0 px-3 py-1 bg-hud-accent text-black font-black text-[9px] uppercase tracking-widest">Lab_Tool</div>
+            <div class="flex justify-between items-center relative z-10">
+              <label class="text-[10px] uppercase tracking-[0.4em] text-hud-accent font-bold">Radar Manual Override</label>
+              <button 
+                class="px-3 py-1 border text-[9px] uppercase tracking-widest transition-colors"
+                :class="isDistanceOverridden ? 'border-hud-accent bg-hud-accent text-black' : 'border-white/20 text-white/40'"
+                @click="isDistanceOverridden = !isDistanceOverridden"
+              >
+                {{ isDistanceOverridden ? '[ Active ]' : '[ Disabled ]' }}
+              </button>
+            </div>
+
+            <div class="space-y-6 relative z-10" :class="{ 'opacity-30 pointer-events-none': !isDistanceOverridden }">
+              <div class="space-y-4">
+                <div class="flex justify-between items-end">
+                  <label class="text-[9px] uppercase tracking-widest text-white/40">Manual Distance (KM)</label>
+                  <span class="font-orbitron font-black text-xl text-white">{{ localSimDistance.toLocaleString() }} KM</span>
+                </div>
+                <input
+                  v-model.number="localSimDistance"
+                  type="range"
+                  min="356500"
+                  max="406700"
+                  step="100"
+                  class="hud-slider"
+                >
+              </div>
+
+              <div class="flex items-center justify-between pt-2">
+                <label class="text-[9px] uppercase tracking-widest text-white/40">Direction of travel</label>
+                <div class="flex gap-2">
+                  <button 
+                    class="px-4 py-2 border text-[9px] uppercase tracking-widest transition-all"
+                    :class="localSimMovingTowardPerigee ? 'border-hud-accent bg-hud-accent/20 text-hud-accent' : 'border-white/10 text-white/20'"
+                    @click="localSimMovingTowardPerigee = true"
+                  >
+                    Approaching (Top)
+                  </button>
+                  <button 
+                    class="px-4 py-2 border text-[9px] uppercase tracking-widest transition-all"
+                    :class="!localSimMovingTowardPerigee ? 'border-hud-accent bg-hud-accent/20 text-hud-accent' : 'border-white/10 text-white/20'"
+                    @click="localSimMovingTowardPerigee = false"
+                  >
+                    Receding (Bottom)
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
       </main>
+      
+      <!-- New Module Simulation Row -->
+      <section class="max-w-6xl mx-auto mt-12 grid grid-cols-1 lg:grid-cols-12 gap-12">
+        <div class="lg:col-span-12">
+          <label class="text-[10px] uppercase tracking-[0.4em] text-hud-accent font-bold mb-6 block">Module Debug: MoonOrbitalRadar</label>
+          <MoonOrbitalRadar
+            :distance="isDistanceOverridden ? localSimDistance : (distance ?? 0)"
+            :moving-toward-perigee="isDistanceOverridden ? localSimMovingTowardPerigee : movingTowardPerigee"
+            :lunar="landingData.lunar"
+          />
+        </div>
+      </section>
 
       <footer class="max-w-6xl mx-auto mt-32 border-t border-white/5 pt-12 pb-24 text-[9px] text-white/20 uppercase tracking-[0.5em] leading-loose text-center">
         <div class="animate-footer-breathe">
@@ -247,9 +311,11 @@
 import { ref, watch, computed } from 'vue'
 import { useMoonData } from '../composables/useMoonData'
 import { useObserverContext } from '../composables/useObserverContext'
+import { landingData } from '../utils/landingData'
 import MoonPhase from '../components/shared/MoonPhase.vue'
+import MoonOrbitalRadar from '../components/pages/landing/MoonOrbitalRadar.vue'
 
-const { fraction, phase, textureRotation, limbRotation, isLoading } = useMoonData()
+const { fraction, phase, textureRotation, limbRotation, isLoading, distance, movingTowardPerigee } = useMoonData()
 const { actualLat, actualLng, actualTime, simLat, simLng, simTimeMinutes, isOverridden, setOverride, resetToActual } = useObserverContext()
 
 const showShadow = ref(true)
@@ -266,6 +332,18 @@ watch([simLat, simLng, simTimeMinutes], () => {
   localSimLng.value = simLng.value
   localSimTime.value = simTimeMinutes.value
 })
+
+const isDistanceOverridden = ref(false)
+const localSimDistance = ref(384400)
+const localSimMovingTowardPerigee = ref(false)
+
+watch(distance, (val) => {
+  if (!isDistanceOverridden.value) localSimDistance.value = val
+}, { immediate: true })
+
+watch(movingTowardPerigee, (val) => {
+  if (!isDistanceOverridden.value) localSimMovingTowardPerigee.value = val
+}, { immediate: true })
 
 const presets = [
   { name: 'Looe', lat: 50.3562, lng: -4.4552 },

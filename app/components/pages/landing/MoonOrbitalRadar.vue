@@ -32,7 +32,12 @@ const distRatio = computed(() => {
 
 // ── Orbital Diagram ──────────────────────────────────────────────────────────
 const ORB = { cx: 140, cy: 62, rx: 92, ry: 56, ex: 67, ey: 62 } as const
-const moonOrbitAngle = computed(() => Math.PI * (1 - distRatio.value / 100))
+const moonOrbitAngle = computed(() => {
+  const base = Math.PI * (1 - distRatio.value / 100)
+  // If approaching perigee (distance decreasing), use the top half of the orbit
+  // If receding toward apogee (distance increasing), use the bottom half
+  return props.movingTowardPerigee ? (Math.PI * 2 - base) : base
+})
 const moonOrbitX = computed(() => ORB.cx + ORB.rx * Math.cos(moonOrbitAngle.value))
 const moonOrbitY = computed(() => ORB.cy + ORB.ry * Math.sin(moonOrbitAngle.value))
 const moonLabelY = computed(() => moonOrbitY.value < ORB.cy ? moonOrbitY.value - 13 : moonOrbitY.value + 16)
