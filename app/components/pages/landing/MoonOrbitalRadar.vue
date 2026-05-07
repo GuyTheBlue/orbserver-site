@@ -24,6 +24,10 @@ const props = defineProps<Props>()
 
 // ── Calculations ─────────────────────────────────────────────────────────────
 const distFormatted = computed(() => props.distance?.toLocaleString('en-GB') ?? '—')
+const distMilesFormatted = computed(() => {
+  if (!props.distance) return '—'
+  return Math.round(props.distance * 0.621371).toLocaleString('en-GB')
+})
 const distRatio = computed(() => {
   if (!props.distance) return 0
   // Range: 356,500km (Perigee) to 406,700km (Apogee)
@@ -67,8 +71,11 @@ const moonLabelY = computed(() => moonOrbitY.value < ORB.cy ? moonOrbitY.value -
       {{ props.lunar.labels.distRadar }}
     </label>
 
-    <div class="relative z-10 font-orbitron font-black text-5xl xl:text-7xl text-white tracking-tighter mb-6">
+    <div class="relative z-10 font-orbitron font-black text-5xl xl:text-7xl text-white tracking-tighter mb-1">
       {{ distFormatted }}<span class="text-xl text-white/30 ml-4 font-mono">KM</span>
+    </div>
+    <div class="relative z-10 font-mono text-[10px] text-white/40 uppercase tracking-[0.3em] mb-6">
+      Equivalent to {{ distMilesFormatted }} MILES
     </div>
 
     <div class="relative z-10 h-[2px] bg-white/5 rounded-full mb-3">
