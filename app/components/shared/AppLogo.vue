@@ -18,14 +18,14 @@ const style = computed(() => themeMap[currentTheme.value] || themeMap.cyan)
   <div class="inline-flex items-center gap-2 group cursor-pointer transition-transform hover:scale-[1.02] active:scale-[0.98]">
     <!-- The "O" - High-fidelity orb image -->
     <div class="relative w-10 h-10 md:w-11 md:h-11 flex items-center justify-center">
-      <div 
+      <div
         class="absolute inset-0 rounded-full blur-md opacity-20 transition-colors"
         :style="{ backgroundColor: style.hex }"
       />
       <!-- The Solid "O" Stencil -->
-      <div 
+      <div
         class="relative z-10 w-full h-full animate-[o-pulse_6s_ease-in-out_infinite]"
-        :style="{ 
+        :style="{
           backgroundColor: style.hex,
           maskImage: 'url(/images/logo_orb.png)',
           maskSize: 'contain',
@@ -38,14 +38,14 @@ const style = computed(() => themeMap[currentTheme.value] || themeMap.cyan)
         }"
       />
       <!-- Decorative orbital ring -->
-      <div 
+      <div
         class="absolute inset-[-4px] rounded-full border transition-colors pointer-events-none opacity-20 group-hover:opacity-40"
         :style="{ borderColor: style.hex }"
       />
     </div>
 
     <!-- The lowercase branding -->
-    <span 
+    <span
       class="font-orbitron font-black text-2xl md:text-3xl lg:text-4xl tracking-[0.1em] lowercase select-none transition-colors leading-none"
       :style="{ color: style.hex, textShadow: `0 0 15px ${style.hex}40` }"
     >

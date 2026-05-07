@@ -90,7 +90,7 @@ const accentColor = computed(() => themeMap[currentTheme.value] || themeMap.cyan
             <div class="absolute bottom-0 left-0 w-full h-[30%] bg-gradient-to-t from-black to-transparent pointer-events-none" />
             <div class="absolute top-full left-0 w-full h-[200vh] bg-black" />
           </div>
-          
+
           <!-- Cloaked Figure (z-55) -->
           <div
             class="absolute bottom-[18%] z-[55] origin-bottom left-[20%] w-[21vw] min-w-[205px] max-w-[360px] sm:left-1/2 sm:-translate-x-1/2 sm:w-[30vw] md:left-[35%] md:translate-x-0 md:w-[22vw] lg:left-[25%] lg:w-[25vw]"
@@ -173,12 +173,15 @@ const accentColor = computed(() => themeMap[currentTheme.value] || themeMap.cyan
             class="relative z-30 transition-transform duration-700"
             :style="{ transform: `translateY(${50 - y * 0.05}px) scale(${0.95 + y * 0.0001})` }"
           >
-            <div class="font-orbitron font-black text-4xl md:text-7xl text-center space-y-4 tracking-[-0.05em] uppercase transition-all duration-1000" :class="voidOpacity > 0.8 ? 'blur-0' : 'blur-[2px]'">
+            <div
+              class="font-orbitron font-black text-4xl md:text-7xl text-center space-y-4 tracking-[-0.05em] uppercase transition-all duration-1000"
+              :class="voidOpacity > 0.8 ? 'blur-0' : 'blur-[2px]'"
+            >
               <div class="text-white/20 flex items-center justify-center">
                 M
                 <div
                   class="w-7 h-7 md:w-14 md:h-14 mx-1 md:mx-2"
-                  :style="{ 
+                  :style="{
                     backgroundColor: accentColor,
                     maskImage: 'url(/images/logo_orb.png)',
                     maskSize: 'contain',

@@ -79,6 +79,6 @@ export function useObserverContext() {
     simLat, simLng, simTimeMinutes,
     isOverridden, locationStatus,
     effectiveLat, effectiveLng, effectiveTime,
-    initGeolocation, setOverride, resetToActual,
+    initGeolocation, setOverride, resetToActual
   }
 }

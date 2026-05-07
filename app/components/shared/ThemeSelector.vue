@@ -44,7 +44,7 @@ const activeColor = computed(() => themes.find(t => t.id === currentTheme.value)
 </script>
 
 <template>
-  <div 
+  <div
     ref="container"
     class="relative pointer-events-auto"
   >
@@ -58,13 +58,13 @@ const activeColor = computed(() => themes.find(t => t.id === currentTheme.value)
       >
         <div
           class="absolute inset-0 transition-opacity duration-300"
-          :style="{ 
-            backgroundColor: t.color, 
-            opacity: currentTheme === t.id ? 1 : 0.2 
+          :style="{
+            backgroundColor: t.color,
+            opacity: currentTheme === t.id ? 1 : 0.2
           }"
         />
         <div class="absolute inset-0 pointer-events-none opacity-20 panel-scanlines" />
-        <div 
+        <div
           v-if="currentTheme === t.id"
           class="absolute inset-0 bg-white/20 animate-pulse pointer-events-none"
         />
@@ -74,11 +74,14 @@ const activeColor = computed(() => themes.find(t => t.id === currentTheme.value)
     <!-- ── MOBILE (XS): ALIGNED ACCORDION ── -->
     <div class="flex sm:hidden relative items-center justify-end w-8 h-8">
       <!-- 1. THE ANCHOR BLOCK -->
-      <button 
-        @click.stop="isOpen = !isOpen"
+      <button
         class="relative w-8 h-8 rounded-sm overflow-hidden border-none cursor-pointer z-10 outline-none focus:outline-none"
+        @click.stop="isOpen = !isOpen"
       >
-        <div class="absolute inset-0" :style="{ backgroundColor: activeColor }" />
+        <div
+          class="absolute inset-0"
+          :style="{ backgroundColor: activeColor }"
+        />
         <div class="absolute inset-0 pointer-events-none opacity-20 panel-scanlines" />
       </button>
 
@@ -91,7 +94,7 @@ const activeColor = computed(() => themes.find(t => t.id === currentTheme.value)
         leave-from-class="opacity-100 scale-100"
         leave-to-class="opacity-0 scale-95"
       >
-        <div 
+        <div
           v-if="isOpen"
           class="absolute top-[-8px] right-[-8px] z-[100] flex flex-col gap-2 p-2 bg-black/70 backdrop-blur-xl rounded-xl shadow-[0_15px_50px_rgba(0,0,0,0.9)]"
         >
@@ -103,9 +106,9 @@ const activeColor = computed(() => themes.find(t => t.id === currentTheme.value)
           >
             <div
               class="absolute inset-0"
-              :style="{ 
-                backgroundColor: t.color, 
-                opacity: currentTheme === t.id ? 1 : 0.5 
+              :style="{
+                backgroundColor: t.color,
+                opacity: currentTheme === t.id ? 1 : 0.5
               }"
             />
             <div class="absolute inset-0 pointer-events-none opacity-20 panel-scanlines" />

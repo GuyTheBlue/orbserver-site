@@ -35,7 +35,12 @@ useSeoMeta({
 })
 
 // ── PWA INSTALL LOGIC ────────────────────────────────────────────────────────
-const deferredPrompt = ref<any>(null)
+interface BeforeInstallPromptEvent extends Event {
+  prompt: () => Promise<void>
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>
+}
+
+const deferredPrompt = ref<BeforeInstallPromptEvent | null>(null)
 const showInstallBtn = ref(false)
 const showInstallGuide = ref(false)
 
@@ -49,7 +54,7 @@ if (import.meta.client) {
 
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault()
-    deferredPrompt.value = e
+    deferredPrompt.value = e as BeforeInstallPromptEvent
     showInstallBtn.value = true
   })
 
@@ -75,8 +80,8 @@ async function installApp() {
     <!-- Installation Guide Modal (Nuxt UI) -->
     <!-- Installation Guide Modal (Nuxt UI v4 API) -->
     <!-- Installation Guide Modal (Nuxt UI v4 API) -->
-    <UModal 
-      v-model:open="showInstallGuide" 
+    <UModal
+      v-model:open="showInstallGuide"
       :ui="{
         content: 'p-0 sm:p-0 bg-transparent shadow-none ring-0 border-0 max-w-4xl w-full',
         overlay: 'backdrop-blur-md bg-black/60'
@@ -94,7 +99,10 @@ async function installApp() {
               <div class="flex items-center justify-between">
                 <div class="flex items-center gap-4">
                   <div class="w-10 h-10 rounded-full bg-hud-accent/10 flex items-center justify-center">
-                    <UIcon name="i-lucide-monitor-smartphone" class="text-hud-accent w-6 h-6 animate-pulse" />
+                    <UIcon
+                      name="i-lucide-monitor-smartphone"
+                      class="text-hud-accent w-6 h-6 animate-pulse"
+                    />
                   </div>
                   <h3 class="font-orbitron font-black text-hud-accent tracking-[0.1em] sm:tracking-[0.2em] uppercase text-xl md:text-3xl leading-tight">
                     INSTALL_SYSTEM // PWA_PROTOCOL
@@ -126,7 +134,7 @@ async function installApp() {
               </UButton>
             </div>
           </div>
-          
+
           <!-- Body -->
           <div class="p-6 md:p-12 relative z-10 space-y-12 bento-flicker bg-black/40 flex-1 overflow-y-auto custom-scrollbar">
             <div class="space-y-6 relative z-10">
@@ -146,7 +154,7 @@ async function installApp() {
                 </p>
               </div>
             </div>
-            
+
             <div class="space-y-6 relative z-10 border-t border-white/5 pt-12 pb-12">
               <div class="flex items-center gap-4 mb-4">
                 <div class="h-6 w-1 bg-pink-500" />
@@ -164,7 +172,7 @@ async function installApp() {
 
           <!-- Footer -->
           <div class="p-4 md:p-8 border-t border-white/5 relative z-20 bg-[#020a14]">
-            <UButton 
+            <UButton
               block
               color="neutral"
               variant="ghost"
@@ -191,7 +199,7 @@ async function installApp() {
           </NuxtLink>
 
           <!-- The New Accordion Accent Selector (Dashboard Mode Only) -->
-          <transition 
+          <transition
             enter-active-class="transition-opacity duration-1000 ease-out"
             enter-from-class="opacity-0"
             enter-to-class="opacity-100"
@@ -216,13 +224,13 @@ async function installApp() {
     <UFooter class="bg-black border-t border-white/5 relative z-50 py-24 md:py-32 overflow-hidden">
       <!-- Background Typography Wash -->
       <div class="absolute inset-0 z-0 pointer-events-none select-none overflow-hidden opacity-30">
-        <div 
+        <div
           class="absolute -bottom-10 -left-10 font-orbitron font-black text-white/[0.04] whitespace-nowrap leading-none"
           style="font-size: clamp(60px, 15vw, 240px); transform: rotate(-8deg);"
         >
           DIST_{{ distFormatted }}KM
         </div>
-        <div 
+        <div
           class="absolute -top-10 -right-10 font-orbitron font-black text-hud-accent/[0.03] whitespace-nowrap leading-none text-right"
           style="font-size: clamp(60px, 12vw, 200px); transform: rotate(5deg);"
         >
@@ -231,8 +239,8 @@ async function installApp() {
       </div>
 
       <!-- Soft Static Accent Scanlines -->
-      <div 
-        class="absolute inset-0 opacity-[0.05] pointer-events-none z-[1]" 
+      <div
+        class="absolute inset-0 opacity-[0.05] pointer-events-none z-[1]"
         :style="{ background: `repeating-linear-gradient(0deg, rgba(var(--hud-accent-rgb), 0.3) 0px, rgba(var(--hud-accent-rgb), 0.3) 1px, transparent 1px, transparent 6px)` }"
       />
 
@@ -242,19 +250,21 @@ async function installApp() {
       <!-- Digital Artifacts (Erratic & Sticky) -->
       <div class="absolute inset-0 z-[3] pointer-events-none overflow-hidden opacity-20">
         <!-- Rapid Jitter (Calmed) -->
-        <div class="absolute inset-x-0 h-[1px] bg-white/40 animate-erratic-line" style="top: 20%" />
-        
-        <!-- Sticky Persistence Line (Sticks then Fades) -->
-        <div 
-          class="absolute inset-x-0 h-[1px] animate-sticky-line" 
-          :style="{ backgroundColor: 'var(--hud-accent)', top: '45%' }" 
+        <div
+          class="absolute inset-x-0 h-[1px] bg-white/40 animate-erratic-line"
+          style="top: 20%"
         />
-        <div 
-          class="absolute inset-x-0 h-[1px] animate-sticky-line" 
-          :style="{ backgroundColor: 'var(--hud-accent)', top: '75%', animationDelay: '-4s' }" 
+
+        <!-- Sticky Persistence Line (Sticks then Fades) -->
+        <div
+          class="absolute inset-x-0 h-[1px] animate-sticky-line"
+          :style="{ backgroundColor: 'var(--hud-accent)', top: '45%' }"
+        />
+        <div
+          class="absolute inset-x-0 h-[1px] animate-sticky-line"
+          :style="{ backgroundColor: 'var(--hud-accent)', top: '75%', animationDelay: '-4s' }"
         />
       </div>
-
 
       <div class="relative z-10 max-w-7xl mx-auto px-6 w-full flex flex-col md:flex-row items-center justify-between gap-6">
         <div class="flex flex-col items-center md:items-start gap-3">
@@ -271,12 +281,12 @@ async function installApp() {
             DEPLOYMENT
           </p>
           <button
-            @click="showInstallBtn ? installApp() : showInstallGuide = true"
             class="group flex items-center gap-3 px-8 py-4 bg-white/5 border border-white/10 rounded-xl hover:bg-hud-accent/10 hover:border-hud-accent/30 transition-all active:scale-95"
+            @click="showInstallBtn ? installApp() : showInstallGuide = true"
           >
-            <UIcon 
-              :name="showInstallBtn ? 'i-lucide-download' : 'i-lucide-monitor-smartphone'" 
-              class="w-4 h-4 text-hud-accent group-hover:animate-pulse" 
+            <UIcon
+              :name="showInstallBtn ? 'i-lucide-download' : 'i-lucide-monitor-smartphone'"
+              class="w-4 h-4 text-hud-accent group-hover:animate-pulse"
             />
             <span class="font-orbitron text-[9px] text-white tracking-[0.4em] uppercase">
               {{ showInstallBtn ? 'Install App' : 'Get App Info' }}

@@ -29,12 +29,15 @@ const style = computed(() => {
     <!-- Background elements -->
     <div class="absolute inset-0 z-0 panel-grid-mesh opacity-[0.15]" />
     <div class="absolute inset-0 z-0 panel-scanlines opacity-20" />
-    
+
     <div class="relative z-10 max-w-7xl mx-auto px-6 flex flex-col lg:flex-row items-center justify-between gap-16 lg:gap-24">
       <!-- Left side: The Wording -->
       <div class="flex-col items-center lg:items-start gap-6 flex-1 text-center lg:text-left space-y-6">
         <div class="flex items-center gap-3 justify-center lg:justify-start">
-          <div class="w-2.5 h-2.5 animate-ping bg-hud-accent" style="box-shadow: 0 0 10px var(--hud-accent)" />
+          <div
+            class="w-2.5 h-2.5 animate-ping bg-hud-accent"
+            style="box-shadow: 0 0 10px var(--hud-accent)"
+          />
           <h3 class="font-mono text-[10px] md:text-[11px] text-hud-accent tracking-[0.8em] uppercase opacity-60">
             {{ data.label }}
           </h3>
@@ -56,9 +59,9 @@ const style = computed(() => {
             src="/images/umph.png"
             alt="UMPH"
             class="relative z-0 w-full h-auto object-contain transition-all duration-700 animate-image-glitch"
-            :style="{ 
+            :style="{
               '--base-filter': `sepia(1) saturate(10) hue-rotate(${style.hue}) brightness(1.1) contrast(1.4)`,
-              filter: `var(--base-filter)`
+              'filter': `var(--base-filter)`
             }"
           />
         </div>
@@ -81,7 +84,7 @@ const style = computed(() => {
             </span>
           </div>
 
-          <div 
+          <div
             class="relative z-10 w-14 h-14 flex-shrink-0 flex items-center justify-center rounded-full transition-all group-hover/btn:scale-110 shadow-lg group-hover/btn:-rotate-12 overflow-hidden"
             :style="{ backgroundColor: 'var(--hud-accent)', color: 'black' }"
           >

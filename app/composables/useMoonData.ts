@@ -150,7 +150,7 @@ export function useMoonData() {
     effectiveLng,
     effectiveTime,
     locationStatus,
-    initGeolocation,
+    initGeolocation
   } = useObserverContext()
 
   onMounted(async () => {
@@ -304,11 +304,9 @@ export function useMoonData() {
         const rotations = calculateLunarRotation(illum.angle, pos.parallacticAngle)
         textureRotation.value = rotations.textureRotation
         limbRotation.value = rotations.limbRotation
-      }
-      catch {
+      } catch {
         hasError.value = true
-      }
-      finally {
+      } finally {
         isLoading.value = false
       }
     })
@@ -350,6 +348,6 @@ export function useMoonData() {
     nextPerigee, nextApogee,
     zodiac, zodiacSymbol,
     constellation,
-    locationStatus,
+    locationStatus
   }
 }

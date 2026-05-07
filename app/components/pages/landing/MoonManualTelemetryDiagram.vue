@@ -83,7 +83,7 @@ const quadrant = computed(() => {
 <template>
   <div class="relative w-full border border-hud-accent/20 rounded-2xl bg-black/40 overflow-hidden p-6 sm:p-10 bento-flicker">
     <div class="panel-grid-mesh opacity-10 absolute inset-0 pointer-events-none" />
-    
+
     <!-- Status Bar -->
     <div class="relative z-10 flex justify-between items-center mb-8 border-b border-white/10 pb-4">
       <div class="flex items-center gap-3">
@@ -102,13 +102,33 @@ const quadrant = computed(() => {
       xmlns="http://www.w3.org/2000/svg"
     >
       <defs>
-        <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stop-color="var(--hud-accent)" stop-opacity="0.05" />
-          <stop offset="100%" stop-color="transparent" />
+        <linearGradient
+          id="skyGrad"
+          x1="0%"
+          y1="0%"
+          x2="0%"
+          y2="100%"
+        >
+          <stop
+            offset="0%"
+            stop-color="var(--hud-accent)"
+            stop-opacity="0.05"
+          />
+          <stop
+            offset="100%"
+            stop-color="transparent"
+          />
         </linearGradient>
         <filter id="moonGlow">
-          <feGaussianBlur stdDeviation="3" result="blur" />
-          <feComposite in="SourceGraphic" in2="blur" operator="over" />
+          <feGaussianBlur
+            stdDeviation="3"
+            result="blur"
+          />
+          <feComposite
+            in="SourceGraphic"
+            in2="blur"
+            operator="over"
+          />
         </filter>
       </defs>
 
@@ -123,23 +143,62 @@ const quadrant = computed(() => {
       />
 
       <!-- Horizon Line -->
-      <line x1="0" y1="220" x2="400" y2="220" stroke="var(--hud-accent)" stroke-width="1.5" />
+      <line
+        x1="0"
+        y1="220"
+        x2="400"
+        y2="220"
+        stroke="var(--hud-accent)"
+        stroke-width="1.5"
+      />
       <g opacity="0.3">
-        <line v-for="i in 11" :key="i" :x1="(i-1)*40" y1="220" :x2="(i-1)*40" y2="225" stroke="currentColor" stroke-width="1" />
+        <line
+          v-for="i in 11"
+          :key="i"
+          :x1="(i-1)*40"
+          y1="220"
+          :x2="(i-1)*40"
+          y2="225"
+          stroke="currentColor"
+          stroke-width="1"
+        />
       </g>
 
       <!-- Compass Labels -->
       <g class="font-mono text-[9px] fill-white/40 tracking-widest uppercase">
-        <text x="5" y="240" text-anchor="start">
+        <text
+          x="5"
+          y="240"
+          text-anchor="start"
+        >
           {{ orientation.leftLabel }}
-          <tspan x="5" dy="12" fill="var(--hud-accent)" font-weight="bold">[{{ orientation.leftType }}]</tspan>
+          <tspan
+            x="5"
+            dy="12"
+            fill="var(--hud-accent)"
+            font-weight="bold"
+          >[{{ orientation.leftType }}]</tspan>
         </text>
-        <text x="200" y="240" text-anchor="middle" fill="white">
+        <text
+          x="200"
+          y="240"
+          text-anchor="middle"
+          fill="white"
+        >
           {{ orientation.centerLabel }}
         </text>
-        <text x="395" y="240" text-anchor="end">
+        <text
+          x="395"
+          y="240"
+          text-anchor="end"
+        >
           {{ orientation.rightLabel }}
-          <tspan x="395" dy="12" fill="var(--hud-accent)" font-weight="bold">[{{ orientation.rightType }}]</tspan>
+          <tspan
+            x="395"
+            dy="12"
+            fill="var(--hud-accent)"
+            font-weight="bold"
+          >[{{ orientation.rightType }}]</tspan>
         </text>
       </g>
 
@@ -156,7 +215,7 @@ const quadrant = computed(() => {
           stroke-dasharray="4 2"
           opacity="0.4"
         />
-        
+
         <!-- Target Bubble -->
         <circle
           :cx="targetX"
@@ -170,9 +229,27 @@ const quadrant = computed(() => {
 
         <!-- Annotation -->
         <g :transform="`translate(${targetX > 300 ? targetX - 100 : targetX + 15}, ${targetY})`">
-          <rect x="0" y="-35" width="90" height="40" fill="black" fill-opacity="0.8" stroke="var(--hud-accent)" stroke-width="0.5" rx="4" />
-          <text x="8" y="-22" class="font-mono text-[8px] fill-hud-accent font-bold uppercase">Target: LUNA</text>
-          <text x="8" y="-10" class="font-mono text-[9px] fill-white uppercase tracking-tighter">
+          <rect
+            x="0"
+            y="-35"
+            width="90"
+            height="40"
+            fill="black"
+            fill-opacity="0.8"
+            stroke="var(--hud-accent)"
+            stroke-width="0.5"
+            rx="4"
+          />
+          <text
+            x="8"
+            y="-22"
+            class="font-mono text-[8px] fill-hud-accent font-bold uppercase"
+          >Target: LUNA</text>
+          <text
+            x="8"
+            y="-10"
+            class="font-mono text-[9px] fill-white uppercase tracking-tighter"
+          >
             {{ azimuthDisplay }}° AZ / {{ altitudeDisplay }}° ALT
           </text>
         </g>
@@ -192,9 +269,29 @@ const quadrant = computed(() => {
 
       <!-- Out of View Indicator -->
       <g v-else>
-        <rect x="100" y="80" width="200" height="60" fill="rgba(255,0,0,0.05)" stroke="red" stroke-width="0.5" stroke-dasharray="4 4" rx="8" />
-        <text x="200" y="105" text-anchor="middle" class="font-mono text-[10px] fill-red-400 font-black uppercase">TARGET_OUT_OF_FOV</text>
-        <text x="200" y="125" text-anchor="middle" class="font-mono text-[8px] fill-white/60 uppercase">
+        <rect
+          x="100"
+          y="80"
+          width="200"
+          height="60"
+          fill="rgba(255,0,0,0.05)"
+          stroke="red"
+          stroke-width="0.5"
+          stroke-dasharray="4 4"
+          rx="8"
+        />
+        <text
+          x="200"
+          y="105"
+          text-anchor="middle"
+          class="font-mono text-[10px] fill-red-400 font-black uppercase"
+        >TARGET_OUT_OF_FOV</text>
+        <text
+          x="200"
+          y="125"
+          text-anchor="middle"
+          class="font-mono text-[8px] fill-white/60 uppercase"
+        >
           Moon is in the {{ quadrant.label }} sector ({{ azimuthDisplay }}°)
         </text>
         <path
@@ -212,25 +309,37 @@ const quadrant = computed(() => {
       <div class="space-y-3">
         <label class="font-mono text-[10px] text-hud-accent uppercase tracking-widest font-black">Azimuth Alignment</label>
         <p class="text-xs text-white/60 leading-relaxed uppercase">
-          Currently looking <span class="text-white font-bold">{{ orientation.looking }}</span>. 
-          The Moon is at <span class="text-hud-accent font-bold">{{ azimuthDisplay }}°</span>, which places it in the 
-          <span class="text-white font-bold">{{ quadrant.label }}</span> sector. 
+          Currently looking <span class="text-white font-bold">{{ orientation.looking }}</span>.
+          The Moon is at <span class="text-hud-accent font-bold">{{ azimuthDisplay }}°</span>, which places it in the
+          <span class="text-white font-bold">{{ quadrant.label }}</span> sector.
           {{ isInView ? 'Use the center point of the diagram to calibrate your heading.' : 'Rotate your position to align with the target sector.' }}
         </p>
       </div>
       <div class="space-y-3">
         <label class="font-mono text-[10px] text-hud-accent uppercase tracking-widest font-black">Altitude Calibration</label>
         <div class="text-xs text-white/60 leading-relaxed uppercase">
-          The Moon's altitude is <span class="text-hud-accent font-bold">{{ altitudeDisplay }}°</span>. 
+          The Moon's altitude is <span class="text-hud-accent font-bold">{{ altitudeDisplay }}°</span>.
           <span v-if="isVisible">
-            <template v-for="part in useTitleParser(`Measure #h#${Math.ceil(altitude / 10)} fists UP#/h# from the horizon to find the center of the lunar disk.`)" :key="part.id">
-              <span v-if="part.type === 'highlight'" class="text-white drop-shadow-[0_0_6px_white] font-bold">{{ part.content }}</span>
+            <template
+              v-for="part in useTitleParser(`Measure #h#${Math.ceil(altitude / 10)} fists UP#/h# from the horizon to find the center of the lunar disk.`)"
+              :key="part.id"
+            >
+              <span
+                v-if="part.type === 'highlight'"
+                class="text-white drop-shadow-[0_0_6px_white] font-bold"
+              >{{ part.content }}</span>
               <span v-else>{{ part.content }}</span>
             </template>
           </span>
           <span v-else>
-            <template v-for="part in useTitleParser(`Current coordinates are #h#below the horizon#/h#. Measure #h#${Math.ceil(Math.abs(altitude) / 10)} fists DOWN#/h# from the horizon to locate its hidden position.`)" :key="part.id">
-              <span v-if="part.type === 'highlight'" class="text-white drop-shadow-[0_0_6px_white] font-bold">{{ part.content }}</span>
+            <template
+              v-for="part in useTitleParser(`Current coordinates are #h#below the horizon#/h#. Measure #h#${Math.ceil(Math.abs(altitude) / 10)} fists DOWN#/h# from the horizon to locate its hidden position.`)"
+              :key="part.id"
+            >
+              <span
+                v-if="part.type === 'highlight'"
+                class="text-white drop-shadow-[0_0_6px_white] font-bold"
+              >{{ part.content }}</span>
               <span v-else>{{ part.content }}</span>
             </template>
           </span>

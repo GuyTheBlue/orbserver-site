@@ -28,8 +28,8 @@ const style = computed(() => themeMap[currentTheme.value] || themeMap.cyan)
     <div
       class="relative w-full border-t-2 border-b transition-all duration-500 overflow-hidden group py-16 sm:py-24 broken-terminal-jitter bento-flicker"
       :style="{
-        borderColor: `rgba(${style.rgb}, 0.3)`,
-        backgroundColor: `rgba(${style.rgb}, 0.03)`,
+        'borderColor': `rgba(${style.rgb}, 0.3)`,
+        'backgroundColor': `rgba(${style.rgb}, 0.03)`,
         '--anomaly-color': style.hex,
         '--anomaly-rgb': style.rgb
       }"
@@ -86,7 +86,6 @@ const style = computed(() => themeMap[currentTheme.value] || themeMap.cyan)
 
         <!-- The Terminal / CTA Block -->
         <div class="flex flex-col items-center lg:items-end gap-12 w-full lg:w-auto">
-          
           <!-- IMAGE SECTION (Bigger in Stacked Mode) -->
           <div
             class="relative w-64 sm:w-60 group-hover:scale-105 transition-all duration-700 p-8 bg-black rounded-[2rem] border overflow-hidden"
@@ -96,9 +95,9 @@ const style = computed(() => themeMap[currentTheme.value] || themeMap.cyan)
             <NuxtImg
               src="/images/umph.png"
               class="relative z-0 w-full h-auto object-contain brightness-125 contrast-125 transition-all duration-500 animate-image-glitch"
-              :style="{ 
+              :style="{
                 '--base-filter': `sepia(1) saturate(10) hue-rotate(${style.hue}) brightness(1.1) contrast(1.4)`,
-                filter: `var(--base-filter)`
+                'filter': `var(--base-filter)`
               }"
               alt="The Umph"
             />
@@ -122,7 +121,7 @@ const style = computed(() => themeMap[currentTheme.value] || themeMap.cyan)
             >
               <div class="flex flex-col items-start leading-none text-left relative z-10">
                 <span class="font-mono text-[9px] text-white/40 tracking-[0.4em] uppercase mb-2">CONNECT_FEED</span>
-                <span 
+                <span
                   class="font-orbitron font-black text-sm md:text-base tracking-[0.2em] uppercase transition-colors duration-300 animate-text-flicker group-hover/btn:text-black"
                   :style="{ color: style.hex }"
                 >
@@ -130,7 +129,7 @@ const style = computed(() => themeMap[currentTheme.value] || themeMap.cyan)
                 </span>
               </div>
 
-              <div 
+              <div
                 class="relative z-10 w-14 h-14 flex-shrink-0 flex items-center justify-center rounded-full transition-all group-hover/btn:scale-110 shadow-lg group-hover/btn:-rotate-12 overflow-hidden"
                 :style="{ backgroundColor: style.hex, color: 'black' }"
               >

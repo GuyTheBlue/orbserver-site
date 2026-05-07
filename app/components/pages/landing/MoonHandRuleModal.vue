@@ -103,13 +103,13 @@ const emit = defineEmits(['close'])
 </script>
 
 <template>
-  <UModal 
-    :open="show" 
-    @update:open="(val) => { if (!val) emit('close') }"
-    :ui="{ 
+  <UModal
+    :open="show"
+    :ui="{
       content: 'p-0 sm:p-0 bg-transparent shadow-none ring-0 border-0 max-w-4xl w-full',
       overlay: 'backdrop-blur-md bg-black/60'
     }"
+    @update:open="(val) => { if (!val) emit('close') }"
   >
     <template #content>
       <div class="bg-[#020a14] border border-hud-accent/40 shadow-[0_0_120px_rgba(0,0,0,1)] ring-1 ring-hud-accent/30 overflow-hidden relative rounded-xl flex flex-col max-h-[90vh]">
@@ -184,8 +184,14 @@ const emit = defineEmits(['close'])
                         Target Sector: <span class="text-hud-accent uppercase">{{ targetSky }}</span>
                       </p>
                       <p class="text-base sm:text-xl text-white/70">
-                        <template v-for="part in useTitleParser(hemisphereManualText)" :key="part.id">
-                          <span v-if="part.type === 'highlight'" class="text-hud-accent font-bold">{{ part.content }}</span>
+                        <template
+                          v-for="part in useTitleParser(hemisphereManualText)"
+                          :key="part.id"
+                        >
+                          <span
+                            v-if="part.type === 'highlight'"
+                            class="text-hud-accent font-bold"
+                          >{{ part.content }}</span>
                           <span v-else>{{ part.content }}</span>
                         </template>
                       </p>
@@ -196,8 +202,14 @@ const emit = defineEmits(['close'])
                         <ul class="space-y-4 list-disc pl-6 text-sm sm:text-lg text-white/70 leading-relaxed">
                           <li>Identify where the <span class="text-white">Sunset</span> point was today (West).</li>
                           <li>
-                            <template v-for="part in useTitleParser(orientationGuide)" :key="part.id">
-                              <span v-if="part.type === 'highlight'" class="text-hud-accent font-bold">{{ part.content }}</span>
+                            <template
+                              v-for="part in useTitleParser(orientationGuide)"
+                              :key="part.id"
+                            >
+                              <span
+                                v-if="part.type === 'highlight'"
+                                class="text-hud-accent font-bold"
+                              >{{ part.content }}</span>
                               <span v-else>{{ part.content }}</span>
                             </template>
                           </li>
@@ -238,7 +250,11 @@ const emit = defineEmits(['close'])
                   How to Locate altitude of moon [{{ altitude.toFixed(1) }}°]
                 </h5>
                 <div class="flex flex-col gap-12 w-full">
-                  <div v-for="(step, i) in dynamicSteps" :key="i" class="flex flex-col w-full text-left">
+                  <div
+                    v-for="(step, i) in dynamicSteps"
+                    :key="i"
+                    class="flex flex-col w-full text-left"
+                  >
                     <div class="h-[1px] w-full bg-hud-accent/30 mb-8" />
                     <div class="font-orbitron font-black text-hud-accent text-sm sm:text-xl tracking-[0.4em] mb-4">
                       {{ (i + 1).toString().padStart(2, '0') }}
@@ -247,8 +263,14 @@ const emit = defineEmits(['close'])
                       {{ step.title }}
                     </div>
                     <div class="text-base sm:text-xl text-white/50 leading-relaxed font-medium">
-                      <template v-for="part in useTitleParser(step.desc)" :key="part.id">
-                        <span v-if="part.type === 'highlight'" class="text-white drop-shadow-[0_0_8px_white]">{{ part.content }}</span>
+                      <template
+                        v-for="part in useTitleParser(step.desc)"
+                        :key="part.id"
+                      >
+                        <span
+                          v-if="part.type === 'highlight'"
+                          class="text-white drop-shadow-[0_0_8px_white]"
+                        >{{ part.content }}</span>
                         <span v-else>{{ part.content }}</span>
                       </template>
                     </div>

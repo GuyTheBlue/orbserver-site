@@ -8,11 +8,11 @@ const props = defineProps<{
 
 const chars = '!@#$%^&*()_+-=[]{}|;:,.<>/?'
 const words = ref(props.text.split(' ').map(w => ({ original: w, current: w, isGlitching: false })))
-let intervalId: any = null
+let intervalId: ReturnType<typeof setTimeout> | null = null
 
 function performGlitch() {
   if (!import.meta.client) return
-  
+
   // Randomly pick 1 to 3 words to glitch
   const targetCount = Math.floor(Math.random() * 2) + 1
   const targetIndices = new Set<number>()
@@ -21,7 +21,7 @@ function performGlitch() {
   }
 
   // Corrupt the target words
-  targetIndices.forEach(idx => {
+  targetIndices.forEach((idx) => {
     const word = words.value[idx]
     word.isGlitching = true
     word.current = word.original
@@ -29,10 +29,10 @@ function performGlitch() {
       .map(char => Math.random() < 0.4 ? chars[Math.floor(Math.random() * chars.length)] : char)
       .join('')
   })
-  
+
   // Return to normal after a short "pop"
   setTimeout(() => {
-    targetIndices.forEach(idx => {
+    targetIndices.forEach((idx) => {
       const word = words.value[idx]
       word.isGlitching = false
       word.current = word.original
@@ -68,9 +68,12 @@ watch(() => props.text, (newVal) => {
 
 <template>
   <span class="glitch-sentence">
-    <template v-for="(word, i) in words" :key="i">
-      <span 
-        class="glitch-word" 
+    <template
+      v-for="(word, i) in words"
+      :key="i"
+    >
+      <span
+        class="glitch-word"
         :class="{ 'is-glitching-red': word.isGlitching }"
       >
         {{ word.current }}
