@@ -71,14 +71,18 @@ const moonLabelY = computed(() => moonOrbitY.value < ORB.cy ? moonOrbitY.value -
       {{ distFormatted }}<span class="text-xl text-white/30 ml-4 font-mono">KM</span>
     </div>
 
-    <div class="relative z-10 h-2 bg-white/5 rounded-full mb-3">
+    <div class="relative z-10 h-[2px] bg-white/5 rounded-full mb-3">
+      <!-- The "Softer Line" (Background) -->
+      <div class="absolute inset-0 bg-white/5 rounded-full" />
+      <!-- The "Accent Line" (Progress) -->
       <div
-        class="absolute inset-y-0 left-0 bg-hud-accent shadow-[var(--hud-accent-glow)] rounded-full transition-all duration-1000"
+        class="absolute inset-y-0 left-0 bg-hud-accent shadow-[0_0_10px_rgba(var(--hud-accent-rgb),0.5)] rounded-full transition-all duration-1000"
         :style="{ width: `${distRatio}%` }"
       />
+      <!-- Progress Tip Notch (Technical look instead of a dot) -->
       <div
-        class="absolute -top-1.5 w-5 h-5 bg-white rounded-full transition-all duration-1000"
-        :style="{ left: `calc(${distRatio}% - 10px)` }"
+        class="absolute top-1/2 -translate-y-1/2 w-[2px] h-3 bg-white shadow-[0_0_8px_white] transition-all duration-1000"
+        :style="{ left: `calc(${distRatio}% - 1px)` }"
       />
     </div>
 
