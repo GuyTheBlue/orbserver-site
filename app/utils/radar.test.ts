@@ -56,9 +56,9 @@ describe('🔭 MOON ORBITAL RADAR LOGIC', () => {
 
   it('supports dynamic orbital bounds for high-fidelity scaling', () => {
     // Simulate a "Supermoon" month where Perigee is closer than average
-    const superPerigee = 350000 
+    const superPerigee = 350000
     const averageApogee = 406700
-    
+
     // At 350,000km, the ratio should be 0% with these custom bounds
     const result = calculateRadarTelemetry(superPerigee, false, superPerigee, averageApogee)
     expect(result.ratio).toBe(0)
