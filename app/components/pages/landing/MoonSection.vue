@@ -16,7 +16,7 @@ const {
   moonrise, moonset,
   apparentDiameter, apparentDiameterRatio, apparentVsMean,
   velocity, lightTravelTime, subLunarPoint,
-  ra, dec, nextPerigee, nextApogee, zodiac,
+  ra, dec, nextPerigee, nextApogee, perigeeDistance, apogeeDistance, zodiac,
   constellation,
   locationStatus
 } = useMoonData()
@@ -420,6 +420,8 @@ const { termLines, termCursor } = useMoonTerminal(lunar?.terminal ?? [], termina
           <MoonOrbitalRadar
             :distance="distance ?? 0"
             :moving-toward-perigee="movingTowardPerigee"
+            :perigee-distance="perigeeDistance"
+            :apogee-distance="apogeeDistance"
             :lunar="lunar"
           />
 

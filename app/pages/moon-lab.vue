@@ -295,6 +295,8 @@
           <MoonOrbitalRadar
             :distance="isDistanceOverridden ? localSimDistance : (distance ?? 0)"
             :moving-toward-perigee="isDistanceOverridden ? localSimMovingTowardPerigee : movingTowardPerigee"
+            :perigee-distance="perigeeDistance"
+            :apogee-distance="apogeeDistance"
             :lunar="landingData.lunar"
           />
         </div>
@@ -320,7 +322,7 @@ import { landingData } from '../utils/landingData'
 import MoonPhase from '../components/shared/MoonPhase.vue'
 import MoonOrbitalRadar from '../components/pages/landing/MoonOrbitalRadar.vue'
 
-const { fraction, phase, textureRotation, limbRotation, isLoading, distance, movingTowardPerigee } = useMoonData()
+const { fraction, phase, textureRotation, limbRotation, isLoading, distance, movingTowardPerigee, perigeeDistance, apogeeDistance } = useMoonData()
 const { actualLat, actualLng, actualTime, simLat, simLng, simTimeMinutes, isOverridden, setOverride, resetToActual } = useObserverContext()
 
 const showShadow = ref(true)

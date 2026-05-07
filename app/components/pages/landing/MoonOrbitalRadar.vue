@@ -6,6 +6,8 @@ import { calculateRadarTelemetry, RADAR_CONFIG } from '~/utils/radar'
 interface Props {
   distance: number
   movingTowardPerigee: boolean
+  perigeeDistance?: number
+  apogeeDistance?: number
   lunar: {
     labels: Record<string, string>
     etymology: {
@@ -18,7 +20,12 @@ interface Props {
 const props = defineProps<Props>()
 
 // ── Calculations ─────────────────────────────────────────────────────────────
-const tel = computed(() => calculateRadarTelemetry(props.distance, props.movingTowardPerigee))
+const tel = computed(() => calculateRadarTelemetry(
+  props.distance,
+  props.movingTowardPerigee,
+  props.perigeeDistance,
+  props.apogeeDistance
+))
 
 const distFormatted = computed(() => props.distance?.toLocaleString('en-GB') ?? '—')
 const distMilesFormatted = computed(() => tel.value.miles.toLocaleString('en-GB'))

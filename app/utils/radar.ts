@@ -12,11 +12,11 @@ export const RADAR_CONFIG = {
   // SVG Geometry Constants
   SVG: {
     cx: 140, // Ellipse Center X
-    cy: 62,  // Ellipse Center Y
-    rx: 92,  // Radius X
-    ry: 56,  // Radius Y
-    ex: 67,  // Earth X
-    ey: 62   // Earth Y
+    cy: 62, // Ellipse Center Y
+    rx: 92, // Radius X
+    ry: 56, // Radius Y
+    ex: 67, // Earth X
+    ey: 62 // Earth Y
   }
 } as const
 
@@ -33,11 +33,18 @@ export interface RadarTelemetry {
  * Calculates the visual telemetry for the Orbital Radar module.
  * @param distance Geocentric distance in KM
  * @param movingTowardPerigee Direction of travel
+ * @param minDist Actual Perigee distance for the current cycle (optional)
+ * @param maxDist Actual Apogee distance for the current cycle (optional)
  */
-export function calculateRadarTelemetry(distance: number, movingTowardPerigee: boolean): RadarTelemetry {
+export function calculateRadarTelemetry(
+  distance: number,
+  movingTowardPerigee: boolean,
+  minDist: number = RADAR_CONFIG.MIN_DIST_KM,
+  maxDist: number = RADAR_CONFIG.MAX_DIST_KM
+): RadarTelemetry {
   // 1. Calculate the proximity ratio (0 = Perigee, 100 = Apogee)
   const ratio = Math.min(100, Math.max(0,
-    ((distance - RADAR_CONFIG.MIN_DIST_KM) / (RADAR_CONFIG.MAX_DIST_KM - RADAR_CONFIG.MIN_DIST_KM)) * 100
+    ((distance - minDist) / (maxDist - minDist)) * 100
   ))
 
   // 2. Map ratio to base angle (Perigee is at PI, Apogee is at 0)

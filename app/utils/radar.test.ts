@@ -5,7 +5,7 @@ describe('🔭 MOON ORBITAL RADAR LOGIC', () => {
   it('identifies Perigee correctly (0% ratio)', () => {
     const distance = RADAR_CONFIG.MIN_DIST_KM
     const result = calculateRadarTelemetry(distance, false)
-    
+
     expect(result.ratio).toBe(0)
     // Angle at Perigee should be PI (180 degrees)
     expect(result.angle).toBeCloseTo(Math.PI)
@@ -16,7 +16,7 @@ describe('🔭 MOON ORBITAL RADAR LOGIC', () => {
   it('identifies Apogee correctly (100% ratio)', () => {
     const distance = RADAR_CONFIG.MAX_DIST_KM
     const result = calculateRadarTelemetry(distance, false)
-    
+
     expect(result.ratio).toBe(100)
     // Angle at Apogee (receding) should be 0
     expect(result.angle).toBeCloseTo(0)
@@ -27,11 +27,11 @@ describe('🔭 MOON ORBITAL RADAR LOGIC', () => {
   it('switches to the top half of the orbit when approaching perigee', () => {
     // Use a distance exactly in the middle of the range
     const midDistance = (RADAR_CONFIG.MIN_DIST_KM + RADAR_CONFIG.MAX_DIST_KM) / 2
-    
+
     // Case A: Receding (Bottom half)
     const receding = calculateRadarTelemetry(midDistance, false)
     expect(receding.y).toBeGreaterThan(RADAR_CONFIG.SVG.cy)
-    
+
     // Case B: Approaching (Top half)
     const approaching = calculateRadarTelemetry(midDistance, true)
     expect(approaching.y).toBeLessThan(RADAR_CONFIG.SVG.cy)

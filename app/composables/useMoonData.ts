@@ -135,6 +135,8 @@ const ra = ref('—')
 const dec = ref('—')
 const nextPerigee = ref('—')
 const nextApogee = ref('—')
+const perigeeDistance = ref(356500)
+const apogeeDistance = ref(406700)
 const zodiac = ref('—')
 const zodiacSymbol = ref('—')
 const constellation = ref('—')
@@ -273,10 +275,12 @@ export function useMoonData() {
             const dc = getGeocentricDistance(tc)
             if (!foundPerigee && db < da && db < dc) {
               nextPerigee.value = tb.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })
+              perigeeDistance.value = Math.round(db)
               foundPerigee = true
             }
             if (!foundApogee && db > da && db > dc) {
               nextApogee.value = tb.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })
+              apogeeDistance.value = Math.round(db)
               foundApogee = true
             }
           }
@@ -346,6 +350,7 @@ export function useMoonData() {
     subLunarPoint,
     ra, dec,
     nextPerigee, nextApogee,
+    perigeeDistance, apogeeDistance,
     zodiac, zodiacSymbol,
     constellation,
     locationStatus
