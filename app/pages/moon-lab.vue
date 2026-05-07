@@ -231,10 +231,12 @@
 
           <!-- Radar Manual Override (Lab Only) -->
           <div class="p-8 border border-hud-accent/20 bg-hud-accent/5 rounded-2xl space-y-8 relative overflow-hidden">
-            <div class="absolute top-0 right-0 px-3 py-1 bg-hud-accent text-black font-black text-[9px] uppercase tracking-widest">Lab_Tool</div>
+            <div class="absolute top-0 right-0 px-3 py-1 bg-hud-accent text-black font-black text-[9px] uppercase tracking-widest">
+              Lab_Tool
+            </div>
             <div class="flex justify-between items-center relative z-10">
               <label class="text-[10px] uppercase tracking-[0.4em] text-hud-accent font-bold">Radar Manual Override</label>
-              <button 
+              <button
                 class="px-3 py-1 border text-[9px] uppercase tracking-widest transition-colors"
                 :class="isDistanceOverridden ? 'border-hud-accent bg-hud-accent text-black' : 'border-white/20 text-white/40'"
                 @click="isDistanceOverridden = !isDistanceOverridden"
@@ -243,7 +245,10 @@
               </button>
             </div>
 
-            <div class="space-y-6 relative z-10" :class="{ 'opacity-30 pointer-events-none': !isDistanceOverridden }">
+            <div
+              class="space-y-6 relative z-10"
+              :class="{ 'opacity-30 pointer-events-none': !isDistanceOverridden }"
+            >
               <div class="space-y-4">
                 <div class="flex justify-between items-end">
                   <label class="text-[9px] uppercase tracking-widest text-white/40">Manual Distance (KM)</label>
@@ -262,14 +267,14 @@
               <div class="flex items-center justify-between pt-2">
                 <label class="text-[9px] uppercase tracking-widest text-white/40">Direction of travel</label>
                 <div class="flex gap-2">
-                  <button 
+                  <button
                     class="px-4 py-2 border text-[9px] uppercase tracking-widest transition-all"
                     :class="localSimMovingTowardPerigee ? 'border-hud-accent bg-hud-accent/20 text-hud-accent' : 'border-white/10 text-white/20'"
                     @click="localSimMovingTowardPerigee = true"
                   >
                     Approaching (Top)
                   </button>
-                  <button 
+                  <button
                     class="px-4 py-2 border text-[9px] uppercase tracking-widest transition-all"
                     :class="!localSimMovingTowardPerigee ? 'border-hud-accent bg-hud-accent/20 text-hud-accent' : 'border-white/10 text-white/20'"
                     @click="localSimMovingTowardPerigee = false"
@@ -282,7 +287,7 @@
           </div>
         </section>
       </main>
-      
+
       <!-- New Module Simulation Row -->
       <section class="max-w-6xl mx-auto mt-12 grid grid-cols-1 lg:grid-cols-12 gap-12">
         <div class="lg:col-span-12">
