@@ -1,18 +1,13 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import MoonEtymology from './MoonEtymology.vue'
+import { calculateRadarTelemetry, RADAR_CONFIG } from '~/utils/radar'
 
 interface Props {
   distance: number
   movingTowardPerigee: boolean
   lunar: {
-    labels: {
-      distRadar: string
-      orbitalPath: string
-      currentDist: string
-      approachingPerigee: string
-      recedingApogee: string
-    }
+    labels: Record<string, string>
     etymology: {
       perigee: string
       apogee: string
@@ -23,28 +18,10 @@ interface Props {
 const props = defineProps<Props>()
 
 // ── Calculations ─────────────────────────────────────────────────────────────
-const distFormatted = computed(() => props.distance?.toLocaleString('en-GB') ?? '—')
-const distMilesFormatted = computed(() => {
-  if (!props.distance) return '—'
-  return Math.round(props.distance * 0.621371).toLocaleString('en-GB')
-})
-const distRatio = computed(() => {
-  if (!props.distance) return 0
-  // Range: 356,500km (Perigee) to 406,700km (Apogee)
-  return Math.min(100, Math.max(0, ((props.distance - 356500) / (406700 - 356500)) * 100))
-})
+const tel = computed(() => calculateRadarTelemetry(props.distance, props.movingTowardPerigee))
 
-// ── Orbital Diagram ──────────────────────────────────────────────────────────
-const ORB = { cx: 140, cy: 62, rx: 92, ry: 56, ex: 67, ey: 62 } as const
-const moonOrbitAngle = computed(() => {
-  const base = Math.PI * (1 - distRatio.value / 100)
-  // If approaching perigee (distance decreasing), use the top half of the orbit
-  // If receding toward apogee (distance increasing), use the bottom half
-  return props.movingTowardPerigee ? (Math.PI * 2 - base) : base
-})
-const moonOrbitX = computed(() => ORB.cx + ORB.rx * Math.cos(moonOrbitAngle.value))
-const moonOrbitY = computed(() => ORB.cy + ORB.ry * Math.sin(moonOrbitAngle.value))
-const moonLabelY = computed(() => moonOrbitY.value < ORB.cy ? moonOrbitY.value - 13 : moonOrbitY.value + 16)
+const distFormatted = computed(() => props.distance?.toLocaleString('en-GB') ?? '—')
+const distMilesFormatted = computed(() => tel.value.miles.toLocaleString('en-GB'))
 </script>
 
 <template>
@@ -75,7 +52,7 @@ const moonLabelY = computed(() => moonOrbitY.value < ORB.cy ? moonOrbitY.value -
       {{ distFormatted }}<span class="text-xl text-white/30 ml-4 font-mono">KM</span>
     </div>
     <div class="relative z-10 font-mono text-[10px] text-white/40 uppercase tracking-[0.3em] mb-6">
-      Equivalent to {{ distMilesFormatted }} MILES
+      {{ props.lunar.labels.radarEquivalent }} {{ distMilesFormatted }} MILES
     </div>
 
     <div class="relative z-10 h-[2px] bg-white/5 rounded-full mb-3">
@@ -84,17 +61,17 @@ const moonLabelY = computed(() => moonOrbitY.value < ORB.cy ? moonOrbitY.value -
       <!-- The "Accent Line" (Progress) -->
       <div
         class="absolute inset-y-0 left-0 bg-hud-accent shadow-[0_0_10px_rgba(var(--hud-accent-rgb),0.5)] rounded-full transition-all duration-1000"
-        :style="{ width: `${distRatio}%` }"
+        :style="{ width: `${tel.ratio}%` }"
       />
       <!-- Progress Tip Notch (Technical look instead of a dot) -->
       <div
         class="absolute top-1/2 -translate-y-1/2 w-[2px] h-3 bg-white shadow-[0_0_8px_white] transition-all duration-1000"
-        :style="{ left: `calc(${distRatio}% - 1px)` }"
+        :style="{ left: `calc(${tel.ratio}% - 1px)` }"
       />
     </div>
 
     <div class="relative z-10 flex justify-between font-mono text-[12px] md:text-[10px] text-white/60 md:text-white/30 uppercase tracking-[0.4em] mb-4">
-      <span>[PRG] NEAR</span><span>[APG] FAR</span>
+      <span>[{{ props.lunar.labels.radarPrg }}] NEAR</span><span>[{{ props.lunar.labels.radarApg }}] FAR</span>
     </div>
 
     <svg
@@ -123,10 +100,10 @@ const moonLabelY = computed(() => moonOrbitY.value < ORB.cy ? moonOrbitY.value -
         fill="url(#orbit-grid-radar)"
       />
       <ellipse
-        :cx="ORB.cx"
-        :cy="ORB.cy"
-        :rx="ORB.rx"
-        :ry="ORB.ry"
+        :cx="RADAR_CONFIG.SVG.cx"
+        :cy="RADAR_CONFIG.SVG.cy"
+        :rx="RADAR_CONFIG.SVG.rx"
+        :ry="RADAR_CONFIG.SVG.ry"
         fill="none"
         stroke="rgba(var(--hud-accent-rgb), 0.22)"
         stroke-width="0.8"
@@ -148,7 +125,7 @@ const moonLabelY = computed(() => moonOrbitY.value < ORB.cy ? moonOrbitY.value -
         font-size="6.5"
         fill="rgba(var(--hud-accent-rgb), 0.55)"
         letter-spacing="1"
-      >PRG</text>
+      >{{ props.lunar.labels.radarPrg }}</text>
       <line
         x1="232"
         y1="55"
@@ -165,52 +142,52 @@ const moonLabelY = computed(() => moonOrbitY.value < ORB.cy ? moonOrbitY.value -
         font-size="6.5"
         fill="rgba(var(--hud-accent-rgb), 0.35)"
         letter-spacing="1"
-      >APG</text>
+      >{{ props.lunar.labels.radarApg }}</text>
       <line
-        :x1="ORB.ex"
-        :y1="ORB.ey"
-        :x2="moonOrbitX"
-        :y2="moonOrbitY"
+        :x1="RADAR_CONFIG.SVG.ex"
+        :y1="RADAR_CONFIG.SVG.ey"
+        :x2="tel.x"
+        :y2="tel.y"
         stroke="rgba(var(--hud-accent-rgb), 0.12)"
         stroke-width="0.7"
         stroke-dasharray="2 4"
       />
       <circle
-        :cx="ORB.ex"
-        :cy="ORB.ey"
+        :cx="RADAR_CONFIG.SVG.ex"
+        :cy="RADAR_CONFIG.SVG.ey"
         r="6"
         fill="rgba(0,60,100,0.7)"
         stroke="rgba(var(--hud-accent-rgb), 0.9)"
         stroke-width="1.2"
       />
       <line
-        :x1="ORB.ex - 10"
-        :y1="ORB.ey"
-        :x2="ORB.ex + 10"
-        :y2="ORB.ey"
+        :x1="RADAR_CONFIG.SVG.ex - 10"
+        :y1="RADAR_CONFIG.SVG.ey"
+        :x2="RADAR_CONFIG.SVG.ex + 10"
+        :y2="RADAR_CONFIG.SVG.ey"
         stroke="rgba(var(--hud-accent-rgb), 0.55)"
         stroke-width="0.7"
       />
       <line
-        :x1="ORB.ex"
-        :y1="ORB.ey - 10"
-        :x2="ORB.ex"
-        :y2="ORB.ey + 10"
+        :x1="RADAR_CONFIG.SVG.ex"
+        :y1="RADAR_CONFIG.SVG.ey - 10"
+        :x2="RADAR_CONFIG.SVG.ex"
+        :y2="RADAR_CONFIG.SVG.ey + 10"
         stroke="rgba(var(--hud-accent-rgb), 0.55)"
         stroke-width="0.7"
       />
       <text
-        :x="ORB.ex"
-        :y="ORB.ey + 20"
+        :x="RADAR_CONFIG.SVG.ex"
+        :y="RADAR_CONFIG.SVG.ey + 20"
         text-anchor="middle"
         font-family="monospace"
         font-size="7"
         fill="rgba(var(--hud-accent-rgb), 0.8)"
         letter-spacing="1.5"
-      >EARTH</text>
+      >{{ props.lunar.labels.radarEarth }}</text>
       <circle
-        :cx="moonOrbitX"
-        :cy="moonOrbitY"
+        :cx="tel.x"
+        :cy="tel.y"
         r="10"
         fill="none"
         stroke="rgba(255,255,255,0.12)"
@@ -218,8 +195,8 @@ const moonLabelY = computed(() => moonOrbitY.value < ORB.cy ? moonOrbitY.value -
         stroke-dasharray="2 3"
       />
       <circle
-        :cx="moonOrbitX"
-        :cy="moonOrbitY"
+        :cx="tel.x"
+        :cy="tel.y"
         r="4.5"
         fill="rgba(200,215,255,0.15)"
         stroke="rgba(255,255,255,0.85)"
@@ -227,14 +204,14 @@ const moonLabelY = computed(() => moonOrbitY.value < ORB.cy ? moonOrbitY.value -
         style="transition: all 1s ease;"
       />
       <text
-        :x="moonOrbitX"
-        :y="moonLabelY"
+        :x="tel.x"
+        :y="tel.labelY"
         text-anchor="middle"
         font-family="monospace"
         font-size="7"
         fill="rgba(255,255,255,0.9)"
         letter-spacing="1.5"
-      >LUNA</text>
+      >{{ props.lunar.labels.radarLuna }}</text>
       <text
         x="140"
         y="116"

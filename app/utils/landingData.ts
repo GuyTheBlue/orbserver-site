@@ -48,7 +48,12 @@ export const landingData = {
       activeSynced: 'ACTIVE // FEED: SYNCED',
       altDesc: 'Vertical angle above your local horizon. 90° is directly overhead. Negative values: Moon is below the horizon and not currently visible.',
       azDesc: 'Horizontal compass bearing from North. 0° N, 90° E, 180° S, 270° W.',
-      handRuleGuide: 'Open Hand Rule Guide'
+      handRuleGuide: 'Open Hand Rule Guide',
+      radarPrg: 'PRG',
+      radarApg: 'APG',
+      radarEarth: 'EARTH',
+      radarLuna: 'LUNA',
+      radarEquivalent: 'Equivalent to'
     },
     nextFullFactoid: {
       label: 'OPPOSITION // LUM',
